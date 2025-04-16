@@ -63,6 +63,13 @@ dependencies {
 	implementation platform('software.amazon.awssdk:bom:2.15.0')
 	implementation 'software.amazon.awssdk:s3'
 	implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
+
+	//okhttp
+	implementation("com.squareup.okhttp3:okhttp:3.2.0")
+	//bulkhead 공공데이터 api 실패시 재시도하기위함
+	implementation("io.github.resilience4j:resilience4j-bulkhead:2.3.0")
+	implementation("io.github.resilience4j:resilience4j-spring-boot3:2.3.0")
+	implementation("io.github.resilience4j:resilience4j-retry:2.3.0")
 }
 
 tasks.named('test') {
