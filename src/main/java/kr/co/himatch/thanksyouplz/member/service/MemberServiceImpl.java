@@ -1,16 +1,19 @@
 package kr.co.himatch.thanksyouplz.member.service;
 
 import jakarta.transaction.Transactional;
-import kr.co.himatch.thanksyouplz.member.dto.MemberSignUpResponseDTO;
+import kr.co.himatch.thanksyouplz.member.dto.*;
 import lombok.extern.slf4j.Slf4j;
-import kr.co.himatch.thanksyouplz.member.dto.MemberSignUpRequestDTO;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.entity.SocialType;
 import kr.co.himatch.thanksyouplz.member.repository.MemberRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -52,7 +55,11 @@ public class MemberServiceImpl implements MemberService {
         Member memberSignUp = memberRepository.save(
                 Member.builder()
                         .memberID(memberSignUpRequestDTO.getMemberID())
-                        .memberPass(memberSignUpRequestDTO.getMemberPass())
+                        .memberPass(
+                                BCrypt.hashpw(
+                                        memberSignUpRequestDTO.getMemberPass(), BCrypt.gensalt()
+                                )
+                        )
                         .memberName(memberSignUpRequestDTO.getMemberName())
                         .memberMail(memberSignUpRequestDTO.getMemberMail())
                         .memberPhone(memberSignUpRequestDTO.getMemberPhone())
@@ -72,4 +79,67 @@ public class MemberServiceImpl implements MemberService {
 
         return memberSignUpResponseDTO;
     }
+
+    // 회원 가입 시, ID 중복 검사
+    @Override
+    public Boolean checkMemberID(MemberCheckIDRequestDTO memberCheckIDRequestDTO) {
+        Optional<String> selectMemberID = memberRepository.selectMemberID(memberCheckIDRequestDTO.getMemberID());
+
+        if (selectMemberID.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 일반 로그인
+    @Override
+    public Long login(String memberID, String memberPass) {
+        Member selectId = memberRepository.selectId(memberID);
+
+        if (selectId == null) {
+            return null;
+        } else {
+            if (BCrypt.checkpw(memberPass, selectId.getMemberPass())) {
+                return selectId.getMemberNo();
+            } else {
+                return null;
+            }
+        }
+    }
+
+    // ID 찾기
+    @Override
+    public List<MemberFindIDResponseDTO> findID(MemberFindIDRequestDTO memberFindIDRequestDTO) {
+        List<Member> findID = memberRepository.selectMemberNameAndMemberPhone(
+                memberFindIDRequestDTO.getMemberName(), memberFindIDRequestDTO.getMemberPhone());
+
+        List<MemberFindIDResponseDTO> memberFindIDResponseDTO = findID.stream().map(this::findListID).toList();
+        return memberFindIDResponseDTO;
+    }
+
+    // ID 찾기 이어서
+    public MemberFindIDResponseDTO findListID(Member member) {
+        MemberFindIDResponseDTO memberFindIDResponseDTO = new MemberFindIDResponseDTO();
+
+        memberFindIDResponseDTO.setMemberID(member.getMemberID());
+        memberFindIDResponseDTO.setMemberJoinDate(member.getMemberJoinDate());
+        return memberFindIDResponseDTO;
+    }
+
+    // PW 찾기
+    @Override
+    public MemberFindPassResponseDTO findPass(MemberFindPassRequestDTO memberFindPassRequestDTO) {
+        String findPass = memberRepository.selectMemberPass(memberFindPassRequestDTO.getMemberID(),
+                memberFindPassRequestDTO.getMemberName(), memberFindPassRequestDTO.getMemberPhone());
+
+        MemberFindPassResponseDTO memberFindPassResponseDTO = new MemberFindPassResponseDTO();
+        if (findPass == null) {
+            return null;
+        }else{
+            memberFindPassResponseDTO.setMessage("Success!");
+            return memberFindPassResponseDTO;
+        }
+    }
+
 }
