@@ -1,4 +1,4 @@
-package kr.co.himatch.thanksyouplz.util;
+package kr.co.himatch.thanksyouplz.auth.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
