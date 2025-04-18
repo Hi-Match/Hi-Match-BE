@@ -16,9 +16,9 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     @Override
     public Optional<String> selectMemberID(String memberID) {
         return Optional.ofNullable(
-                queryFactory.select(company.companyId)
+                queryFactory.select(company.companyID)
                         .from(company)
-                        .where(company.companyId.eq(memberID))
+                        .where(company.companyID.eq(memberID))
                         .fetchFirst()
         );
     }
@@ -28,7 +28,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     public Company selectID(String memberID) {
         return queryFactory.select(company)
                 .from(company)
-                .where(company.companyId.eq(memberID))
+                .where(company.companyID.eq(memberID))
                 .fetchFirst();
     }
 }
