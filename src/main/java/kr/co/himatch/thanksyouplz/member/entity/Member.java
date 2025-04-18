@@ -2,6 +2,7 @@ package kr.co.himatch.thanksyouplz.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
 
@@ -67,5 +68,26 @@ public class Member {
 
     @Column(name = "member_test_date")
     private LocalDateTime memberTestDate;
+
+    // 프로필 편집 - 휴대폰 번호 변경
+    public void changePhone(String memberPhone){
+        this.memberPhone = memberPhone;
+    }
+
+    // 프로필 편집 - 메일 변경
+    public void changeMail(String memberMail){
+        this.memberMail = memberMail;
+    }
+
+    // Token 재발급
+    public void changeToken(String memberRefreshToken){
+        this.memberRefreshToken = memberRefreshToken;
+    }
+
+    // 비밀번호 찾기 시 > 임시 비밀번호로 변경
+    public void temporaryChangePass(String memberPass){
+        this.memberPass = BCrypt.hashpw(memberPass, BCrypt.gensalt());
+    }
+
 
 }

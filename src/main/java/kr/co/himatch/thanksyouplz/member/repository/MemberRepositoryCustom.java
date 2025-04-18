@@ -1,6 +1,7 @@
 package kr.co.himatch.thanksyouplz.member.repository;
 
 import kr.co.himatch.thanksyouplz.member.entity.Member;
+import kr.co.himatch.thanksyouplz.member.entity.SocialType;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,5 +17,13 @@ public interface MemberRepositoryCustom {
     List<Member> selectMemberNameAndMemberPhone(String memberName, String memberPhone);
 
     // PW 찾기
-    String selectMemberPass(String memberID, String memberName, String memberPhone);
+    Optional<Member> selectMemberIdAndNameAndPhone(String memberID, String memberName, String memberPhone);
+
+    // 소셜 로그인 시 사용함
+    Optional<String> selectTokenByMemberNo(Long memberNo);
+
+    // 소셜ID로 MemberNo를 가져오는 것
+    Optional<Long> selectMemberBySocialId(SocialType registrationId, String socialId);
+
+
 }

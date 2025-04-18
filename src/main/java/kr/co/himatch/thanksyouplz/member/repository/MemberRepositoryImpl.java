@@ -2,6 +2,7 @@ package kr.co.himatch.thanksyouplz.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
+import kr.co.himatch.thanksyouplz.member.entity.SocialType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -45,10 +46,33 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
     // PW 찾기
     @Override
-    public String selectMemberPass(String memberID, String memberName, String memberPhone) {
-        return queryFactory.select(member.memberPass)
-                .from(member)
-                .where(member.memberID.eq(memberID).and(member.memberName.eq(memberName).and(member.memberPhone.eq(memberPhone))))
-                .fetchFirst();
+    public Optional<Member> selectMemberIdAndNameAndPhone(String memberID, String memberName, String memberPhone) {
+        return Optional.ofNullable(
+                queryFactory.select(member)
+                        .from(member)
+                        .where(member.memberID.eq(memberID).and(member.memberName.eq(memberName).and(member.memberPhone.eq(memberPhone))))
+                        .fetchFirst()
+        );
+    }
+
+    // 소셜 로그인 시 사용 - Token 받아오기
+    @Override
+    public Optional<String> selectTokenByMemberNo(Long memberNo) {
+        return Optional.ofNullable(
+                queryFactory.select(member.memberRefreshToken)
+                        .from(member)
+                        .where(member.memberNo.eq(memberNo))
+                        .where().fetchFirst());
+    }
+
+    // 소셜ID로 MemberNo를 가져오는 것
+    // 소셜로그인시 kakao. google. naver. github중 무엇인지 파악한 뒤, 첫 로그인인지 판별
+    @Override
+    public Optional<Long> selectMemberBySocialId(SocialType registrationId, String socialId) {
+        return Optional.ofNullable(
+                queryFactory.select(member.memberNo)
+                        .from(member)
+                        .where(member.memberSocialID.eq(socialId).and(member.socialType.eq(registrationId)))
+                        .where().fetchFirst());
     }
 }

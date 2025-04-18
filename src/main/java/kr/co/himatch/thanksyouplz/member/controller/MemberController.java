@@ -1,6 +1,12 @@
 package kr.co.himatch.thanksyouplz.member.controller;
 
+import jakarta.mail.Authenticator;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
 import jakarta.validation.Valid;
+import kr.co.himatch.thanksyouplz.auth.jwt.JsonWebToken;
+import kr.co.himatch.thanksyouplz.auth.util.EmailUtil;
+import kr.co.himatch.thanksyouplz.auth.util.JwtTokenUtils;
 import kr.co.himatch.thanksyouplz.config.AuthConfig;
 import kr.co.himatch.thanksyouplz.member.dto.*;
 import kr.co.himatch.thanksyouplz.member.service.MemberService;
@@ -15,11 +21,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static kr.co.himatch.thanksyouplz.auth.util.JwtTokenUtils.REFRESH_PERIOD;
 
 @Slf4j
 @RestController
@@ -33,9 +45,11 @@ public class MemberController {
     // 휴대폰 인증번호 발신
     public static DefaultMessageService messageService;
 
-    //     관리자가 휴대폰 인증을 보내기 위한 것
+    // 관리자가 휴대폰 인증을 보내기 위한 것
     @Autowired
     private AuthConfig authConfig;
+
+
 
     //     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //     여기서부터 휴대폰 인증 Controller
@@ -90,32 +104,44 @@ public class MemberController {
     // 일반 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberLoginRequestDTO memberLoginRequestDTO) {
+
+        Map<String, String> responsebody = new HashMap<>();
+        responsebody.put("message", "Success");
+        Long memberNo = memberService.login(memberLoginRequestDTO.getMemberID(), memberLoginRequestDTO.getMemberPass());
+
         Long login = memberService.login(memberLoginRequestDTO.getMemberID(), memberLoginRequestDTO.getMemberPass());
 
         if (login != null) {
 
-//            // ROLE_USER : user인지 admin인지 같이 판별하기 위해서 보내는 것
-//            JsonWebToken jsonWebToken = JwtTokenUtils.allocateToken(login, "ROLE_USER");
-//            MultiValueMap<String, String> headers = new HttpHeaders();
-//            headers.add("Authorization", jsonWebToken.getAccessToken());
-//
-//            // path("/") : Cookie는 FE에서 설정 없이 접근하기 때문에 해당 쿠키가 어떤 url에서 사용하고 안하고를 정할 수 있음.
-//            // header같은 경우, 호출이나 값을 빼오는 코드를 모두 적어줘야한다.
-//            // Cookie는 코드 구현이 필요 없다. Chrome 등 exp에서 가지고 있다가 자동으로 보내준다(크롬이)
-//            // 우리는 그래서 아래 코드와 같이 추가 설정만 해주는 것이다.
-//            // 그러나 "/"만 적게 되면 어떤 url에서도 Cookie를 보내겠다는 뜻
-//            // "/abcd" 등 /뒤에 path를 적게 되면 해당 path로만 Cookie를 보내게 됨
-//            // sameSite("None") : 다른 사이트에서도 접근 가능함 > LocalHost에서 nonestep.site로 접근 가능
-//            // sameSite("None")을 안써야하는거 아냐? 우리는 지금 개발단계이니까 풀어두고, 실제 배포할 때에는 지워야함!
-//            // secure(true) : http뿐만 아니라 https에서도 보내겠다. 둘 다 허용한다!
-//            memberService.refreshlogin(login, jsonWebToken.getRefreshToken());
-//            ResponseCookie cookie = ResponseCookie.from("Refresh", jsonWebToken.getRefreshToken())
+            JsonWebToken jsonWebToken = JwtTokenUtils.allocateToken(memberNo, "ROLE_USER");
+            MultiValueMap<String, String> headers = new HttpHeaders();
+
+            // 엑세스 토큰을 넣어준다. 헤더에 들어간다. DB에는 저장되지 않는다.
+            // 백엔드에서만 토큰을 관리하기 때문에 header에 AccessToken을 보내지 않는다.
+//            headers.add("Access", jsonWebToken.getAccessToken());
+
+            // AccessToken도 쿠키로 준다.
+            // 원래 AccssToken을 Authorization이라는 이름으로 줬으나, Access로 변경
+//            ResponseCookie accessToken = ResponseCookie.from("Access", jsonWebToken.getAccessToken())
 //                    .sameSite("None")
+//                    .httpOnly(false)
 //                    .secure(true)
 //                    .path("/")
-//                    .maxAge(REFRESH_PERIOD)
+//                    .maxAge(0)
 //                    .build();
-//            headers.add("Set-Cookie", cookie.toString());
+//            headers.add("Set-Cookie", accessToken.toString());
+
+            // 리프레시 토큰을 넣어준다. 해당 member_Token에 들어간다.
+            memberService.memberNormalLoginRefreshToken(memberNo, jsonWebToken.getRefreshToken());
+            ResponseCookie cookie = ResponseCookie.from("Refresh", jsonWebToken.getRefreshToken())
+                    //sameSite == None 으로 하는 순간, 다른 서버(?) 곳 에서도 접속이 가능하다.
+                    .sameSite("None")
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(REFRESH_PERIOD / 1000)
+                    .build();
+            headers.add("Set-Cookie", cookie.toString());
 
             MemberLoginResponseDTO memberLoginResponseDTO = new MemberLoginResponseDTO();
             memberLoginResponseDTO.setMessage("Success");
@@ -125,24 +151,6 @@ public class MemberController {
             return new ResponseEntity<>("ID와 PW를 확인해주세요", HttpStatus.BAD_REQUEST);
         }
     }
-
-    // 로그아웃
-//    @GetMapping("/logout")
-//    public ResponseEntity<?> logout(){
-//        MultiValueMap<String, String> headers = new HttpHeaders(); //새로 선언
-//        MemberLogoutResponseDTO memberLogoutResponseDTO = new MemberLogoutResponseDTO();
-//        memberLogoutResponseDTO.setMessage("success");
-//        //이제 보내야하는데 그 전에 토큰을 제거해준다.
-//        ResponseCookie cookie = ResponseCookie.from("Refresh")
-//                .sameSite("None")
-//                .secure(true)
-//                .path("/")
-//                .maxAge(0)//즉시 제거해
-//                .build();
-//        headers.add("Set-Cookie", cookie.toString());
-//
-//        return new ResponseEntity<>(memberLogoutResponseDTO, headers, HttpStatus.OK);
-//    }
 
     // ID 찾기
     @PostMapping("/idfind")
@@ -157,17 +165,101 @@ public class MemberController {
         }
     }
 
+    // 랜덤함수로 임시비밀번호 구문 만들기
+    public String getTempPassword() {
+        char[] charSet = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+
+        String str = "";
+
+        // 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+    }
+
     // PW 찾기
     @PostMapping("/pwfind")
     public ResponseEntity<?> findPW(@RequestBody MemberFindPassRequestDTO memberFindPassRequestDTO) {
 
-        MemberFindPassResponseDTO findPass = memberService.findPass(memberFindPassRequestDTO);
+        String temporaryPW = getTempPassword();
+        String findPass = memberService.findPass(memberFindPassRequestDTO, temporaryPW);
 
         if (findPass == null) {
             return new ResponseEntity<>("일치하는 회원 정보가 없습니다", HttpStatus.BAD_REQUEST);
         }else{
-            return new ResponseEntity<>(findPass, HttpStatus.OK);
+
+            // 임시비밀번호 발급 메일 전송
+            final String fromEmail = authConfig.getEmailId(); // requires valid gmail id
+            final String password = authConfig.getEmailPw(); // correct password for gmail id
+
+            System.out.println("TLSEmail Start");
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
+            props.put("mail.smtp.port", "587"); // TLS Port
+            props.put("mail.smtp.auth", "true"); // enable authentication
+            props.put("mail.smtp.starttls.enable", "true"); // enable STARTTLS
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            // create Authenticator object to pass in Session.getInstance argument
+            Authenticator auth = new Authenticator() {
+                // override the getPasswordAuthentication method
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(fromEmail, password);
+                }
+            };
+            Session session = Session.getInstance(props, auth);
+
+            EmailUtil.sendEmail(session, findPass,
+                    "[Hi-Match] 하이매치 임시 비밀번호 안내 입니다.",
+                    "Hi! Higher한 당신을 Hire합니다. 안녕하세요. 하이매치입니다.\n\n" +
+                            "지원자와 기업을 1:1로 이어주는 [Hi-Match] 임시 비밀번호 발급 안내입니다.\n\n" +
+                            "회원님의 [Hi-Match] 임시 비밀번호가 발급되었습니다.\n" +
+                            "아래의 임시 비밀번호로 로그인 하신 후 비밀번호를 재설정하시기 바랍니다.\n" +
+                            "비밀번호 재설정은 설정 > 비밀번호 변경에서 가능합니다.\n" +
+                            "\n" +
+                            "임시 비밀번호는 복사 + 붙여넣기 대신 직접 입력하여 주시기 바랍니다.\n\n\n" +
+                            temporaryPW);
+
+            MemberFindPassResponseDTO memberPwFindResponseDTO = new MemberFindPassResponseDTO();
+            memberPwFindResponseDTO.setMemberMail(findPass);
+
+            return new ResponseEntity<>(memberPwFindResponseDTO, HttpStatus.OK);
         }
     }
 
+    // 프로필 편집 - 휴대폰 번호 변경
+    @PutMapping("/modify-phone")
+    public ResponseEntity<?> changePhone(@RequestBody MemberChangePhoneRequestDTO memberChangePhoneRequestDTO){
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        MemberChangePhoneResponseDTO changePhone = memberService.changePhone(memberChangePhoneRequestDTO, memberNo);
+        return new ResponseEntity<>(changePhone, HttpStatus.OK);
+    }
+
+    // 프로필 편집 - 메일 변경
+    @PutMapping("/modify-mail")
+    public ResponseEntity<?> changeMail(@RequestBody MemberChangeMailRequestDTO memberChangeMailRequestDTO){
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        MemberChangeMailResponseDTO changeMail = memberService.changeMail(memberChangeMailRequestDTO, memberNo);
+        return new ResponseEntity<>(changeMail, HttpStatus.OK);
+    }
+
+    // 프로필 편집 - 주소 변경
+//    @PutMapping("/modify-address")
+//    public ResponseEntity<?> changeAddress(@RequestBody ){
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
+    // 프로필 편집 - 비밀번호
+//    @PutMapping("/modify-pass")
+//    public ResponseEntity<?> changePass(@RequestBody){
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }

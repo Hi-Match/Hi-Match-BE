@@ -108,6 +108,13 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    // 일반 로그인 시 refreshToken 저장
+    @Override
+    public void memberNormalLoginRefreshToken(Long memberNo, String memberToken) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        member.changeToken(memberToken);
+    }
+
     // ID 찾기
     @Override
     public List<MemberFindIDResponseDTO> findID(MemberFindIDRequestDTO memberFindIDRequestDTO) {
@@ -129,17 +136,48 @@ public class MemberServiceImpl implements MemberService {
 
     // PW 찾기
     @Override
-    public MemberFindPassResponseDTO findPass(MemberFindPassRequestDTO memberFindPassRequestDTO) {
-        String findPass = memberRepository.selectMemberPass(memberFindPassRequestDTO.getMemberID(),
+    public String findPass(MemberFindPassRequestDTO memberFindPassRequestDTO, String memberPass) {
+        Optional<Member> findPass = memberRepository.selectMemberIdAndNameAndPhone(memberFindPassRequestDTO.getMemberID(),
                 memberFindPassRequestDTO.getMemberName(), memberFindPassRequestDTO.getMemberPhone());
 
-        MemberFindPassResponseDTO memberFindPassResponseDTO = new MemberFindPassResponseDTO();
-        if (findPass == null) {
+        if (findPass.isEmpty()){
             return null;
         }else{
-            memberFindPassResponseDTO.setMessage("Success!");
-            return memberFindPassResponseDTO;
+
+            // 유저의 비밀번호를 임시 비멀번호로 변경한다.
+            findPass.get().temporaryChangePass(memberPass);
+            return findPass.get().getMemberMail();
         }
     }
+
+    // 프로필 편집 - 휴대폰 번호 변경
+    @Override
+    public MemberChangePhoneResponseDTO changePhone(MemberChangePhoneRequestDTO memberChangePhoneRequestDTO, Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        member.changePhone(memberChangePhoneRequestDTO.getMemberPhone());
+
+        MemberChangePhoneResponseDTO memberChangePhoneResponseDTO = new MemberChangePhoneResponseDTO();
+        memberChangePhoneResponseDTO.setMessage("Success!");
+
+        return memberChangePhoneResponseDTO;
+    }
+
+    // 프로필 편집 - 메일 변경
+    @Override
+    public MemberChangeMailResponseDTO changeMail(MemberChangeMailRequestDTO memberChangeMailRequestDTO, Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        member.changeMail(memberChangeMailRequestDTO.getMemberMail());
+
+        MemberChangeMailResponseDTO memberChangeMailResponseDTO = new MemberChangeMailResponseDTO();
+        memberChangeMailResponseDTO.setMessage("Success!");
+
+        return memberChangeMailResponseDTO;
+    }
+
+//    // 프로필 편집 - 주소 변경
+//    @Override
+//    public MemberChangeAddressResponseDTO changeAddress(MemberChangeMailRequestDTO memberChangeMailRequestDTO, Long memberNo) {
+//        return null;
+//    }
 
 }
