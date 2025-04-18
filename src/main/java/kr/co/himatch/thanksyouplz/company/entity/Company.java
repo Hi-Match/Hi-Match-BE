@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "COMPANY")
@@ -13,15 +14,14 @@ import java.sql.Timestamp;
 public class Company {
 
     @Id
-    @Column(name = "COMPANY_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyNo;
 
-    @Column(name = "COMPANY_ID", nullable = false, length = 100)
-    private String companyId;
+    @Column(name = "COMPANY_ID", nullable = false, length = 100, unique = true)
+    private String companyID;
 
     @Column(name = "COMPANY_PW", nullable = false, length = 255)
-    private String companyPw;
+    private String companyPass;
 
     @Column(name = "COMPANY_NAME", nullable = false, length = 100)
     private String companyName;
@@ -57,10 +57,10 @@ public class Company {
     @Column(name = "COMPANY_LOGO", length = 255)
     private String companyLogo;
 
-    @Column(name = "COMPANY_CREATE")
-    private Timestamp companyCreate;
+    @Column(name = "COMPANY_CREATE", nullable = false)
+    private LocalDateTime companyCreate;
 
     @Column(name = "COMPANY_UPDATE")
-    private Timestamp companyUpdate;
+    private LocalDateTime companyUpdate;
 
 }

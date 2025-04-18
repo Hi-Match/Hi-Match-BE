@@ -1,9 +1,11 @@
 package kr.co.himatch.thanksyouplz.company.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import kr.co.himatch.thanksyouplz.company.dto.CompanyLicenseRequestDTO;
 import kr.co.himatch.thanksyouplz.company.dto.CompanyLicenseResponseDTO;
 import kr.co.himatch.thanksyouplz.company.dto.CompanySignupRequestDTO;
+import kr.co.himatch.thanksyouplz.company.dto.CompanySignupResponseDTO;
 import kr.co.himatch.thanksyouplz.company.service.CompanyService;
 import kr.co.himatch.thanksyouplz.config.AuthConfig;
 import kr.co.himatch.thanksyouplz.auth.util.OkHttpService;
@@ -29,12 +31,18 @@ public class CompanyConrtoller {
     private CompanyService companyService;
 
 
-    @PostMapping("/mebmer/signup")
-    public ResponseEntity<?> signup(@RequestBody CompanySignupRequestDTO companySignupRequestDTO) {
+    // 기업용 회원 가입
+    // 기업은 소셜 로그인 진행하지 않고, 일반 회원 가입만 가능하다
+    @PostMapping("/member/signup")
+    public ResponseEntity<?> signup(@Valid @RequestBody CompanySignupRequestDTO companySignupRequestDTO) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        CompanySignupResponseDTO companySignUp = companyService.companySignUp(companySignupRequestDTO);
+
+        return new ResponseEntity<>(companySignUp, HttpStatus.OK);
     }
 
+
+    // 사업자 등록번호 조회
     @PostMapping("/mebmer/license")
     public ResponseEntity<?> license(@RequestBody CompanyLicenseRequestDTO companyLicenseRequestDTO) throws IOException {
         String url = "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=" + authConfig.getLicenseKey();
