@@ -63,4 +63,12 @@ public class Company {
     @Column(name = "COMPANY_UPDATE")
     private LocalDateTime companyUpdate;
 
+    @Column(name = "COMPANY_REFRESH_TOKEN", length = 2000)
+    private String companyRefreshToken;
+
+    // Token 재발급
+    public void changeToken(String companyRefreshToken){
+        this.companyRefreshToken = companyRefreshToken;
+    }
+
 }

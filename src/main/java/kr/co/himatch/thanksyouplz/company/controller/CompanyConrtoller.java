@@ -2,21 +2,28 @@ package kr.co.himatch.thanksyouplz.company.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
-import kr.co.himatch.thanksyouplz.company.dto.CompanyLicenseRequestDTO;
-import kr.co.himatch.thanksyouplz.company.dto.CompanyLicenseResponseDTO;
-import kr.co.himatch.thanksyouplz.company.dto.CompanySignupRequestDTO;
-import kr.co.himatch.thanksyouplz.company.dto.CompanySignupResponseDTO;
+import kr.co.himatch.thanksyouplz.auth.jwt.JsonWebToken;
+import kr.co.himatch.thanksyouplz.auth.util.JwtTokenUtils;
+import kr.co.himatch.thanksyouplz.company.dto.*;
 import kr.co.himatch.thanksyouplz.company.service.CompanyService;
 import kr.co.himatch.thanksyouplz.config.AuthConfig;
 import kr.co.himatch.thanksyouplz.auth.util.OkHttpService;
+import kr.co.himatch.thanksyouplz.member.dto.MemberLoginResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static kr.co.himatch.thanksyouplz.auth.util.JwtTokenUtils.REFRESH_PERIOD;
 
 @Slf4j
 @RestController
@@ -52,4 +59,63 @@ public class CompanyConrtoller {
         CompanyLicenseResponseDTO companyLicenseResponseDTO = objectMapper.readValue(result, CompanyLicenseResponseDTO.class);
         return new ResponseEntity<>(companyLicenseResponseDTO.hasMatchCnt(), HttpStatus.OK);
     }
+
+    // 회원 가입 시 ID 중복 검사
+    @GetMapping("member/idcheck")
+    public ResponseEntity<?> checkID(@ModelAttribute CompanyMemberIDCheckRequestDTO memberIDCheckRequestDTO){
+        Boolean checkCompanyMemberID = companyService.checkCompanyMemberID(memberIDCheckRequestDTO);
+        return new ResponseEntity<>(checkCompanyMemberID, HttpStatus.OK);
+    }
+
+    // 일반 로그인
+    @PostMapping("/member/login")
+    public ResponseEntity<?> companyLogin(@RequestBody CompanyMemberLoginRequestDTO companyMemberLoginRequestDTO){
+
+        Map<String, String> responsebody = new HashMap<>();
+        responsebody.put("message", "Success");
+
+        Long login = companyService.companyLogin(
+                companyMemberLoginRequestDTO.getMemberID(), companyMemberLoginRequestDTO.getMemberPass());
+
+        if (login != null) {
+
+            JsonWebToken jsonWebToken = JwtTokenUtils.allocateToken(login, "ROLE_USER");
+            MultiValueMap<String, String> headers = new HttpHeaders();
+
+            // 엑세스 토큰을 넣어준다. 헤더에 들어간다. DB에는 저장되지 않는다.
+            // 백엔드에서만 토큰을 관리하기 때문에 header에 AccessToken을 보내지 않는다.
+//            headers.add("Access", jsonWebToken.getAccessToken());
+
+            // AccessToken도 쿠키로 준다.
+            // 원래 AccssToken을 Authorization이라는 이름으로 줬으나, Access로 변경
+//            ResponseCookie accessToken = ResponseCookie.from("Access", jsonWebToken.getAccessToken())
+//                    .sameSite("None")
+//                    .httpOnly(false)
+//                    .secure(true)
+//                    .path("/")
+//                    .maxAge(0)
+//                    .build();
+//            headers.add("Set-Cookie", accessToken.toString());
+
+            // 리프레시 토큰을 넣어준다. 해당 member_Token에 들어간다.
+            companyService.memberNormalLoginRefreshToken(login, jsonWebToken.getRefreshToken());
+            ResponseCookie cookie = ResponseCookie.from("Refresh", jsonWebToken.getRefreshToken())
+                    //sameSite == None 으로 하는 순간, 다른 서버(?) 곳 에서도 접속이 가능하다.
+                    .sameSite("None")
+                    .httpOnly(false)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(REFRESH_PERIOD / 1000)
+                    .build();
+            headers.add("Set-Cookie", cookie.toString());
+
+            MemberLoginResponseDTO memberLoginResponseDTO = new MemberLoginResponseDTO();
+            memberLoginResponseDTO.setMessage("Success");
+
+            return new ResponseEntity<>(memberLoginResponseDTO, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("ID와 PW를 확인해주세요", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
