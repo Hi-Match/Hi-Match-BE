@@ -5,6 +5,6 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class MemberFindPassResponseDTO {
-    private String memberMail;
+public class MemberChangeAddressResponseDTO {
+    private String message;
 }
