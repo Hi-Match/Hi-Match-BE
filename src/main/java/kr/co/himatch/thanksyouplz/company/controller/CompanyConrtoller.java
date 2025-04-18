@@ -1,23 +1,18 @@
 package kr.co.himatch.thanksyouplz.company.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.resilience4j.bulkhead.annotation.Bulkhead;
-import io.github.resilience4j.retry.annotation.Retry;
 import kr.co.himatch.thanksyouplz.company.dto.CompanyLicenseRequestDTO;
 import kr.co.himatch.thanksyouplz.company.dto.CompanyLicenseResponseDTO;
 import kr.co.himatch.thanksyouplz.company.dto.CompanySignupRequestDTO;
-import kr.co.himatch.thanksyouplz.company.dto.CompanySignupResponseDTO;
 import kr.co.himatch.thanksyouplz.company.service.CompanyService;
 import kr.co.himatch.thanksyouplz.config.AuthConfig;
-import kr.co.himatch.thanksyouplz.util.OkHttpService;
+import kr.co.himatch.thanksyouplz.auth.util.OkHttpService;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.io.IOException;
 
