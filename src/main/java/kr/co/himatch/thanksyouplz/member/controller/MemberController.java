@@ -50,7 +50,6 @@ public class MemberController {
     private AuthConfig authConfig;
 
 
-
     //     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //     여기서부터 휴대폰 인증 Controller
     @Autowired
@@ -107,13 +106,12 @@ public class MemberController {
 
         Map<String, String> responsebody = new HashMap<>();
         responsebody.put("message", "Success");
-        Long memberNo = memberService.login(memberLoginRequestDTO.getMemberID(), memberLoginRequestDTO.getMemberPass());
 
         Long login = memberService.login(memberLoginRequestDTO.getMemberID(), memberLoginRequestDTO.getMemberPass());
 
         if (login != null) {
 
-            JsonWebToken jsonWebToken = JwtTokenUtils.allocateToken(memberNo, "ROLE_USER");
+            JsonWebToken jsonWebToken = JwtTokenUtils.allocateToken(login, "ROLE_USER");
             MultiValueMap<String, String> headers = new HttpHeaders();
 
             // 엑세스 토큰을 넣어준다. 헤더에 들어간다. DB에는 저장되지 않는다.
@@ -132,7 +130,7 @@ public class MemberController {
 //            headers.add("Set-Cookie", accessToken.toString());
 
             // 리프레시 토큰을 넣어준다. 해당 member_Token에 들어간다.
-            memberService.memberNormalLoginRefreshToken(memberNo, jsonWebToken.getRefreshToken());
+            memberService.memberNormalLoginRefreshToken(login, jsonWebToken.getRefreshToken());
             ResponseCookie cookie = ResponseCookie.from("Refresh", jsonWebToken.getRefreshToken())
                     //sameSite == None 으로 하는 순간, 다른 서버(?) 곳 에서도 접속이 가능하다.
                     .sameSite("None")
@@ -146,7 +144,7 @@ public class MemberController {
             MemberLoginResponseDTO memberLoginResponseDTO = new MemberLoginResponseDTO();
             memberLoginResponseDTO.setMessage("Success");
 
-            return new ResponseEntity<>(memberLoginResponseDTO, HttpStatus.OK);
+            return new ResponseEntity<>(memberLoginResponseDTO, headers, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("ID와 PW를 확인해주세요", HttpStatus.BAD_REQUEST);
         }
@@ -190,7 +188,7 @@ public class MemberController {
 
         if (findPass == null) {
             return new ResponseEntity<>("일치하는 회원 정보가 없습니다", HttpStatus.BAD_REQUEST);
-        }else{
+        } else {
 
             // 임시비밀번호 발급 메일 전송
             final String fromEmail = authConfig.getEmailId(); // requires valid gmail id
@@ -233,7 +231,7 @@ public class MemberController {
 
     // 프로필 편집 - 휴대폰 번호 변경
     @PutMapping("/modify-phone")
-    public ResponseEntity<?> changePhone(@RequestBody MemberChangePhoneRequestDTO memberChangePhoneRequestDTO){
+    public ResponseEntity<?> changePhone(@RequestBody MemberChangePhoneRequestDTO memberChangePhoneRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
         MemberChangePhoneResponseDTO changePhone = memberService.changePhone(memberChangePhoneRequestDTO, memberNo);
@@ -242,24 +240,48 @@ public class MemberController {
 
     // 프로필 편집 - 메일 변경
     @PutMapping("/modify-mail")
-    public ResponseEntity<?> changeMail(@RequestBody MemberChangeMailRequestDTO memberChangeMailRequestDTO){
+    public ResponseEntity<?> changeMail(@RequestBody MemberChangeMailRequestDTO memberChangeMailRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
         MemberChangeMailResponseDTO changeMail = memberService.changeMail(memberChangeMailRequestDTO, memberNo);
         return new ResponseEntity<>(changeMail, HttpStatus.OK);
     }
 
-    // 프로필 편집 - 주소 변경
-//    @PutMapping("/modify-address")
-//    public ResponseEntity<?> changeAddress(@RequestBody ){
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
     // 프로필 편집 - 비밀번호
-//    @PutMapping("/modify-pass")
-//    public ResponseEntity<?> changePass(@RequestBody){
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PutMapping("/modify-pass")
+    public ResponseEntity<?> changePass(@RequestBody MemberChangePassRequestDTO memberChangePassRequestDTO) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        MemberChangePassResponseDTO changePass = memberService.changePass(memberChangePassRequestDTO);
+
+        if (changePass == null) {
+            return new ResponseEntity<>("잘못된 접근입니다. 다시 시도해주세요", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(changePass, HttpStatus.OK);
+        }
+    }
+
+    // 로그아웃
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        MemberLogOutResponseDTO memberLogOutResponseDTO = new MemberLogOutResponseDTO();
+        memberLogOutResponseDTO.setMessage("Success");
+
+        // 리프레시 토큰을 제거한다.
+        ResponseCookie cookie = ResponseCookie.from("Refresh", "")
+                .sameSite("None")
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .build();
+        headers.add("Set-Cookie", cookie.toString());
+
+        log.info("{}", memberLogOutResponseDTO);
+        return new ResponseEntity<>(memberLogOutResponseDTO, headers, HttpStatus.OK);
+    }
+
+
 }

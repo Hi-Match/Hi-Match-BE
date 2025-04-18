@@ -25,5 +25,8 @@ public interface MemberRepositoryCustom {
     // 소셜ID로 MemberNo를 가져오는 것
     Optional<Long> selectMemberBySocialId(SocialType registrationId, String socialId);
 
+    // 비밀번호 변경, 혹은 찾을 때 받는 정보로 Member 조회
+    Optional<Member> selectPass(String memberID, String memberName, String memberPhone);
+
 
 }
