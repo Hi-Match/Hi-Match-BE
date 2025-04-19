@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static kr.co.himatch.thanksyouplz.auth.util.JwtTokenUtils.REFRESH_PERIOD;
@@ -117,5 +118,40 @@ public class CompanyConrtoller {
             return new ResponseEntity<>("ID와 PW를 확인해주세요", HttpStatus.BAD_REQUEST);
         }
     }
+
+    // 기업용 회원 로그아웃
+    @GetMapping("/member/logout")
+    public ResponseEntity<?> companyLogOut(){
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        CompanyMemberLogOutResponseDTO companyMemberLogOutResponseDTO = new CompanyMemberLogOutResponseDTO();
+        companyMemberLogOutResponseDTO.setMessage("Success!");
+
+        // 리프레시 토큰을 제거한다.
+        ResponseCookie cookie = ResponseCookie.from("Refresh", "")
+                .sameSite("None")
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .build();
+        headers.add("Set-Cookie", cookie.toString());
+
+        return new ResponseEntity<>(companyMemberLogOutResponseDTO, headers, HttpStatus.OK);
+
+    }
+
+    // 기업용 회원 ID 찾기
+    @PostMapping("/member/idfind")
+    public ResponseEntity<?> findID(@RequestBody CompanyMemberFindIDRequestDTO companyMemberFindIDRequestDTO){
+
+        List<CompanyMemberFindIDResponseDTO> companyFindID = companyService.companyFindID(companyMemberFindIDRequestDTO);
+
+        if (companyFindID.isEmpty()){
+            return new ResponseEntity<>("일치하는 회원 정보가 없습니다.", HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(companyFindID, HttpStatus.OK);
+        }
+    }
+
 
 }
