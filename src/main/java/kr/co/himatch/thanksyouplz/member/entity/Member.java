@@ -5,8 +5,8 @@ import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
-
 @Entity
+@Table(name = "MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
@@ -77,6 +77,11 @@ public class Member {
     // 프로필 편집 - 메일 변경
     public void changeMail(String memberMail){
         this.memberMail = memberMail;
+    }
+
+    // 프로필 편집 - 비밀번호 변경
+    public void changePass(String memberPass){
+        this.memberPass = memberPass;
     }
 
     // Token 재발급

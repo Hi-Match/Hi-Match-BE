@@ -174,10 +174,22 @@ public class MemberServiceImpl implements MemberService {
         return memberChangeMailResponseDTO;
     }
 
-//    // 프로필 편집 - 주소 변경
-//    @Override
-//    public MemberChangeAddressResponseDTO changeAddress(MemberChangeMailRequestDTO memberChangeMailRequestDTO, Long memberNo) {
-//        return null;
-//    }
+    // 프로필 편집 - 비밀번호 변경
+    @Override
+    public MemberChangePassResponseDTO changePass(MemberChangePassRequestDTO memberChangePassRequestDTO) {
+        Optional<Member> selectPass = memberRepository.selectPass(memberChangePassRequestDTO.getMemberID(),
+                memberChangePassRequestDTO.getMemberName(), memberChangePassRequestDTO.getMemberPhone());
+
+        if (selectPass.isEmpty()){
+            return null;
+        }else{
+            selectPass.get().changePass(BCrypt.hashpw(memberChangePassRequestDTO.getMemberPass(), BCrypt.gensalt()));
+
+            MemberChangePassResponseDTO memberChangePassResponseDTO = new MemberChangePassResponseDTO();
+            memberChangePassResponseDTO.setMessage("Success!");
+
+            return memberChangePassResponseDTO;
+        }
+    }
 
 }

@@ -12,7 +12,8 @@ public class CompanySignupRequestDTO {
     private String memberPass;
     private String memberName;
     private String licenseNumber;
-    private String companyCount;
+    private String companyName;
+    private int companyCount;
     private String companyPart;
     private String memberMail;
     private String memberPhone;

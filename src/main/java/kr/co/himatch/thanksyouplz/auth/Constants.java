@@ -15,7 +15,8 @@ public class Constants {
             "/himatch/webjars/**", "/himatch/swagger-ui/**",
             "/himatch/v3/api-docs/**", "/himatch/swagger-ui/**", "/himatch/swagger-resources/**",
             "/himatch/congestion/down-time", "/himatch/congestion/up-info", "/himatch/congestion/down-info", "/himatch/congestion/subway-marker"
-            , "/himatch/congestion/up-car", "/himatch/congestion/down-car"
+            , "/himatch/congestion/up-car", "/himatch/congestion/down-car", "/himatch/company/member/signup", "/himatch/company/member/login",
+            "/himatch/company/member/idfind", "/himatch/company/member/pwfind"
 
     };
 
