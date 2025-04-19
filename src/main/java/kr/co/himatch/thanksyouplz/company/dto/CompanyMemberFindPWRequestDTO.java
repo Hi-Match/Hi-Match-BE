@@ -5,7 +5,8 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class CompanyMemberFindIDRequestDTO {
+public class CompanyMemberFindPWRequestDTO {
+    private String memberID;
     private String memberName;
-    private String licenseNumber;
+    private String memberPhone;
 }
