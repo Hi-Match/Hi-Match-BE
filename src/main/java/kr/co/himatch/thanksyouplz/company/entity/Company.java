@@ -1,6 +1,7 @@
 package kr.co.himatch.thanksyouplz.company.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -71,4 +72,8 @@ public class Company {
         this.companyRefreshToken = companyRefreshToken;
     }
 
+    // 비밀번호 찾기 시 > 임시 비밀번호로 변경
+    public void temporaryChangePass(String companyPass){
+        this.companyPass = BCrypt.hashpw(companyPass, BCrypt.gensalt());
+    }
 }

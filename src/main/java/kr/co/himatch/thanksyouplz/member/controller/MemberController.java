@@ -213,7 +213,8 @@ public class MemberController {
 
             EmailUtil.sendEmail(session, findPass,
                     "[Hi-Match] 하이매치 임시 비밀번호 안내 입니다.",
-                    "Hi! Higher한 당신을 Hire합니다. 안녕하세요. 하이매치입니다.\n\n" +
+                    "Hi! Higher한 당신을 Hire합니다.\n\n\n" +
+                            "안녕하세요. 하이매치입니다.\n\n" +
                             "지원자와 기업을 1:1로 이어주는 [Hi-Match] 임시 비밀번호 발급 안내입니다.\n\n" +
                             "회원님의 [Hi-Match] 임시 비밀번호가 발급되었습니다.\n" +
                             "아래의 임시 비밀번호로 로그인 하신 후 비밀번호를 재설정하시기 바랍니다.\n" +

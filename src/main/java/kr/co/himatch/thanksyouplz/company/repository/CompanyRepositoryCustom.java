@@ -2,6 +2,7 @@ package kr.co.himatch.thanksyouplz.company.repository;
 
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CompanyRepositoryCustom {
@@ -10,4 +11,11 @@ public interface CompanyRepositoryCustom {
 
     // 기업용 일반 로그인
     Company selectID(String memberID);
+
+    // 기업용 회원 ID 찾기
+    List<Company> selectMemberNameAndLicenseNumber(String memberName, String licenseNumber);
+
+    // 기업용 회원 PW 찾기
+    Optional<Company> selectCompanyIdAndNameAndPhone(String memberID, String memberName, String memberPhone);
+
 }

@@ -1,9 +1,7 @@
 package kr.co.himatch.thanksyouplz.company.service;
 
 import jakarta.transaction.Transactional;
-import kr.co.himatch.thanksyouplz.company.dto.CompanyMemberIDCheckRequestDTO;
-import kr.co.himatch.thanksyouplz.company.dto.CompanySignupRequestDTO;
-import kr.co.himatch.thanksyouplz.company.dto.CompanySignupResponseDTO;
+import kr.co.himatch.thanksyouplz.company.dto.*;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static kr.co.himatch.thanksyouplz.company.entity.QCompany.*;
@@ -89,5 +88,42 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = companyRepository.getReferenceById(companyNo);
         company.changeToken(companyMemberToken);
+    }
+
+    // 기업용 회원 ID 찾기
+    @Override
+    public List<CompanyMemberFindIDResponseDTO> companyFindID(CompanyMemberFindIDRequestDTO companyMemberFindIDRequestDTO) {
+        List<Company> findID = companyRepository.selectMemberNameAndLicenseNumber(
+                companyMemberFindIDRequestDTO.getMemberName(), companyMemberFindIDRequestDTO.getLicenseNumber());
+
+        List<CompanyMemberFindIDResponseDTO> companyMemberFindIDResponseDTO = findID.stream().map(this::findListID).toList();
+
+        return companyMemberFindIDResponseDTO;
+    }
+
+    // 기업용 회원 ID 찾기 이어서
+    public CompanyMemberFindIDResponseDTO findListID(Company company){
+        CompanyMemberFindIDResponseDTO companyMemberFindIDResponseDTO = new CompanyMemberFindIDResponseDTO();
+
+        companyMemberFindIDResponseDTO.setMemberID(company.getCompanyID());
+        companyMemberFindIDResponseDTO.setMemberJoinDate(company.getCompanyCreate());
+
+        return companyMemberFindIDResponseDTO;
+    }
+
+    // 기업용 회원 PW 찾기
+    @Override
+    public String findPass(CompanyMemberFindPWRequestDTO companyMemberFindPWRequestDTO, String memberPass) {
+        Optional<Company> findPass = companyRepository.selectCompanyIdAndNameAndPhone(
+                companyMemberFindPWRequestDTO.getMemberID(), companyMemberFindPWRequestDTO.getMemberName(), companyMemberFindPWRequestDTO.getMemberPhone());
+
+        if (findPass.isEmpty()){
+            return null;
+        }else{
+
+            // 유저의 비밀번호를 임시 비멀번호로 변경한다.
+            findPass.get().temporaryChangePass(memberPass);
+            return findPass.get().getCompanyMail();
+        }
     }
 }
