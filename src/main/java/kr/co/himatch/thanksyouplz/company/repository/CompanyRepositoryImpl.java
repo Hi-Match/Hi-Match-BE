@@ -53,4 +53,23 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
                         .fetchFirst()
         );
     }
+
+    // 기업용 회원 프로필 편집 - 비밀번호 편집 시 받는 정보로 CompanyMember 조회
+    @Override
+    public Optional<Company> selectCompanyPass(String memberID, String memberName, String memberPhone) {
+        return Optional.ofNullable(
+                queryFactory.select(company)
+                        .from(company)
+                        .where(company.companyID.eq(memberID).and(company.companyManagerName.eq(memberName).and(company.companyPhone.eq(memberPhone))))
+                        .fetchFirst()
+        );
+    }
+
+    // 기업용 회원 탈퇴
+    @Override
+    public void deleteCompany(Long memberNo) {
+        queryFactory.delete(company)
+                .where(company.companyNo.eq(memberNo))
+                .execute();
+    }
 }

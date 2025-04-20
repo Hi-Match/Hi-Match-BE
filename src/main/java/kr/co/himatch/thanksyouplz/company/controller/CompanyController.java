@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,14 +70,14 @@ public class CompanyController {
 
     // 회원 가입 시 ID 중복 검사
     @GetMapping("member/idcheck")
-    public ResponseEntity<?> checkID(@ModelAttribute CompanyMemberIDCheckRequestDTO memberIDCheckRequestDTO){
+    public ResponseEntity<?> checkID(@ModelAttribute CompanyMemberIDCheckRequestDTO memberIDCheckRequestDTO) {
         Boolean checkCompanyMemberID = companyService.checkCompanyMemberID(memberIDCheckRequestDTO);
         return new ResponseEntity<>(checkCompanyMemberID, HttpStatus.OK);
     }
 
     // 일반 로그인
     @PostMapping("/member/login")
-    public ResponseEntity<?> companyLogin(@RequestBody CompanyMemberLoginRequestDTO companyMemberLoginRequestDTO){
+    public ResponseEntity<?> companyLogin(@RequestBody CompanyMemberLoginRequestDTO companyMemberLoginRequestDTO) {
 
         Map<String, String> responsebody = new HashMap<>();
         responsebody.put("message", "Success");
@@ -127,7 +128,7 @@ public class CompanyController {
 
     // 기업용 회원 로그아웃
     @GetMapping("/member/logout")
-    public ResponseEntity<?> companyLogOut(){
+    public ResponseEntity<?> companyLogOut() {
         MultiValueMap<String, String> headers = new HttpHeaders();
         CompanyMemberLogOutResponseDTO companyMemberLogOutResponseDTO = new CompanyMemberLogOutResponseDTO();
         companyMemberLogOutResponseDTO.setMessage("Success!");
@@ -148,13 +149,13 @@ public class CompanyController {
 
     // 기업용 회원 ID 찾기
     @PostMapping("/member/idfind")
-    public ResponseEntity<?> findID(@RequestBody CompanyMemberFindIDRequestDTO companyMemberFindIDRequestDTO){
+    public ResponseEntity<?> findID(@RequestBody CompanyMemberFindIDRequestDTO companyMemberFindIDRequestDTO) {
 
         List<CompanyMemberFindIDResponseDTO> companyFindID = companyService.companyFindID(companyMemberFindIDRequestDTO);
 
-        if (companyFindID.isEmpty()){
+        if (companyFindID.isEmpty()) {
             return new ResponseEntity<>("일치하는 회원 정보가 없습니다.", HttpStatus.BAD_REQUEST);
-        }else{
+        } else {
             return new ResponseEntity<>(companyFindID, HttpStatus.OK);
         }
     }
@@ -177,14 +178,14 @@ public class CompanyController {
 
     // 기업용 회원 PW 찾기
     @PostMapping("/member/pwfind")
-    public ResponseEntity<?> findPW(@RequestBody CompanyMemberFindPWRequestDTO companyMemberFindPWRequestDTO){
+    public ResponseEntity<?> findPW(@RequestBody CompanyMemberFindPWRequestDTO companyMemberFindPWRequestDTO) {
 
         String temporaryPW = getTempPassword();
         String findPass = companyService.findPass(companyMemberFindPWRequestDTO, temporaryPW);
 
         if (findPass == null) {
             return new ResponseEntity<>("일치하는 회원 정보가 없습니다", HttpStatus.BAD_REQUEST);
-        }else{
+        } else {
 
             // 임시비밀번호 발급 메일 전송
             final String fromEmail = authConfig.getEmailId(); // requires valid gmail id
@@ -226,7 +227,48 @@ public class CompanyController {
         }
     }
 
-    //
+    // 프로필 편집 - 휴대폰 번호 변경
+    @PutMapping("/member/modify-phone")
+    public ResponseEntity<?> companyChangePhone(@RequestBody CompanyChangePhoneRequestDTO companyChangePhoneRequestDTO) {
+
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        CompanyChangePhoneResponseDTO companyChangePhone = companyService.companyChangePhone(companyChangePhoneRequestDTO, memberNo);
+        return new ResponseEntity<>(companyChangePhone, HttpStatus.OK);
+    }
+
+    // 프로필 편집 - 메일 변경
+    @PutMapping("/member/modify-mail")
+    public ResponseEntity<?> companyChangeMail(@RequestBody CompanyChangeMailRequestDTO companyChangeMailRequestDTO) {
+
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        CompanyChangeMailResponseDTO companyChangeMail = companyService.companyChangeMail(companyChangeMailRequestDTO, memberNo);
+        return new ResponseEntity<>(companyChangeMail, HttpStatus.OK);
+    }
+
+    // 프로필 편집 - 비밀번호 변경
+    @PutMapping("/member/modify-pass")
+    public ResponseEntity<?> companyChangePass(@RequestBody CompanyChangePassRequestDTO companyChangePassRequestDTO) {
+
+        CompanyChangePassResponseDTO companyChangePass = companyService.companyChangePass(companyChangePassRequestDTO);
+
+        if (companyChangePass == null) {
+            return new ResponseEntity<>("잘못된 접근입니다. 다시 시도하세요", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(companyChangePass, HttpStatus.OK);
+        }
+    }
+
+    // 기업용 회원 탈퇴
+    @DeleteMapping("/member/delete")
+    public ResponseEntity<?> companyDelete(){
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        CompanyMemberDeleteResponseDTO companyDelete = companyService.companyDelete(memberNo);
+
+        return new ResponseEntity<>(companyDelete, HttpStatus.OK);
+    }
 
 
 }
