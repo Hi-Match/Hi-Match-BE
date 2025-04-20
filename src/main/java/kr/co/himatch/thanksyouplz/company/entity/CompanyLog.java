@@ -1,19 +1,17 @@
 package kr.co.himatch.thanksyouplz.company.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
-import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "COMPANY")
+@Table(name = "COMPANY_LOG")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
 @Builder
-public class Company {
-
+public class CompanyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyNo;
@@ -61,39 +59,9 @@ public class Company {
     @Column(name = "COMPANY_CREATE", nullable = false)
     private LocalDateTime companyCreate;
 
-    @Column(name = "COMPANY_UPDATE")
-    private LocalDateTime companyUpdate;
-
     @Column(name = "COMPANY_REFRESH_TOKEN", length = 2000)
     private String companyRefreshToken;
 
-    // Token 재발급
-    public void changeToken(String companyRefreshToken){
-        this.companyRefreshToken = companyRefreshToken;
-    }
-
-    // 비밀번호 찾기 시 > 임시 비밀번호로 변경
-    public void temporaryChangePass(String companyPass){
-        this.companyPass = BCrypt.hashpw(companyPass, BCrypt.gensalt());
-    }
-
-    // 기업용 회원 프로필 편집 - 휴대폰 번호 변경
-    public void companyChangePhone(String companyPhone){
-        this.companyPhone = companyPhone;
-        this.companyUpdate = LocalDateTime.now();
-    }
-
-    // 기업용 회원 프로필 편집 - 메일 변경
-    public void companyChangeMail(String companyMail){
-        this.companyMail = companyMail;
-        this.companyUpdate = LocalDateTime.now();
-    }
-
-    // 기업용 회원 프로필 편집 - 비밀번호 변경
-    public void companyChangePass(String companyPass){
-        this.companyPass = companyPass;
-        this.companyUpdate = LocalDateTime.now();
-    }
-
-
+    @Column(name = "COMPANY_DELETE")
+    private LocalDateTime companyDelete;
 }

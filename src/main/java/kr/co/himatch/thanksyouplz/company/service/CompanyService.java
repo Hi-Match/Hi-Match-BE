@@ -22,4 +22,16 @@ public interface CompanyService {
 
     // 기업용 회원 PW 찾기
     String findPass(CompanyMemberFindPWRequestDTO companyMemberFindPWRequestDTO, String memberPass);
+
+    // 기업용 회원 프로필 편집 - 휴대폰 번호 변경
+    CompanyChangePhoneResponseDTO companyChangePhone(CompanyChangePhoneRequestDTO companyChangePhoneRequestDTO, Long memberNo);
+
+    // 기업용 회원 프로필 편집 - 메일 변경
+    CompanyChangeMailResponseDTO companyChangeMail(CompanyChangeMailRequestDTO companyChangeMailRequestDTO, Long memberNo);
+
+    // 기업용 회원 프로필 편집 - 비밀번호 변경
+    CompanyChangePassResponseDTO companyChangePass(CompanyChangePassRequestDTO companyChangePassRequestDTO);
+
+    // 기업용 회원 탈퇴
+    CompanyMemberDeleteResponseDTO companyDelete(Long memberNo);
 }

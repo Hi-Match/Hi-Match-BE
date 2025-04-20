@@ -18,4 +18,10 @@ public interface CompanyRepositoryCustom {
     // 기업용 회원 PW 찾기
     Optional<Company> selectCompanyIdAndNameAndPhone(String memberID, String memberName, String memberPhone);
 
+    // 기업용 회원 프로필 편집 - 비밀번호 편집 시 받는 정보로 CompanyMember 조회
+    Optional<Company> selectCompanyPass(String memberID, String memberName, String memberPhone);
+
+    // 기업용 회원 탈퇴
+    void deleteCompany(Long memberNo);
+
 }
