@@ -2,17 +2,16 @@ package kr.co.himatch.thanksyouplz.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "MEMBER")
+@Table(name = "MEMBER_LOG")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
 @Builder
-public class Member {
-
+public class MemberLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberNo;
@@ -69,34 +68,6 @@ public class Member {
     @Column(name = "member_test_date")
     private LocalDateTime memberTestDate;
 
-    @Column(name = "member_update")
-    private LocalDateTime memberUpdate;
-
-    // 프로필 편집 - 휴대폰 번호 변경
-    public void changePhone(String memberPhone){
-        this.memberPhone = memberPhone;
-        this.memberUpdate = LocalDateTime.now();
-    }
-
-    // 프로필 편집 - 메일 변경
-    public void changeMail(String memberMail){
-        this.memberMail = memberMail;
-        this.memberUpdate = LocalDateTime.now();
-    }
-
-    // 프로필 편집 - 비밀번호 변경
-    public void changePass(String memberPass){
-        this.memberPass = memberPass;
-        this.memberUpdate = LocalDateTime.now();
-    }
-
-    // Token 재발급
-    public void changeToken(String memberRefreshToken){
-        this.memberRefreshToken = memberRefreshToken;
-    }
-
-    // 비밀번호 찾기 시 > 임시 비밀번호로 변경
-    public void temporaryChangePass(String memberPass){
-        this.memberPass = BCrypt.hashpw(memberPass, BCrypt.gensalt());
-    }
+    @Column(name = "member_delete_date")
+    private LocalDateTime memberDeleteDate;
 }

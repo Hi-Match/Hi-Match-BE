@@ -284,5 +284,15 @@ public class MemberController {
         return new ResponseEntity<>(memberLogOutResponseDTO, headers, HttpStatus.OK);
     }
 
+    // 회원 탈퇴
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> memberDelete(){
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        MemberDeleteResponseDTO memberDelete = memberService.memberDelete(memberNo);
+
+        return new ResponseEntity<>(memberDelete, HttpStatus.OK);
+    }
+
 
 }

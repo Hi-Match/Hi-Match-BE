@@ -2,6 +2,8 @@ package kr.co.himatch.thanksyouplz.member.service;
 
 import jakarta.transaction.Transactional;
 import kr.co.himatch.thanksyouplz.member.dto.*;
+import kr.co.himatch.thanksyouplz.member.entity.MemberLog;
+import kr.co.himatch.thanksyouplz.member.repository.MemberLogRepository;
 import lombok.extern.slf4j.Slf4j;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.entity.SocialType;
@@ -22,6 +24,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private MemberLogRepository memberLogRepository;
 
     //닉네임 배열을 위한
     String[] nick1 = new String[]{"성실한", "재밌는", "유쾌한", "밝은", "목마른", "배아픈", "청량한", "심심한", "차가운", "지루한", "불안한", "행복한",
@@ -190,6 +195,45 @@ public class MemberServiceImpl implements MemberService {
 
             return memberChangePassResponseDTO;
         }
+    }
+
+    // 회원 탈퇴
+    @Override
+    public MemberDeleteResponseDTO memberDelete(Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+
+        // 회원 탈퇴 전, Member Log Table로 data를 옮긴다.
+        MemberLog memberLog = memberLogRepository.save(
+                MemberLog.builder()
+                        .memberID(member.getMemberID())
+                        .memberPass(member.getMemberPass())
+                        .memberName(member.getMemberName())
+                        .memberMail(member.getMemberMail())
+                        .memberPhone(member.getMemberPhone())
+                        .socialType(member.getSocialType())
+                        .memberSocialID(member.getMemberSocialID())
+                        .memberRefreshToken(member.getMemberRefreshToken())
+                        .memberNickName(member.getMemberNickName())
+                        .memberRandom(member.getMemberRandom())
+                        .memberFile(member.getMemberFile())
+                        .memberJoinDate(member.getMemberJoinDate())
+                        .memberCompanyAddress(member.getMemberCompanyAddress())
+                        .memberCompanyPart(member.getMemberCompanyPart())
+                        .memberCompanyContract(member.getMemberCompanyContract())
+                        .memberCode(member.getMemberCode())
+                        .memberTestDate(member.getMemberTestDate())
+                        .memberDeleteDate(LocalDateTime.now())
+                        .build()
+        );
+
+        // Member Table > Member_Log Table로 data 이관 후, 삭제를 진행한다.
+        memberRepository.deleteMember(memberNo);
+
+        MemberDeleteResponseDTO memberDeleteResponseDTO = new MemberDeleteResponseDTO();
+        memberDeleteResponseDTO.setMessage("Success!");
+
+        return memberDeleteResponseDTO;
+
     }
 
 }

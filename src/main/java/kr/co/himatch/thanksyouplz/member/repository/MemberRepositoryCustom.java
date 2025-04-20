@@ -28,5 +28,8 @@ public interface MemberRepositoryCustom {
     // 비밀번호 변경, 혹은 찾을 때 받는 정보로 Member 조회
     Optional<Member> selectPass(String memberID, String memberName, String memberPhone);
 
+    // 회원 탈퇴
+    void deleteMember(Long memberNo);
+
 
 }

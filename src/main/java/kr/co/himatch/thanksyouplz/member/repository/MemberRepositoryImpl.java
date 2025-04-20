@@ -86,4 +86,12 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
                         .fetchFirst()
         );
     }
+
+    // 회원 탈퇴
+    @Override
+    public void deleteMember(Long memberNo) {
+        queryFactory.delete(member)
+                .where(member.memberNo.eq(memberNo))
+                .execute();
+    }
 }
