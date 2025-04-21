@@ -28,4 +28,11 @@ public class ResumeAwardRepositoryImpl implements ResumeAwardRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public void deleteResumeAward(Long resumeNo) {
+        queryFactory.delete(resumeAward)
+                .where(resumeAward.resumeNo.resumeNo.eq(resumeNo))
+                .execute();
+    }
+
 }

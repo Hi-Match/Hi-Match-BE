@@ -1,6 +1,9 @@
 package kr.co.himatch.thanksyouplz.resume.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.util.Arrays;
 
 public enum ArmyPart {
     AIR_FORCE("공군"),
@@ -16,5 +19,13 @@ public enum ArmyPart {
     @JsonValue
     public String getColumData() {
         return columData;
+    }
+
+    @JsonCreator
+    public static ArmyPart fromString(String value) {
+        return Arrays.stream(ArmyPart.values())
+                .filter(armyPart -> armyPart.columData.equals(value))
+                .findAny()
+                .orElse(null);
     }
 }

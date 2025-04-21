@@ -51,4 +51,27 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
                 .fetchFirst();
     }
 
+    @Override
+    public void deleteResumeDetail(Long memberNo, Long resumeNo) {
+        queryFactory.delete(resume)
+                .where(resume.resumeNo.eq(resumeNo)
+                        .and(resume.memberNo.memberNo.eq(memberNo)))
+                .execute();
+    }
+
+    @Override
+    public Long countResumeDetailByMemberAndResume(Long memberNo, Long resumeNo) {
+        return queryFactory.select(resume.count())
+                .where(resume.resumeNo.eq(resumeNo)
+                        .and(resume.memberNo.memberNo.eq(memberNo)))
+                .fetchFirst();
+    }
+
+    @Override
+    public Long countResumeDetailByMember(Long memberNo) {
+        return queryFactory.select(resume.count())
+                .where(resume.memberNo.memberNo.eq(memberNo))
+                .fetchFirst();
+    }
+
 }

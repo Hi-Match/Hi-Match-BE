@@ -41,9 +41,4 @@ public class ResumeExperience {
     @Column(name = "EXP_IS_CURRENT")
     private Boolean expIsCurrent;
 
-    @Column(name = "EXP_CREATE")
-    private LocalDateTime expCreate;
-
-    @Column(name = "EXP_UPDATE")
-    private LocalDateTime expUpdate;
 }

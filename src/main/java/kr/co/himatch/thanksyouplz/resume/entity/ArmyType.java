@@ -1,6 +1,9 @@
 package kr.co.himatch.thanksyouplz.resume.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.util.Arrays;
 
 public enum ArmyType {
     NON_APPLICABLE("비대상"),
@@ -16,5 +19,13 @@ public enum ArmyType {
     @JsonValue
     public String getColumData() {
         return columData;
+    }
+
+    @JsonCreator
+    public static ArmyType fromString(String value) {
+        return Arrays.stream(ArmyType.values())
+                .filter(armyType -> armyType.columData.equals(value))
+                .findAny()
+                .orElse(null);
     }
 }

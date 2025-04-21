@@ -36,4 +36,11 @@ public class ResumeExperienceRepositoryImpl implements ResumeExperienceRepositor
                 .fetch();
     }
 
+    @Override
+    public void deleteResumeExperience(Long resumeNo) {
+        queryFactory.delete(resumeExperience)
+                .where(resumeEducation.resumeNo.resumeNo.eq(resumeNo))
+                .execute();
+    }
+
 }

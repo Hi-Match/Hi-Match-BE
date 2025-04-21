@@ -1,6 +1,9 @@
 package kr.co.himatch.thanksyouplz.resume.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.util.Arrays;
 
 public enum SchPart {
     HIGH_SCHOOL("고등학교"),
@@ -18,5 +21,13 @@ public enum SchPart {
     @JsonValue
     public String getColumData() {
         return columData;
+    }
+
+    @JsonCreator
+    public static SchPart fromString(String value) {
+        return Arrays.stream(SchPart.values())
+                .filter(schPart -> schPart.columData.equals(value))
+                .findAny()
+                .orElse(null);
     }
 }

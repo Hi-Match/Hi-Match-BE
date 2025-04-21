@@ -6,5 +6,5 @@ import lombok.ToString;
 @Data
 @ToString
 public class ResumeDetailResponseDTO {
-    private String success;
+    private String message;
 }

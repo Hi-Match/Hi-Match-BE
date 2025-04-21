@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ResumeExperienceRepositoryCustom {
     List<ResumeExperienceDTO> selectResumeExperience(Long resumeNo);
+    void deleteResumeExperience(Long resumeNo);
 }

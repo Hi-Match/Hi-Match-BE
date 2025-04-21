@@ -18,16 +18,16 @@ public class ResumeSchoolDTO {
     @JsonFormat(pattern = "yyyyMMdd")
     private LocalDateTime schoolGraduationDate;
     @JsonFormat(pattern = "yyyyMMdd")
-    private LocalDateTime schoolAddmissionDate;
+    private LocalDateTime schoolAdmissionDate;
     private BigDecimal schoolGPA;
     private SchPart schoolPart;
 
-    public ResumeSchoolDTO(String schoolName, String schoolMajor, SchType schoolDegree, LocalDateTime schoolGraduationDate, LocalDateTime schoolAddmissionDate, BigDecimal schoolGPA, SchPart schoolPart) {
+    public ResumeSchoolDTO(String schoolName, String schoolMajor, SchType schoolDegree, LocalDateTime schoolGraduationDate, LocalDateTime schoolAdmissionDate, BigDecimal schoolGPA, SchPart schoolPart) {
         this.schoolName = schoolName;
         this.schoolMajor = schoolMajor;
         this.schoolDegree = schoolDegree;
         this.schoolGraduationDate = schoolGraduationDate;
-        this.schoolAddmissionDate = schoolAddmissionDate;
+        this.schoolAdmissionDate = schoolAdmissionDate;
         this.schoolGPA = schoolGPA;
         this.schoolPart = schoolPart;
     }
