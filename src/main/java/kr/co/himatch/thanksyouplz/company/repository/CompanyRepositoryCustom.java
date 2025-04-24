@@ -24,4 +24,6 @@ public interface CompanyRepositoryCustom {
     // 기업용 회원 탈퇴
     void deleteCompany(Long memberNo);
 
+    Optional<Company> selectCompanyDetail(Long memberNo);
+
 }

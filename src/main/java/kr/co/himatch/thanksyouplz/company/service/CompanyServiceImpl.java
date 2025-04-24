@@ -4,9 +4,12 @@ import jakarta.transaction.Transactional;
 import kr.co.himatch.thanksyouplz.company.dto.*;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 import kr.co.himatch.thanksyouplz.company.entity.CompanyLog;
+import kr.co.himatch.thanksyouplz.company.entity.CompanyTag;
 import kr.co.himatch.thanksyouplz.company.repository.CompanyLogRepository;
 import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
+import kr.co.himatch.thanksyouplz.company.repository.CompanyTagRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
+import kr.co.himatch.thanksyouplz.resume.entity.ResumeAward;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private CompanyLogRepository companyLogRepository;
+
+    @Autowired
+    private CompanyTagRepository companyTagRepository;
 
     // 기업용 일반 회원 가입
     @Override
@@ -64,9 +70,9 @@ public class CompanyServiceImpl implements CompanyService {
     public Boolean checkCompanyMemberID(CompanyMemberIDCheckRequestDTO companyMemberIDCheckRequestDTO) {
         Optional<String> selectMemberID = companyRepository.selectMemberID(companyMemberIDCheckRequestDTO.getMemberID());
 
-        if (selectMemberID.isPresent()){
+        if (selectMemberID.isPresent()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -76,12 +82,12 @@ public class CompanyServiceImpl implements CompanyService {
     public Long companyLogin(String memberID, String memberPass) {
         Company selectID = companyRepository.selectID(memberID);
 
-        if (selectID == null){
+        if (selectID == null) {
             return null;
-        }else{
-            if (BCrypt.checkpw(memberPass, selectID.getCompanyPass())){
+        } else {
+            if (BCrypt.checkpw(memberPass, selectID.getCompanyPass())) {
                 return selectID.getCompanyNo();
-            }else{
+            } else {
                 return null;
             }
         }
@@ -107,7 +113,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     // 기업용 회원 ID 찾기 이어서
-    public CompanyMemberFindIDResponseDTO findListID(Company company){
+    public CompanyMemberFindIDResponseDTO findListID(Company company) {
         CompanyMemberFindIDResponseDTO companyMemberFindIDResponseDTO = new CompanyMemberFindIDResponseDTO();
 
         companyMemberFindIDResponseDTO.setMemberID(company.getCompanyID());
@@ -122,9 +128,9 @@ public class CompanyServiceImpl implements CompanyService {
         Optional<Company> findPass = companyRepository.selectCompanyIdAndNameAndPhone(
                 companyMemberFindPWRequestDTO.getMemberID(), companyMemberFindPWRequestDTO.getMemberName(), companyMemberFindPWRequestDTO.getMemberPhone());
 
-        if (findPass.isEmpty()){
+        if (findPass.isEmpty()) {
             return null;
-        }else{
+        } else {
 
             // 유저의 비밀번호를 임시 비멀번호로 변경한다.
             findPass.get().temporaryChangePass(memberPass);
@@ -163,9 +169,9 @@ public class CompanyServiceImpl implements CompanyService {
                 companyChangePassRequestDTO.getMemberID(), companyChangePassRequestDTO.getMemberName(), companyChangePassRequestDTO.getMemberPhone()
         );
 
-        if (companyChangePass.isEmpty()){
+        if (companyChangePass.isEmpty()) {
             return null;
-        }else{
+        } else {
             companyChangePass.get().companyChangePass(BCrypt.hashpw(companyChangePassRequestDTO.getMemberPass(), BCrypt.gensalt()));
 
             CompanyChangePassResponseDTO companyChangePassResponseDTO = new CompanyChangePassResponseDTO();
@@ -212,5 +218,53 @@ public class CompanyServiceImpl implements CompanyService {
         companyMemberDeleteResponseDTO.setMessage("Success!");
 
         return companyMemberDeleteResponseDTO;
+    }
+
+    // 기업용 상세 조회 API
+    @Override
+    public CompanyInfoDetailResponseDTO companyDetail(Long memberNo) {
+        Company company = companyRepository.selectCompanyDetail(memberNo).orElseThrow();
+        CompanyInfoDetailResponseDTO companyInfoDetailResponseDTO = new CompanyInfoDetailResponseDTO();
+        companyInfoDetailResponseDTO.setCompanyName(company.getCompanyName());
+        companyInfoDetailResponseDTO.setCompanyManagerName(company.getCompanyManagerName());
+        companyInfoDetailResponseDTO.setCompanyAddress(company.getCompanyAddress());
+        companyInfoDetailResponseDTO.setCompanyPhone(company.getCompanyPhone());
+        companyInfoDetailResponseDTO.setCompanyMail(company.getCompanyMail());
+        companyInfoDetailResponseDTO.setCompanyIndustry(company.getCompanyIndustry());
+        companyInfoDetailResponseDTO.setCompanyEmployee(company.getCompanyEmployee());
+        companyInfoDetailResponseDTO.setCompanyDescription(company.getCompanyDescription());
+        companyInfoDetailResponseDTO.setCompanyLogo(company.getCompanyLogo());
+        companyInfoDetailResponseDTO.setTag(companyTagRepository.selectCompanyTags(memberNo));
+        return companyInfoDetailResponseDTO;
+    }
+
+    @Override
+    public CompanyInfoRegisterResponseDTO companyUpdate(CompanyInfoRegisterRequestDTO registerRequestDTO, Long memberNo) {
+        Company company = companyRepository.getReferenceById(memberNo);
+        company.companyInfoModify(
+                registerRequestDTO.getCompanyName(),
+                registerRequestDTO.getCompanyManagerName(),
+                registerRequestDTO.getCompanyAddress(),
+                registerRequestDTO.getCompanyPhone(),
+                registerRequestDTO.getCompanyMail(),
+                registerRequestDTO.getCompanyIndustry(),
+                registerRequestDTO.getCompanyEmployee(),
+                registerRequestDTO.getCompanyDescription(),
+                registerRequestDTO.getCompanyLogo()
+        );
+        companyTagRepository.deleteCompanyTags(memberNo);
+        Optional.ofNullable(registerRequestDTO.getTag())
+                .orElseGet(List::of)
+                .forEach(companyInfoTagRegisterDTO ->
+                        companyTagRepository.save(
+                                CompanyTag
+                                        .builder()
+                                        .companyNo(company)
+                                        .cTagName(companyInfoTagRegisterDTO.getTagName())
+                                        .build()
+                        ));
+        CompanyInfoRegisterResponseDTO companyInfoRegisterResponseDTO = new CompanyInfoRegisterResponseDTO();
+        companyInfoRegisterResponseDTO.setMessage("Success");
+        return companyInfoRegisterResponseDTO;
     }
 }
