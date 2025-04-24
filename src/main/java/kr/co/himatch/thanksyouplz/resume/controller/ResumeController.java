@@ -51,20 +51,26 @@ public class ResumeController {
     @PutMapping("/modify")
     public ResponseEntity<?> modify(@RequestBody ResumeDetailDTO resumeDetailDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-        ResumeDetailResponseDTO detail = resumeService.modifyResumeDetail(resumeDetailDTO, memberNo);
+        ResumeDetailResponseDTO detail = resumeService.deleteResumeDetail(resumeDetailDTO.getResumeNo(), memberNo);
         if (detail == null) {
             detail = new ResumeDetailResponseDTO();
             detail.setMessage("본인만 수정할 수 있습니다.");
             return new ResponseEntity<>(detail, HttpStatus.BAD_REQUEST);
         }
+        resumeService.registerResumeDetail(resumeDetailDTO, memberNo);
         return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestParam Long resumeNo) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-        resumeService.deleteResumeDetail(resumeNo, memberNo);
-        return new ResponseEntity<>(HttpStatus.OK);
+        ResumeDetailResponseDTO detail = resumeService.deleteResumeDetail(resumeNo, memberNo);
+        if (detail == null) {
+            detail = new ResumeDetailResponseDTO();
+            detail.setMessage("본인만 삭제할 수 있습니다.");
+            return new ResponseEntity<>(detail, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 
 }

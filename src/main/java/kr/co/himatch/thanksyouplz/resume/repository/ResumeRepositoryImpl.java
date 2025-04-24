@@ -62,6 +62,7 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
     @Override
     public Long countResumeDetailByMemberAndResume(Long memberNo, Long resumeNo) {
         return queryFactory.select(resume.count())
+                .from(resume)
                 .where(resume.resumeNo.eq(resumeNo)
                         .and(resume.memberNo.memberNo.eq(memberNo)))
                 .fetchFirst();
@@ -70,6 +71,7 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
     @Override
     public Long countResumeDetailByMember(Long memberNo) {
         return queryFactory.select(resume.count())
+                .from(resume)
                 .where(resume.memberNo.memberNo.eq(memberNo))
                 .fetchFirst();
     }

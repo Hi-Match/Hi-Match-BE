@@ -11,7 +11,5 @@ public interface ResumeService {
 
     ResumeDetailResponseDTO registerResumeDetail(ResumeDetailDTO resumeDetailDTO, Long memberNo);
 
-    ResumeDetailResponseDTO modifyResumeDetail(ResumeDetailDTO resumeDetailDTO, Long memberNo);
-
     ResumeDetailResponseDTO deleteResumeDetail(Long resumeNo, Long memberNo);
 }
