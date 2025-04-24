@@ -10,6 +10,7 @@ import kr.co.himatch.thanksyouplz.auth.util.EmailUtil;
 import kr.co.himatch.thanksyouplz.auth.util.JwtTokenUtils;
 import kr.co.himatch.thanksyouplz.company.dto.*;
 import kr.co.himatch.thanksyouplz.company.service.CompanyService;
+import kr.co.himatch.thanksyouplz.company.service.TagService;
 import kr.co.himatch.thanksyouplz.config.AuthConfig;
 import kr.co.himatch.thanksyouplz.auth.util.OkHttpService;
 import kr.co.himatch.thanksyouplz.member.dto.MemberFindPassResponseDTO;
@@ -44,6 +45,8 @@ public class CompanyController {
     private AuthConfig authConfig;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private TagService tagService;
 
 
     // 기업용 회원 가입
@@ -262,12 +265,33 @@ public class CompanyController {
 
     // 기업용 회원 탈퇴
     @DeleteMapping("/member/delete")
-    public ResponseEntity<?> companyDelete(){
+    public ResponseEntity<?> companyDelete() {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
         CompanyMemberDeleteResponseDTO companyDelete = companyService.companyDelete(memberNo);
 
         return new ResponseEntity<>(companyDelete, HttpStatus.OK);
+    }
+
+    @GetMapping("/info/detail")
+    public ResponseEntity<?> infoDetail() {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        CompanyInfoDetailResponseDTO companyInfoDetailResponseDTO = companyService.companyDetail(memberNo);
+        return new ResponseEntity<>(companyInfoDetailResponseDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/info/register")
+    public ResponseEntity<?> infoRegister(@RequestBody CompanyInfoRegisterRequestDTO registerRequestDTO) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        CompanyInfoRegisterResponseDTO companyInfoRegisterResponseDTO = companyService.companyUpdate(registerRequestDTO, memberNo);
+        return new ResponseEntity<>(companyInfoRegisterResponseDTO, HttpStatus.OK);
+    }
+
+    // 기업용 Tag 리스트 제공
+    @GetMapping("/info/tags")
+    public ResponseEntity<?> infoTags() {
+        List<CompanyInfoTagResponseDTO> companyInfoTagResponseDTOList = tagService.tagList();
+        return new ResponseEntity<>(companyInfoTagResponseDTOList, HttpStatus.OK);
     }
 
 

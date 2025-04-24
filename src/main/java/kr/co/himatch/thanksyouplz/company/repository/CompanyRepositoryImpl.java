@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+
 import static kr.co.himatch.thanksyouplz.company.entity.QCompany.*;
 
 public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
@@ -71,5 +72,16 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
         queryFactory.delete(company)
                 .where(company.companyNo.eq(memberNo))
                 .execute();
+    }
+    
+    // 기업용 상세 조회
+    @Override
+    public Optional<Company> selectCompanyDetail(Long memberNo) {
+        return Optional.ofNullable(
+                queryFactory.select(company)
+                        .from(company)
+                        .where(company.companyNo.eq(memberNo))
+                        .fetchFirst()
+        );
     }
 }

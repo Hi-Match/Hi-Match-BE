@@ -34,4 +34,10 @@ public interface CompanyService {
 
     // 기업용 회원 탈퇴
     CompanyMemberDeleteResponseDTO companyDelete(Long memberNo);
+
+    // 기업용 상세 조회
+    CompanyInfoDetailResponseDTO companyDetail(Long memberNo);
+
+    // 기업용 상세 등록
+    CompanyInfoRegisterResponseDTO companyUpdate(CompanyInfoRegisterRequestDTO registerRequestDTO, Long memberNo);
 }

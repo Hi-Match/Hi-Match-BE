@@ -1,4 +1,5 @@
 package kr.co.himatch.thanksyouplz.company.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -45,8 +46,8 @@ public class Company {
     @Column(name = "COMPANY_INDUSTRY", length = 30)
     private String companyIndustry;
 
-    @Column(name = "COMPANY_EMPLOYEE")
-    private Integer companyEmployee;
+    @Column(name = "COMPANY_EMPLOYEE", length = 50)
+    private String companyEmployee;
 
     @Lob
     @Column(name = "COMPANY_DESCRIPTION")
@@ -68,31 +69,43 @@ public class Company {
     private String companyRefreshToken;
 
     // Token 재발급
-    public void changeToken(String companyRefreshToken){
+    public void changeToken(String companyRefreshToken) {
         this.companyRefreshToken = companyRefreshToken;
     }
 
     // 비밀번호 찾기 시 > 임시 비밀번호로 변경
-    public void temporaryChangePass(String companyPass){
+    public void temporaryChangePass(String companyPass) {
         this.companyPass = BCrypt.hashpw(companyPass, BCrypt.gensalt());
     }
 
     // 기업용 회원 프로필 편집 - 휴대폰 번호 변경
-    public void companyChangePhone(String companyPhone){
+    public void companyChangePhone(String companyPhone) {
         this.companyPhone = companyPhone;
         this.companyUpdate = LocalDateTime.now();
     }
 
     // 기업용 회원 프로필 편집 - 메일 변경
-    public void companyChangeMail(String companyMail){
+    public void companyChangeMail(String companyMail) {
         this.companyMail = companyMail;
         this.companyUpdate = LocalDateTime.now();
     }
 
     // 기업용 회원 프로필 편집 - 비밀번호 변경
-    public void companyChangePass(String companyPass){
+    public void companyChangePass(String companyPass) {
         this.companyPass = companyPass;
         this.companyUpdate = LocalDateTime.now();
+    }
+
+    public void companyInfoModify(String companyName, String companyManagerName, String companyAddress, String companyPhone, String companyMail, String companyIndustry, String companyEmployee, String companyDescription, String companyLogo) {
+        this.companyName = companyName;
+        this.companyManagerName = companyManagerName;
+        this.companyAddress = companyAddress;
+        this.companyPhone = companyPhone;
+        this.companyMail = companyMail;
+        this.companyIndustry = companyIndustry;
+        this.companyEmployee = companyEmployee;
+        this.companyDescription = companyDescription;
+        this.companyLogo = companyLogo;
     }
 
 

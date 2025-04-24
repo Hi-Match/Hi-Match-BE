@@ -43,8 +43,8 @@ public class CompanyLog {
     @Column(name = "COMPANY_INDUSTRY", length = 30)
     private String companyIndustry;
 
-    @Column(name = "COMPANY_EMPLOYEE")
-    private Integer companyEmployee;
+    @Column(name = "COMPANY_EMPLOYEE", length = 50)
+    private String companyEmployee;
 
     @Lob
     @Column(name = "COMPANY_DESCRIPTION")
