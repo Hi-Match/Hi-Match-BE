@@ -7,4 +7,6 @@ import java.util.List;
 public interface ResumeEducationRepositoryCustom {
 
     List<ResumeEducationDTO> selectResumeEducation(Long resumeNo);
+
+    void deleteResumeEducation(Long resumeNo);
 }

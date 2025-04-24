@@ -9,9 +9,7 @@ public interface ResumeService {
 
     ResumeDetailDTO findResumeDetail(Long memberNo, Long resumeNo);
 
-    ResumeDetailResponseDTO registerResumeDetail(ResumeDetailDTO resumeDetailDTO);
+    ResumeDetailResponseDTO registerResumeDetail(ResumeDetailDTO resumeDetailDTO, Long memberNo);
 
-    ResumeDetailResponseDTO modifyResumeDetail(ResumeDetailDTO resumeDetailDTO);
-
-    ResumeDetailResponseDTO deleteResumeDetail(ResumeDetailDTO resumeDetailDTO);
+    ResumeDetailResponseDTO deleteResumeDetail(Long resumeNo, Long memberNo);
 }

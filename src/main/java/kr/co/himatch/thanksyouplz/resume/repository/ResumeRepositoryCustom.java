@@ -10,4 +10,9 @@ public interface ResumeRepositoryCustom {
 
     ResumeDetailDTO selectResumeDetail(Long memberNo, Long resumeNo);
 
+    void deleteResumeDetail(Long memberNo, Long resumeNo);
+
+    Long countResumeDetailByMemberAndResume(Long memberNo, Long resumeNo);
+    Long countResumeDetailByMember(Long memberNo);
+
 }

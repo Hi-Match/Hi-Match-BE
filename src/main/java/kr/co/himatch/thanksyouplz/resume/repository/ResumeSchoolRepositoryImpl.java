@@ -16,6 +16,17 @@ public class ResumeSchoolRepositoryImpl implements ResumeSchoolRepositoryCustom 
 
     @Override
     public List<ResumeSchoolDTO> selectResumeSchool(Long resumeNo) {
-        return queryFactory.select(Projections.constructor(ResumeSchoolDTO.class, resumeSchool.schName, resumeSchool.schMajor, resumeSchool.schDegree, resumeSchool.schGraduationDate, resumeSchool.schAdmissionDate, resumeSchool.schGpa, resumeSchool.schPart)).from(resumeSchool).where(resumeSchool.resumeNo.resumeNo.eq(resumeNo)).fetch();
+        return queryFactory.select(Projections.constructor(ResumeSchoolDTO.class, resumeSchool.schName, resumeSchool.schMajor, resumeSchool.schDegree, resumeSchool.schGraduationDate, resumeSchool.schAdmissionDate, resumeSchool.schGpa, resumeSchool.schPart))
+                .from(resumeSchool)
+                .where(resumeSchool.resumeNo.resumeNo.eq(resumeNo))
+                .fetch();
+    }
+
+    @Override
+    public void deleteResumeSchool(Long resumeNo) {
+        queryFactory.delete(resumeSchool)
+                .where(resumeSchool.resumeNo.resumeNo.eq(resumeNo))
+                .execute();
+
     }
 }

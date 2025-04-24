@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ResumeAwardRepositoryCustom {
     List<ResumeAwardDTO> selectResumeAward(Long resumeNo);
+
+    void deleteResumeAward(Long resumeNo);
 }

@@ -38,10 +38,4 @@ public class ResumeEducation {
     @Column(name = "EDU_END_DATE")
     private LocalDateTime eduEndDate;
 
-    @Column(name = "EDU_CREATE")
-    private LocalDateTime eduCreate;
-
-    @Column(name = "EDU_UPDATE")
-    private LocalDateTime eduUpdate;
-
 }

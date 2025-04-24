@@ -28,4 +28,11 @@ public class ResumeCertificateRepositoryImpl implements ResumeCertificateReposit
                 .fetch();
     }
 
+    @Override
+    public void deleteResumeCertificate(Long resumeNo) {
+        queryFactory.delete(resumeCertificate)
+                .where(resumeCertificate.resumeNo.resumeNo.eq(resumeNo))
+                .execute();
+    }
+
 }

@@ -8,4 +8,6 @@ public interface ResumeCertificateRepositoryCustom {
 
     List<ResumeCertificateDTO> selectResumeCertificate(Long resumeNo);
 
+    void deleteResumeCertificate(Long resumeNo);
+
 }

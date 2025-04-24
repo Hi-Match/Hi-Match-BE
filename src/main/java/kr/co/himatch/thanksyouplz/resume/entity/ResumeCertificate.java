@@ -32,10 +32,4 @@ public class ResumeCertificate {
     @Column(name = "CER_EXPIRE")
     private LocalDateTime cerExpire;
 
-    @Column(name = "CER_CREATE")
-    private LocalDateTime cerCreate;
-
-    @Column(name = "CER_UPDATE")
-    private LocalDateTime cerUpdate;
-
 }

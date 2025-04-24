@@ -43,12 +43,6 @@ public class ResumeSchool {
     @Column(name = "SCH_DESCRIPTION", columnDefinition = "LONGTEXT")
     private String schDescription;
 
-    @Column(name = "SCH_CREATE")
-    private LocalDateTime schCreate;
-
-    @Column(name = "SCH_UPDATE")
-    private LocalDateTime schUpdate;
-
     @Convert(converter = SchPartConverter.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "SCH_PART")
