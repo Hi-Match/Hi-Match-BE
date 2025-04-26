@@ -70,7 +70,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Boolean checkCompanyMemberID(CompanyMemberIDCheckRequestDTO companyMemberIDCheckRequestDTO) {
         Optional<String> selectMemberID = companyRepository.selectMemberID(companyMemberIDCheckRequestDTO.getMemberID());
 
-        if (selectMemberID.isPresent()) {
+        if (selectMemberID.isEmpty()) {
             return true;
         } else {
             return false;
