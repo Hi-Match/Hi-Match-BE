@@ -44,12 +44,6 @@ public class JobPosting {
     @Column(name = "POSTING_LOCATION", length = 100)
     private String postingLocation;
 
-    @Column(name = "POSTING_IS_DEGREE")
-    private Boolean postingIsDegree;
-
-    @Column(name = "POSTING_IS_EXP")
-    private Boolean postingIsExp;
-
     @Column(name = "POSTING_TYPE", length = 100)
     private String postingType;
 
@@ -61,12 +55,6 @@ public class JobPosting {
 
     @Column(name = "POSTING_WORK_END_TIME")
     private LocalDateTime postingWorkEndTime;
-
-    @Column(name = "POSTING_COMPANY_URL", length = 255)
-    private String postingCompanyUrl;
-
-    @Column(name = "POSTING_ETC", length = 255)
-    private String postingEtc;
 
     @Column(name = "POSTING_IS_FINISH")
     private Boolean postingIsFinish;
