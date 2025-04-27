@@ -12,6 +12,5 @@ public class CompanyMemberMyhomeResponseDTO {
     private String memberMail;
     private String memberName;
     private String memberPhone;
-    private String memberAddress;
     private LocalDateTime memberJoinDate;
 }

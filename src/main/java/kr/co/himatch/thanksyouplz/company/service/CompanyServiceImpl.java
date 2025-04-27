@@ -219,7 +219,6 @@ public class CompanyServiceImpl implements CompanyService {
         companyMyhome.setMemberMail(company.getCompanyMail());
         companyMyhome.setMemberName(company.getCompanyManagerName());
         companyMyhome.setMemberPhone(company.getCompanyPhone());
-        companyMyhome.setMemberAddress(company.getCompanyAddress());
         companyMyhome.setMemberJoinDate(company.getCompanyCreate());
         return companyMyhome;
     }
