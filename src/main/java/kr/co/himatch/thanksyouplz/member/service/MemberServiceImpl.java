@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -234,6 +235,84 @@ public class MemberServiceImpl implements MemberService {
 
         return memberDeleteResponseDTO;
 
+    }
+
+    // 마이 페이지 접속 시 제공하는 회원 정보
+    @Override
+    public MemberInfoResponseDTO memberInfo(Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        MemberInfoResponseDTO memberInfoResponseDTO = new MemberInfoResponseDTO();
+        memberInfoResponseDTO.setMemberID(member.getMemberID());
+        memberInfoResponseDTO.setMemberName(member.getMemberName());
+        memberInfoResponseDTO.setMemberMail(member.getMemberMail());
+        memberInfoResponseDTO.setMemberJoinDate(member.getMemberJoinDate());
+        memberInfoResponseDTO.setMemberPhone(member.getMemberPhone());
+
+        // spilt을 바로 하면 생기는 오류
+        // member.getCompanyAddress가 null이면 null.spilt()이 되기 때문에 >> 오류가 남
+
+        // 사용자가 원하는 기업의 주소지들을 배열로 입력받는다.
+        // 사용자가 원하는 기업의 주소(근무지)는 여러 군데 일 수 있기 때문이다.
+        if (member.getMemberCompanyAddress() == null){
+            memberInfoResponseDTO.setCompanyAddress(null);
+        }else{
+            memberInfoResponseDTO.setCompanyAddress(Arrays.stream(member.getMemberCompanyAddress().split(",")).toList());
+        }
+
+        // 사용자가 원하는 기업의 직무들을 배열로 입력받는다.
+        // 사용자가 원하는 기업의 직무 여러개일 수 있기 때문이다.
+        if (member.getMemberCompanyPart() == null){
+            memberInfoResponseDTO.setCompanyPart(null);
+        }else{
+            memberInfoResponseDTO.setCompanyPart(Arrays.stream(member.getMemberCompanyPart().split(",")).toList());
+        }
+
+        // 사용자가 원하는 기업의 고용형태들을 배열로 입력받는다.
+        // 사용자가 원하는 기업의 고용형태가 다양할 수 있기 때문이다.
+        if (member.getMemberCompanyContract() == null){
+            memberInfoResponseDTO.setCompanyType(null);
+        }else{
+            memberInfoResponseDTO.setCompanyType(Arrays.stream(member.getMemberCompanyContract().split(",")).toList());
+        }
+
+        return memberInfoResponseDTO;
+    }
+
+    // 지원자가 마이페이지에서 저장하는 원하는 기업의 정보들(주소, 고용형태, 직무)
+    @Override
+    public MemberCompanyInfoResponseDTO memberCompanyInfo(MemberCompanyInfoRequestDTO memberCompanyInfoRequestDTO, Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+
+        // List로 받아져있는 주소 정보들을 ","를 기준으로 한 String으로 합쳐준다.
+        List<String> memberCompanyInfoAddress = memberCompanyInfoRequestDTO.getCompanyAddress();
+        String memberWantedCompanyAddressInfo = String.valueOf("");
+
+        if (memberCompanyInfoAddress != null && !memberCompanyInfoAddress.isEmpty()){
+            memberWantedCompanyAddressInfo = String.join(",", memberCompanyInfoAddress);
+        }
+
+        // List로 받아져있는 직무 정보들을 ","를 기준으로 한 String으로 합쳐준다.
+        List<String> memberCompanyInfoPart = memberCompanyInfoRequestDTO.getCompanyPart();
+        String memberWantedCompanyPartInfo = String.valueOf("");
+
+        if (memberCompanyInfoPart != null && !memberCompanyInfoPart.isEmpty()){
+            memberWantedCompanyPartInfo = String.join(",", memberCompanyInfoPart);
+        }
+
+        // List로 받아져있는 고용형태 정보들을 ","를 기준으로 한 String으로 합쳐준다.
+        List<String> memberCompanyInfoType = memberCompanyInfoRequestDTO.getCompanyType();
+        String memberWantedCompanyTypeInfo = String.valueOf("");
+
+        if (memberCompanyInfoType != null && !memberCompanyInfoType.isEmpty()){
+            memberWantedCompanyTypeInfo = String.join(",", memberCompanyInfoType);
+        }
+
+        member.changeMemberCompanyInfo(memberWantedCompanyAddressInfo, memberWantedCompanyPartInfo, memberWantedCompanyTypeInfo);
+
+        MemberCompanyInfoResponseDTO memberCompanyInfoResponseDTO = new MemberCompanyInfoResponseDTO();
+        memberCompanyInfoResponseDTO.setMessage("Success!");
+
+        return memberCompanyInfoResponseDTO;
     }
 
 }
