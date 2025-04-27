@@ -104,6 +104,9 @@ public class ResumeServiceImpl implements ResumeService {
                 .resumeArmyDate(resumeDetailDTO.getResumeArmyDate())
                 .resumeArmyEnd(resumeDetailDTO.getResumeArmyEnd())
                 .resumeArmyPart(resumeDetailDTO.getResumeArmyPart())
+                .resumeDisability(resumeDetailDTO.getResumeDisability())
+                .resumeDisabilityType(resumeDetailDTO.getResumeDisabilityType())
+                .resumeRewardingPatriotism(resumeDetailDTO.getResumeRewardingPatriotism())
                 .build());
 
         Optional.ofNullable(resumeDetailDTO.getResumeSchool())

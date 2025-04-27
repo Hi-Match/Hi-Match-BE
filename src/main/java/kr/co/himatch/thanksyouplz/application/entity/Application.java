@@ -77,6 +77,15 @@ public class Application {
     @Column(name = "APPLICATION_ARMY_PART")
     private ArmyPart applicationArmyPart;
 
+    @Column(name = "APPLICATION_DISABILITY_TYPE", length = 30)
+    private String applicationDisabilityType;
+
+    @Column(name = "APPLICATION_DISABILITY", length = 100)
+    private String applicationDisability;
+
+    @Column(name = "APPLICATION_REWARDING_PATRIOTISM", length = 20)
+    private String applicationRewardingPatriotism;
+
     @Column(name = "APPLICATION_DATE")
     private LocalDateTime applicationDate;
 

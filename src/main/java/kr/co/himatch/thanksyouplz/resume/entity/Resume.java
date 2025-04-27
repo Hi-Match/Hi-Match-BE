@@ -77,4 +77,13 @@ public class Resume {
     @Column(name = "RESUME_ARMY_PART")
     private ArmyPart resumeArmyPart;
 
+    @Column(name = "RESUME_DISABILITY_TYPE", length = 30)
+    private String resumeDisabilityType;
+
+    @Column(name = "RESUME_DISABILITY", length = 100)
+    private String resumeDisability;
+
+    @Column(name = "RESUME_REWARDING_PATRIOTISM", length = 20)
+    private String resumeRewardingPatriotism;
+
 }

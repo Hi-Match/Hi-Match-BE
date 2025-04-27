@@ -43,7 +43,10 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
                                 resume.resumeArmyType,
                                 resume.resumeArmyDate,
                                 resume.resumeArmyEnd,
-                                resume.resumeArmyPart
+                                resume.resumeArmyPart,
+                                resume.resumeDisability,
+                                resume.resumeDisabilityType,
+                                resume.resumeRewardingPatriotism
                         )
                 ).from(resume)
                 .where(resume.resumeNo.eq(resumeNo)

@@ -55,13 +55,16 @@ public class ResumeDetailDTO {
     private LocalDateTime resumeArmyEnd;
     @Schema(description = "병과", example = "공군")
     private ArmyPart resumeArmyPart;
+    private String resumeDisability;
+    private String resumeDisabilityType;
+    private String resumeRewardingPatriotism;
     private List<ResumeSchoolDTO> resumeSchool;
     private List<ResumeExperienceDTO> resumeExperience;
     private List<ResumeCertificateDTO> resumeCertificate;
     private List<ResumeEducationDTO> resumeEducation;
     private List<ResumeAwardDTO> resumeAward;
 
-    public ResumeDetailDTO(Long resumeNo, String resumeTitle, String resumeName, String resumeEngName, String resumeMail, String resumeTel, String resumeAddress, String resumeBirthDay, Gender resumeGender, String resumeIMG, LocalDateTime resumeDate, String resumePortFolio, String resumeAmbition, ArmyType resumeArmyType, LocalDateTime resumeArmyDate, LocalDateTime resumeArmyEnd, ArmyPart resumeArmyPart) {
+    public ResumeDetailDTO(Long resumeNo, String resumeTitle, String resumeName, String resumeEngName, String resumeMail, String resumeTel, String resumeAddress, String resumeBirthDay, Gender resumeGender, String resumeIMG, LocalDateTime resumeDate, String resumePortFolio, String resumeAmbition, ArmyType resumeArmyType, LocalDateTime resumeArmyDate, LocalDateTime resumeArmyEnd, ArmyPart resumeArmyPart, String resumeDisability,String resumeDisabilityType,String resumeRewardingPatriotism) {
         this.resumeNo = resumeNo;
         this.resumeTitle = resumeTitle;
         this.resumeName = resumeName;
@@ -79,6 +82,9 @@ public class ResumeDetailDTO {
         this.resumeArmyDate = resumeArmyDate;
         this.resumeArmyEnd = resumeArmyEnd;
         this.resumeArmyPart = resumeArmyPart;
+        this.resumeDisability = resumeDisability;
+        this.resumeDisabilityType = resumeDisabilityType;
+        this.resumeRewardingPatriotism = resumeRewardingPatriotism;
     }
 
 
