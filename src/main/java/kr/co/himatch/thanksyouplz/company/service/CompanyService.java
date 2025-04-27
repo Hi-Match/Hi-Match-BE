@@ -40,4 +40,7 @@ public interface CompanyService {
 
     // 기업용 상세 등록
     CompanyInfoRegisterResponseDTO companyUpdate(CompanyInfoRegisterRequestDTO registerRequestDTO, Long memberNo);
+
+    // 기업 회원 프로필 정보
+    CompanyMemberMyhomeResponseDTO companyMemberMyhome(Long memberNo);
 }
