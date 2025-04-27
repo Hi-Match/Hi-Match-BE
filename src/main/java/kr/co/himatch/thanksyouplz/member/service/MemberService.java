@@ -39,5 +39,11 @@ public interface MemberService {
     // 회원 탈퇴
     MemberDeleteResponseDTO memberDelete(Long memberNo);
 
+    // 마이 페이지 접속 시 제공하는 회원 정보
+    MemberInfoResponseDTO memberInfo(Long memberNo);
+
+    // 지원자가 마이페이지에서 저장하는 원하는 기업의 정보들(주소, 고용형태, 직무)
+    MemberCompanyInfoResponseDTO memberCompanyInfo(MemberCompanyInfoRequestDTO memberCompanyInfoRequestDTO, Long memberNo);
+
 
 }

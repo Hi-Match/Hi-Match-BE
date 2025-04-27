@@ -99,4 +99,14 @@ public class Member {
     public void temporaryChangePass(String memberPass){
         this.memberPass = BCrypt.hashpw(memberPass, BCrypt.gensalt());
     }
+
+    // 지원자가 마이페이지에서 저장하는 원하는 기업의 정보들(주소, 고용형태, 직무)
+    public void changeMemberCompanyInfo(String memberWantedCompanyAddressInfo
+            , String memberWantedCompanyPartInfo, String memberWantedCompanyTypeInfo){
+
+        this.memberCompanyAddress = memberWantedCompanyAddressInfo;
+        this.memberCompanyPart = memberWantedCompanyPartInfo;
+        this.memberCompanyContract = memberWantedCompanyTypeInfo;
+
+    }
 }

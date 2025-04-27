@@ -94,4 +94,15 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
                 .where(member.memberNo.eq(memberNo))
                 .execute();
     }
+
+    // 마이페이지 접속 시, 회원 정보
+    @Override
+    public Optional<Member> selectMemberInfo(Long memberNo) {
+        return Optional.ofNullable(
+                queryFactory.select(member)
+                        .from(member)
+                        .where(member.memberNo.eq(memberNo))
+                        .fetchFirst()
+        );
+    }
 }
