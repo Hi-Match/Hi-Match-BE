@@ -116,11 +116,15 @@ public class ResumeServiceImpl implements ResumeService {
                         .resumeNo(resume)
                         .schName(resumeSchoolDTO.getSchoolName())
                         .schMajor(resumeSchoolDTO.getSchoolMajor())
+                        .schMinor(resumeSchoolDTO.getSchoolMinor())
+                        .schMultiple(resumeSchoolDTO.getSchoolMultiple())
                         .schDegree(resumeSchoolDTO.getSchoolDegree())
                         .schGraduationDate(resumeSchoolDTO.getSchoolGraduationDate())
                         .schAdmissionDate(resumeSchoolDTO.getSchoolAdmissionDate())
                         .schGpa(resumeSchoolDTO.getSchoolGPA())
+                        .schStandardGpa(resumeSchoolDTO.getSchoolStandardGPA())
                         .schPart(resumeSchoolDTO.getSchoolPart())
+                        .schLev(resumeSchoolDTO.getSchoolLev())
                         .build()));
 
         Optional.ofNullable(resumeDetailDTO.getResumeExperience())

@@ -24,6 +24,10 @@ public class ResumeSchoolDTO {
     private String schoolName;
     @Schema(description = "전공", example = "컴퓨터공학과")
     private String schoolMajor;
+    @Schema(description = "부전공", example = "전자공학과")
+    private String schoolMinor;
+    @Schema(description = "복수전공", example = "경영학과")
+    private String schoolMultiple;
     @Schema(description = "입학 또는 편입", example = "입학")
     private SchType schoolDegree;
     @Schema(description = "졸업일", example = "20220225", pattern = "yyyyMMdd")
@@ -32,17 +36,25 @@ public class ResumeSchoolDTO {
     private LocalDateTime schoolAdmissionDate;
     @Schema(description = "학점", example = "4.3")
     private BigDecimal schoolGPA;
+    @Schema(description = "기준학점", example = "4.3")
+    private BigDecimal schoolStandardGPA;
     @Schema(description = "과정", example = "고등학교")
     private SchPart schoolPart;
+    @Schema(description = "과정순서", example = "1")
+    private Long schoolLev;
 
-    public ResumeSchoolDTO(String schoolName, String schoolMajor, SchType schoolDegree, LocalDateTime schoolGraduationDate, LocalDateTime schoolAdmissionDate, BigDecimal schoolGPA, SchPart schoolPart) {
+    public ResumeSchoolDTO(String schoolName, String schoolMajor, String schoolMinor, String schoolMultiple, SchType schoolDegree, LocalDateTime schoolGraduationDate, LocalDateTime schoolAdmissionDate, BigDecimal schoolGPA,BigDecimal schoolStandardGPA, SchPart schoolPart, Long schoolLev) {
         this.schoolName = schoolName;
         this.schoolMajor = schoolMajor;
+        this.schoolMinor = schoolMinor;
+        this.schoolMultiple = schoolMultiple;
         this.schoolDegree = schoolDegree;
         this.schoolGraduationDate = schoolGraduationDate;
         this.schoolAdmissionDate = schoolAdmissionDate;
         this.schoolGPA = schoolGPA;
+        this.schoolStandardGPA = schoolStandardGPA;
         this.schoolPart = schoolPart;
+        this.schoolLev = schoolLev;
     }
     @JsonProperty("schoolGraduationDate")
     public void setSchoolGraduationDate(String dateStr) {

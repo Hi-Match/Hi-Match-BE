@@ -32,6 +32,12 @@ public class ApplicationSchool {
     @Column(name = "A_SCH_MAJOR", length = 100)
     private String aSchMajor;
 
+    @Column(name = "A_SCH_MINOR", length = 100)
+    private String aSchMinor;
+
+    @Column(name = "A_SCH_MULTIPLE", length = 100)
+    private String aSchMultiple;
+
     @Convert(converter = SchTypeConverter.class)
     @Column(name = "A_SCH_TYPE")
     private SchType aSchDegree;
@@ -45,6 +51,9 @@ public class ApplicationSchool {
     @Column(name = "A_SCH_GPA", precision = 3, scale = 2)
     private BigDecimal aSchGpa;
 
+    @Column(name = "A_SCH_STANDARD_GPA", precision = 3, scale = 2)
+    private BigDecimal aSchStandardGpa;
+
     @Column(name = "A_SCH_DESCRIPTION", columnDefinition = "LONGTEXT")
     private String aSchDescription;
 
@@ -52,4 +61,7 @@ public class ApplicationSchool {
     @Enumerated(EnumType.STRING)
     @Column(name = "A_SCH_PART")
     private SchPart aSchPart;
+
+    @Column(name = "A_SCH_LEV")
+    private Long aSchLev;
 }

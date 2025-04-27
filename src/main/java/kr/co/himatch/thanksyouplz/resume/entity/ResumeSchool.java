@@ -27,6 +27,12 @@ public class ResumeSchool {
     @Column(name = "SCH_MAJOR", length = 100)
     private String schMajor;
 
+    @Column(name = "SCH_MINOR", length = 100)
+    private String schMinor;
+
+    @Column(name = "SCH_MULTIPLE", length = 100)
+    private String schMultiple;
+
     @Convert(converter = SchTypeConverter.class)
     @Column(name = "SCH_TYPE")
     private SchType schDegree;
@@ -40,6 +46,9 @@ public class ResumeSchool {
     @Column(name = "SCH_GPA", precision = 3, scale = 2)
     private BigDecimal schGpa;
 
+    @Column(name = "SCH_STANDARD_GPA", precision = 3, scale = 2)
+    private BigDecimal schStandardGpa;
+
     @Column(name = "SCH_DESCRIPTION", columnDefinition = "LONGTEXT")
     private String schDescription;
 
@@ -47,4 +56,7 @@ public class ResumeSchool {
     @Enumerated(EnumType.STRING)
     @Column(name = "SCH_PART")
     private SchPart schPart;
+
+    @Column(name = "SCH_LEV")
+    private Long schLev;
 }

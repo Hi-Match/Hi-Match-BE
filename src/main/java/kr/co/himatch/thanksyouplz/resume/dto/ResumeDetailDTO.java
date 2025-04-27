@@ -55,8 +55,11 @@ public class ResumeDetailDTO {
     private LocalDateTime resumeArmyEnd;
     @Schema(description = "병과", example = "공군")
     private ArmyPart resumeArmyPart;
+    @Schema(description = "장애중상정도", example = "1급")
     private String resumeDisability;
+    @Schema(description = "장애명", example = "아픔내용")
     private String resumeDisabilityType;
+    @Schema(description = "보훈번호", example = "11-321231")
     private String resumeRewardingPatriotism;
     private List<ResumeSchoolDTO> resumeSchool;
     private List<ResumeExperienceDTO> resumeExperience;
