@@ -3,6 +3,7 @@ package kr.co.himatch.thanksyouplz.member.repository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.entity.SocialType;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,9 @@ public interface MemberRepositoryCustom {
 
     // 회원 탈퇴
     void deleteMember(Long memberNo);
+
+    // 마이페이지 접속 시, 회원 정보
+    Optional<Member> selectMemberInfo(Long memberNo);
 
 
 }

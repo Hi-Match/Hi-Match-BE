@@ -294,5 +294,24 @@ public class MemberController {
         return new ResponseEntity<>(memberDelete, HttpStatus.OK);
     }
 
+    // 마이 페이지 접속 시 보이는 회원 정보
+    @GetMapping("/info")
+    public ResponseEntity<?> memberInfo(){
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        MemberInfoResponseDTO memberInfo = memberService.memberInfo(memberNo);
+
+        return new ResponseEntity<>(memberInfo, HttpStatus.OK);
+    }
+
+    // 지원자의 니즈에 맞춰 공고 검색 시 저장하는 키워드
+    @PostMapping("/company-info")
+    public ResponseEntity<?> memberWantedCompanyInfo(@RequestBody MemberCompanyInfoRequestDTO memberCompanyInfoRequestDTO){
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        MemberCompanyInfoResponseDTO memberCompanyInfo = memberService.memberCompanyInfo(memberCompanyInfoRequestDTO, memberNo);
+
+        return new ResponseEntity<>(memberCompanyInfo, HttpStatus.OK);
+    }
 
 }

@@ -38,23 +38,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanySignupResponseDTO companySignUp(CompanySignupRequestDTO companySignupRequestDTO) {
 
-        Company signup = companyRepository.save(
-                Company.builder()
-                        .companyID(companySignupRequestDTO.getMemberID())
-                        .companyPass(
-                                BCrypt.hashpw(
-                                        companySignupRequestDTO.getMemberPass(), BCrypt.gensalt()
-                                )
-                        )
-                        .companyManagerName(companySignupRequestDTO.getMemberName())
-                        .companyLicense(companySignupRequestDTO.getLicenseNumber())
-                        .companyName(companySignupRequestDTO.getCompanyName())
-                        .companyEmployee(companySignupRequestDTO.getCompanyCount())
-                        .companyIndustry(companySignupRequestDTO.getCompanyPart())
-                        .companyMail(companySignupRequestDTO.getMemberMail())
-                        .companyPhone(companySignupRequestDTO.getMemberPhone())
-                        .companyCreate(LocalDateTime.now())
-                        .build());
+        Company signup = companyRepository.save(Company.builder().companyID(companySignupRequestDTO.getMemberID()).companyPass(BCrypt.hashpw(companySignupRequestDTO.getMemberPass(), BCrypt.gensalt())).companyManagerName(companySignupRequestDTO.getMemberName()).companyLicense(companySignupRequestDTO.getLicenseNumber()).companyName(companySignupRequestDTO.getCompanyName()).companyEmployee(companySignupRequestDTO.getCompanyCount()).companyIndustry(companySignupRequestDTO.getCompanyPart()).companyMail(companySignupRequestDTO.getMemberMail()).companyPhone(companySignupRequestDTO.getMemberPhone()).companyCreate(LocalDateTime.now()).build());
 
         CompanySignupResponseDTO companySignupResponseDTO = new CompanySignupResponseDTO();
         companySignupResponseDTO.setMemberID(signup.getCompanyID());
@@ -104,8 +88,7 @@ public class CompanyServiceImpl implements CompanyService {
     // 기업용 회원 ID 찾기
     @Override
     public List<CompanyMemberFindIDResponseDTO> companyFindID(CompanyMemberFindIDRequestDTO companyMemberFindIDRequestDTO) {
-        List<Company> findID = companyRepository.selectMemberNameAndLicenseNumber(
-                companyMemberFindIDRequestDTO.getMemberName(), companyMemberFindIDRequestDTO.getLicenseNumber());
+        List<Company> findID = companyRepository.selectMemberNameAndLicenseNumber(companyMemberFindIDRequestDTO.getMemberName(), companyMemberFindIDRequestDTO.getLicenseNumber());
 
         List<CompanyMemberFindIDResponseDTO> companyMemberFindIDResponseDTO = findID.stream().map(this::findListID).toList();
 
@@ -125,8 +108,7 @@ public class CompanyServiceImpl implements CompanyService {
     // 기업용 회원 PW 찾기
     @Override
     public String findPass(CompanyMemberFindPWRequestDTO companyMemberFindPWRequestDTO, String memberPass) {
-        Optional<Company> findPass = companyRepository.selectCompanyIdAndNameAndPhone(
-                companyMemberFindPWRequestDTO.getMemberID(), companyMemberFindPWRequestDTO.getMemberName(), companyMemberFindPWRequestDTO.getMemberPhone());
+        Optional<Company> findPass = companyRepository.selectCompanyIdAndNameAndPhone(companyMemberFindPWRequestDTO.getMemberID(), companyMemberFindPWRequestDTO.getMemberName(), companyMemberFindPWRequestDTO.getMemberPhone());
 
         if (findPass.isEmpty()) {
             return null;
@@ -165,9 +147,7 @@ public class CompanyServiceImpl implements CompanyService {
     // 기업용 회원 프로필 편집 - 비밀번호 변경
     @Override
     public CompanyChangePassResponseDTO companyChangePass(CompanyChangePassRequestDTO companyChangePassRequestDTO) {
-        Optional<Company> companyChangePass = companyRepository.selectCompanyPass(
-                companyChangePassRequestDTO.getMemberID(), companyChangePassRequestDTO.getMemberName(), companyChangePassRequestDTO.getMemberPhone()
-        );
+        Optional<Company> companyChangePass = companyRepository.selectCompanyPass(companyChangePassRequestDTO.getMemberID(), companyChangePassRequestDTO.getMemberName(), companyChangePassRequestDTO.getMemberPhone());
 
         if (companyChangePass.isEmpty()) {
             return null;
@@ -191,25 +171,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.getReferenceById(memberNo);
 
         // 기업 탈퇴 전, Log Table로 data를 옮긴다.
-        CompanyLog companyLogInsert = companyLogRepository.save(
-                CompanyLog.builder()
-                        .companyID(company.getCompanyID())
-                        .companyPass(company.getCompanyPass())
-                        .companyName(company.getCompanyName())
-                        .companyManagerName(company.getCompanyManagerName())
-                        .companyAddress(company.getCompanyAddress())
-                        .companyLicense(company.getCompanyLicense())
-                        .companyPhone(company.getCompanyPhone())
-                        .companyMail(company.getCompanyMail())
-                        .companyIndustry(company.getCompanyIndustry())
-                        .companyEmployee(company.getCompanyEmployee())
-                        .companyDescription(company.getCompanyDescription())
-                        .companyCode(company.getCompanyCode())
-                        .companyLogo(company.getCompanyLogo())
-                        .companyCreate(company.getCompanyCreate())
-                        .companyDelete(LocalDateTime.now())
-                        .build()
-        );
+        CompanyLog companyLogInsert = companyLogRepository.save(CompanyLog.builder().companyID(company.getCompanyID()).companyPass(company.getCompanyPass()).companyName(company.getCompanyName()).companyManagerName(company.getCompanyManagerName()).companyAddress(company.getCompanyAddress()).companyLicense(company.getCompanyLicense()).companyPhone(company.getCompanyPhone()).companyMail(company.getCompanyMail()).companyIndustry(company.getCompanyIndustry()).companyEmployee(company.getCompanyEmployee()).companyDescription(company.getCompanyDescription()).companyCode(company.getCompanyCode()).companyLogo(company.getCompanyLogo()).companyCreate(company.getCompanyCreate()).companyDelete(LocalDateTime.now()).build());
 
         // Company Table에서 data를 일괄 삭제한다.
         companyRepository.deleteCompany(memberNo);
@@ -241,30 +203,24 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyInfoRegisterResponseDTO companyUpdate(CompanyInfoRegisterRequestDTO registerRequestDTO, Long memberNo) {
         Company company = companyRepository.getReferenceById(memberNo);
-        company.companyInfoModify(
-                registerRequestDTO.getCompanyName(),
-                registerRequestDTO.getCompanyManagerName(),
-                registerRequestDTO.getCompanyAddress(),
-                registerRequestDTO.getCompanyPhone(),
-                registerRequestDTO.getCompanyMail(),
-                registerRequestDTO.getCompanyIndustry(),
-                registerRequestDTO.getCompanyEmployee(),
-                registerRequestDTO.getCompanyDescription(),
-                registerRequestDTO.getCompanyLogo()
-        );
+        company.companyInfoModify(registerRequestDTO.getCompanyName(), registerRequestDTO.getCompanyManagerName(), registerRequestDTO.getCompanyAddress(), registerRequestDTO.getCompanyPhone(), registerRequestDTO.getCompanyMail(), registerRequestDTO.getCompanyIndustry(), registerRequestDTO.getCompanyEmployee(), registerRequestDTO.getCompanyDescription(), registerRequestDTO.getCompanyLogo());
         companyTagRepository.deleteCompanyTags(memberNo);
-        Optional.ofNullable(registerRequestDTO.getTag())
-                .orElseGet(List::of)
-                .forEach(companyInfoTagRegisterDTO ->
-                        companyTagRepository.save(
-                                CompanyTag
-                                        .builder()
-                                        .companyNo(company)
-                                        .cTagName(companyInfoTagRegisterDTO.getTagName())
-                                        .build()
-                        ));
+        Optional.ofNullable(registerRequestDTO.getTag()).orElseGet(List::of).forEach(companyInfoTagRegisterDTO -> companyTagRepository.save(CompanyTag.builder().companyNo(company).cTagName(companyInfoTagRegisterDTO.getTagName()).build()));
         CompanyInfoRegisterResponseDTO companyInfoRegisterResponseDTO = new CompanyInfoRegisterResponseDTO();
         companyInfoRegisterResponseDTO.setMessage("Success");
         return companyInfoRegisterResponseDTO;
+    }
+
+    @Override
+    public CompanyMemberMyhomeResponseDTO companyMemberMyhome(Long memberNo) {
+        Company company = companyRepository.getReferenceById(memberNo);
+        CompanyMemberMyhomeResponseDTO companyMyhome = new CompanyMemberMyhomeResponseDTO();
+        companyMyhome.setMemberID(company.getCompanyID());
+        companyMyhome.setMemberMail(company.getCompanyMail());
+        companyMyhome.setMemberName(company.getCompanyManagerName());
+        companyMyhome.setMemberPhone(company.getCompanyPhone());
+        companyMyhome.setMemberAddress(company.getCompanyAddress());
+        companyMyhome.setMemberJoinDate(company.getCompanyCreate());
+        return companyMyhome;
     }
 }
