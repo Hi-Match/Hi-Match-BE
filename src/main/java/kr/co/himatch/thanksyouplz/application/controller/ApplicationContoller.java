@@ -1,18 +1,18 @@
 package kr.co.himatch.thanksyouplz.application.controller;
 
-import jakarta.validation.Valid;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberCountResponseDTO;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberPageResponseDTO;
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
 import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
 import kr.co.himatch.thanksyouplz.application.service.ApplicationService;
-import kr.co.himatch.thanksyouplz.company.dto.CompanySignupRequestDTO;
-import kr.co.himatch.thanksyouplz.company.dto.CompanySignupResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -37,5 +37,15 @@ public class ApplicationContoller {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         ApplicationMemberCountResponseDTO countResponseDTO = applicationService.selectCountByStatus(memberNo);
         return new ResponseEntity<>(countResponseDTO, HttpStatus.OK);
+    }
+
+    // 지원서 상태에 따른 지원서 조회
+    @GetMapping("/member/{applicationStatus}")
+    public ResponseEntity<?> memberApplicationStatus(@PathVariable String applicationStatus, @RequestParam Long page) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        ApplicationStatus status = ApplicationStatus.toUpperCase(applicationStatus);
+        List<ApplicationMemberStatusResponseDTO> statusResponseDTOList = applicationService.selectPageByStatus(status, memberNo, page);
+
+        return new ResponseEntity<>(statusResponseDTOList, HttpStatus.OK);
     }
 }

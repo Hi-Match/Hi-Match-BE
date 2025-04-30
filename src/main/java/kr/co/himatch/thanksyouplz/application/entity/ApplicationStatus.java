@@ -31,4 +31,11 @@ public enum ApplicationStatus {
                 .findAny()
                 .orElse(null);
     }
+
+    public static ApplicationStatus toUpperCase(String statue){
+        return Arrays.stream(ApplicationStatus.values())
+                .filter(ApplicationStatus -> ApplicationStatus.columData.equals(statue.toUpperCase()))
+                .findAny()
+                .orElse(null);
+    }
 }

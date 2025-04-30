@@ -3,11 +3,14 @@ package kr.co.himatch.thanksyouplz.application.service;
 import jakarta.transaction.Transactional;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberCountResponseDTO;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberPageResponseDTO;
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
 import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
 import kr.co.himatch.thanksyouplz.application.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -63,5 +66,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         countResponseDTO.setFinalPass(finalPass);
         countResponseDTO.setFail(fail);
         return countResponseDTO;
+    }
+
+    // 지원서 상태에 따른 지원서 조회
+    @Override
+    public List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page) {
+        if (page >= 1) {
+            page--;
+        }
+        return applicationRepository.selectPageByStatus(applicationStatus, memberNo, page);
     }
 }
