@@ -55,13 +55,19 @@ public class ResumeDetailDTO {
     private LocalDateTime resumeArmyEnd;
     @Schema(description = "병과", example = "공군")
     private ArmyPart resumeArmyPart;
+    @Schema(description = "장애중상정도", example = "1급")
+    private String resumeDisability;
+    @Schema(description = "장애명", example = "아픔내용")
+    private String resumeDisabilityType;
+    @Schema(description = "보훈번호", example = "11-321231")
+    private String resumeRewardingPatriotism;
     private List<ResumeSchoolDTO> resumeSchool;
     private List<ResumeExperienceDTO> resumeExperience;
     private List<ResumeCertificateDTO> resumeCertificate;
     private List<ResumeEducationDTO> resumeEducation;
     private List<ResumeAwardDTO> resumeAward;
 
-    public ResumeDetailDTO(Long resumeNo, String resumeTitle, String resumeName, String resumeEngName, String resumeMail, String resumeTel, String resumeAddress, String resumeBirthDay, Gender resumeGender, String resumeIMG, LocalDateTime resumeDate, String resumePortFolio, String resumeAmbition, ArmyType resumeArmyType, LocalDateTime resumeArmyDate, LocalDateTime resumeArmyEnd, ArmyPart resumeArmyPart) {
+    public ResumeDetailDTO(Long resumeNo, String resumeTitle, String resumeName, String resumeEngName, String resumeMail, String resumeTel, String resumeAddress, String resumeBirthDay, Gender resumeGender, String resumeIMG, LocalDateTime resumeDate, String resumePortFolio, String resumeAmbition, ArmyType resumeArmyType, LocalDateTime resumeArmyDate, LocalDateTime resumeArmyEnd, ArmyPart resumeArmyPart, String resumeDisability,String resumeDisabilityType,String resumeRewardingPatriotism) {
         this.resumeNo = resumeNo;
         this.resumeTitle = resumeTitle;
         this.resumeName = resumeName;
@@ -79,6 +85,9 @@ public class ResumeDetailDTO {
         this.resumeArmyDate = resumeArmyDate;
         this.resumeArmyEnd = resumeArmyEnd;
         this.resumeArmyPart = resumeArmyPart;
+        this.resumeDisability = resumeDisability;
+        this.resumeDisabilityType = resumeDisabilityType;
+        this.resumeRewardingPatriotism = resumeRewardingPatriotism;
     }
 
 

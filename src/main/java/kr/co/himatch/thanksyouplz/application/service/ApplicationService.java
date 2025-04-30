@@ -1,0 +1,20 @@
+package kr.co.himatch.thanksyouplz.application.service;
+
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberCountResponseDTO;
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberPageResponseDTO;
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
+import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
+
+import java.util.List;
+
+public interface ApplicationService {
+    // 지원서 상태에 따른 max page
+    ApplicationMemberPageResponseDTO selectMaxPage(ApplicationStatus applicationStatus, Long memberNo);
+
+    // 지원서 상태에 따른 count
+    ApplicationMemberCountResponseDTO selectCountByStatus(Long memberNo);
+
+    // 지원서 상태에 따른 지원서 조회
+    List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page);
+
+}
