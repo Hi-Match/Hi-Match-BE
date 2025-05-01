@@ -160,8 +160,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     // 채용 공고 수정
     @Override
-    public ApplicationCompanyModifyResponseDTO postingModify(ApplicationCompanyModifyRequestDTO modifyRequestDTO) {
+    public ApplicationCompanyModifyResponseDTO postingModify(ApplicationCompanyModifyRequestDTO modifyRequestDTO, Long memberNo) {
         JobPosting jobPosting = jobPostingRepository.getReferenceById(modifyRequestDTO.getPostingNo());
+        if (!jobPosting.getCompanyNo().getCompanyNo().equals(memberNo)) {
+            return null;
+        }
 
         jobPosting.changePostingInfo(modifyRequestDTO.getPostingTitle(), modifyRequestDTO.getPostingContent(),
                 modifyRequestDTO.getPostingPart(), modifyRequestDTO.getPostingSal(),
@@ -187,5 +190,20 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationCompanyModifyResponseDTO modifyResponseDTO = new ApplicationCompanyModifyResponseDTO();
         modifyResponseDTO.setMessage("Success");
         return modifyResponseDTO;
+    }
+
+    @Override
+    public ApplicationCompanyDeleteResponseDTO posingDelete(Long memberNo, Long postingNo) {
+        JobPosting jobPosting = jobPostingRepository.getReferenceById(postingNo);
+        if (!jobPosting.getCompanyNo().getCompanyNo().equals(memberNo)) {
+            return null;
+        }
+
+        companyQuestionsRepository.deleteQuestionByPostingNo(postingNo);
+        jobPostingRepository.delete(jobPosting);
+
+        ApplicationCompanyDeleteResponseDTO deleteResponseDTO = new ApplicationCompanyDeleteResponseDTO();
+        deleteResponseDTO.setMessage("Success");
+        return deleteResponseDTO;
     }
 }

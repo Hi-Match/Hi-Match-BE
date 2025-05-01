@@ -74,7 +74,26 @@ public class ApplicationContoller {
     @PutMapping("/company/modify")
     public ResponseEntity<?> companyModify(@RequestBody ApplicationCompanyModifyRequestDTO modifyListRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-        ApplicationCompanyModifyResponseDTO modifyResponseDTO = applicationService.postingModify(modifyListRequestDTO);
+        ApplicationCompanyModifyResponseDTO modifyResponseDTO = applicationService.postingModify(modifyListRequestDTO, memberNo);
+        if (modifyResponseDTO == null) {
+            modifyResponseDTO = new ApplicationCompanyModifyResponseDTO();
+            modifyResponseDTO.setMessage("본인만 수정할 수 있습니다.");
+            return new ResponseEntity<>(modifyResponseDTO, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(modifyResponseDTO, HttpStatus.OK);
     }
+
+    // 채용 공고 삭제
+    @DeleteMapping("/company/delete")
+    public ResponseEntity<?> companyDelete(@RequestParam Long postingNo) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        ApplicationCompanyDeleteResponseDTO deleteResponseDTO = applicationService.posingDelete(memberNo, postingNo);
+        if (deleteResponseDTO == null) {
+            deleteResponseDTO = new ApplicationCompanyDeleteResponseDTO();
+            deleteResponseDTO.setMessage("본인만 삭제할 수 있습니다.");
+            return new ResponseEntity<>(deleteResponseDTO, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(deleteResponseDTO, HttpStatus.OK);
+    }
+
 }
