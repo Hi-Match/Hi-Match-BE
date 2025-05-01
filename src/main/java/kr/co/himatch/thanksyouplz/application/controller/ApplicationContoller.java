@@ -1,8 +1,6 @@
 package kr.co.himatch.thanksyouplz.application.controller;
 
-import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberCountResponseDTO;
-import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberPageResponseDTO;
-import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
+import kr.co.himatch.thanksyouplz.application.dto.*;
 import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
 import kr.co.himatch.thanksyouplz.application.service.ApplicationService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,5 +45,28 @@ public class ApplicationContoller {
         List<ApplicationMemberStatusResponseDTO> statusResponseDTOList = applicationService.selectPageByStatus(status, memberNo, page);
 
         return new ResponseEntity<>(statusResponseDTOList, HttpStatus.OK);
+    }
+
+    // 지원서 상세 보기
+    @GetMapping("/member/detail")
+    public ResponseEntity<?> memberDetail(@RequestParam Long applicationNo) {
+        ApplicationMemberDetailResponseDTO detailResponseDTO = applicationService.selectApplicationDetail(applicationNo);
+        return new ResponseEntity<>(detailResponseDTO, HttpStatus.OK);
+    }
+
+    // 채용 공고 조회
+    @GetMapping("/company/select")
+    public ResponseEntity<?> companySelect(@RequestParam Long posingNo) {
+        ApplicationCompanySelectResponseDTO responseDTO = applicationService.selectJobPosting(posingNo);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+
+    // 채용 공고 등록
+    @PostMapping("/company/register")
+    public ResponseEntity<?> companyRegister(@RequestBody ApplicationCompanyRegisterRequestDTO registerListRequestDTO) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        ApplicationCompanyRegisterResponseDTO responseDTO = applicationService.posingRegister(registerListRequestDTO, memberNo);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }

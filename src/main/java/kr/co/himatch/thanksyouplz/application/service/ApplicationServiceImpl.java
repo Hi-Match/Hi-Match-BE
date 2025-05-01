@@ -1,15 +1,19 @@
 package kr.co.himatch.thanksyouplz.application.service;
 
 import jakarta.transaction.Transactional;
-import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberCountResponseDTO;
-import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberPageResponseDTO;
-import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
+import kr.co.himatch.thanksyouplz.application.dto.*;
+import kr.co.himatch.thanksyouplz.application.entity.Application;
 import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
+import kr.co.himatch.thanksyouplz.application.entity.CompanyQuestions;
+import kr.co.himatch.thanksyouplz.application.entity.JobPosting;
 import kr.co.himatch.thanksyouplz.application.repository.*;
+import kr.co.himatch.thanksyouplz.company.entity.Company;
+import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -37,6 +41,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     private CoverLetterRepository coverLetterRepository;
     @Autowired
     private JobPostingRepository jobPostingRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     // 지원서 상태에 따른 max page
     @Override
@@ -75,5 +81,80 @@ public class ApplicationServiceImpl implements ApplicationService {
             page--;
         }
         return applicationRepository.selectPageByStatus(applicationStatus, memberNo, page);
+    }
+
+    // 지원서 상세 보기
+    @Override
+    public ApplicationMemberDetailResponseDTO selectApplicationDetail(Long applicationNo) {
+        Application application = applicationRepository.getReferenceById(applicationNo);
+        List<ApplicationMemberDetailListResponseDTO> coverList = coverLetterRepository.selectQuestionListByApplicationNo(applicationNo);
+
+        ApplicationMemberDetailResponseDTO detailResponseDTO = new ApplicationMemberDetailResponseDTO();
+        detailResponseDTO.setApplicationDate(application.getApplicationDate());
+        detailResponseDTO.setCoverList(coverList);
+        return detailResponseDTO;
+    }
+
+    @Override
+    public ApplicationCompanySelectResponseDTO selectJobPosting(Long postingNo) {
+        JobPosting posting = jobPostingRepository.getReferenceById(postingNo);
+        List<ApplicationCompanySelectListResponseDTO> questions = companyQuestionsRepository.selectQuestionByPostingNo(postingNo);
+
+        ApplicationCompanySelectResponseDTO responseDTO = new ApplicationCompanySelectResponseDTO();
+        responseDTO.setPostingTitle(posting.getPostingTitle());
+        responseDTO.setPostingPart(posting.getPostingPart());
+        responseDTO.setPostingSal(posting.getPostingSal());
+        responseDTO.setPostingExperience(posting.getPostingExperience());
+        responseDTO.setPostingEducation(posting.getPostingEducation());
+        responseDTO.setPostingLocation(posting.getPostingLocation());
+        responseDTO.setPostingType(posting.getPostingType());
+        responseDTO.setPostingWorkType(posting.getPostingWorkType());
+        responseDTO.setPostingWorkStartTime(posting.getPostingWorkStartTime());
+        responseDTO.setPostingWorkEndTime(posting.getPostingWorkEndTime());
+        responseDTO.setPostingIsFinish(posting.getPostingIsFinish());
+        responseDTO.setPostingDeadLine(posting.getPostingDeadline());
+        responseDTO.setPostingQuestion(questions);
+
+        return responseDTO;
+    }
+
+    // 채용 공고 등록
+    @Override
+    public ApplicationCompanyRegisterResponseDTO posingRegister(ApplicationCompanyRegisterRequestDTO registerRequestDTO, Long memberNo) {
+        Company company = companyRepository.getReferenceById(memberNo);
+        JobPosting jobPosting = jobPostingRepository.save(JobPosting
+                .builder()
+                .companyNo(company)
+                .postingTitle(registerRequestDTO.getPostingTitle())
+                .postingContent(registerRequestDTO.getPostingContent())
+                .postingPart(registerRequestDTO.getPostingPart())
+                .postingSal(registerRequestDTO.getPostingSal())
+                .postingExperience(registerRequestDTO.getPostingExperience())
+                .postingEducation(registerRequestDTO.getPostingEducation())
+                .postingLocation(registerRequestDTO.getPostingLocation())
+                .postingType(registerRequestDTO.getPostingType())
+                .postingWorkType(registerRequestDTO.getPostingWorkType())
+                .postingWorkStartTime(registerRequestDTO.getPostingWorkStartTime())
+                .postingWorkEndTime(registerRequestDTO.getPostingWorkEndTime())
+                .postingIsFinish(false)
+                .postingDeadline(registerRequestDTO.getPostingDeadLine())
+                .postingCreate(LocalDateTime.now())
+                .build());
+
+        for (ApplicationCompanyRegisterListRequestDTO question : registerRequestDTO.getPostingQuestion()) {
+            companyQuestionsRepository.save(
+                    CompanyQuestions
+                            .builder()
+                            .postingNo(jobPosting)
+                            .questionTitle(question.getQuestion())
+                            .questionLength(question.getQuestionLength())
+                            .build()
+            );
+        }
+
+
+        ApplicationCompanyRegisterResponseDTO registerResponseDTO = new ApplicationCompanyRegisterResponseDTO();
+        registerResponseDTO.setMessage("Success");
+        return registerResponseDTO;
     }
 }
