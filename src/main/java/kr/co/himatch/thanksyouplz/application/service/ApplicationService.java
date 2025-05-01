@@ -21,6 +21,9 @@ public interface ApplicationService {
     // 지원서 상세 보기
     ApplicationMemberDetailResponseDTO selectApplicationDetail(Long applicationNo);
 
+    // 개인 사용자가 1개의 기업에 채용 지원
+    ApplicationMemberApplyResponseDTO applyPosting(ApplicationMemberApplyRequestDTO requestDTO, Long memberNo);
+
     // 기업이 등록한 채용 공고 목록 조회
     List<ApplicationCompanyPostingResponseDTO> selectPostingList(Long memberNo);
 

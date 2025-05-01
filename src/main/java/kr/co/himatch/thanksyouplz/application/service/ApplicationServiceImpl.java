@@ -2,13 +2,14 @@ package kr.co.himatch.thanksyouplz.application.service;
 
 import jakarta.transaction.Transactional;
 import kr.co.himatch.thanksyouplz.application.dto.*;
-import kr.co.himatch.thanksyouplz.application.entity.Application;
-import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
-import kr.co.himatch.thanksyouplz.application.entity.CompanyQuestions;
-import kr.co.himatch.thanksyouplz.application.entity.JobPosting;
+import kr.co.himatch.thanksyouplz.application.entity.*;
 import kr.co.himatch.thanksyouplz.application.repository.*;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
+import kr.co.himatch.thanksyouplz.member.entity.Member;
+import kr.co.himatch.thanksyouplz.member.repository.MemberRepository;
+import kr.co.himatch.thanksyouplz.resume.entity.*;
+import kr.co.himatch.thanksyouplz.resume.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,21 @@ public class ApplicationServiceImpl implements ApplicationService {
     private JobPostingRepository jobPostingRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private ResumeRepository resumeRepository;
+    @Autowired
+    private ResumeAwardRepository resumeAwardRepository;
+    @Autowired
+    private ResumeCertificateRepository resumeCertificateRepository;
+    @Autowired
+    private ResumeEducationRepository resumeEducationRepository;
+    @Autowired
+    private ResumeExperienceRepository resumeExperienceRepository;
+    @Autowired
+    private ResumeSchoolRepository resumeSchoolRepository;
+
 
     // 지원서 상태에 따른 max page
     @Override
@@ -99,6 +115,129 @@ public class ApplicationServiceImpl implements ApplicationService {
         detailResponseDTO.setApplicationDate(application.getApplicationDate());
         detailResponseDTO.setCoverList(coverList);
         return detailResponseDTO;
+    }
+
+    // 개인 사용자가 1개의 기업에 채용 지원
+    @Override
+    public ApplicationMemberApplyResponseDTO applyPosting(ApplicationMemberApplyRequestDTO requestDTO, Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        Resume resume = resumeRepository.getReferenceById(requestDTO.getResumeNo());
+        JobPosting posting = jobPostingRepository.getReferenceById(requestDTO.getPostingNo());
+
+        if (!resume.getMemberNo().getMemberNo().equals(memberNo)) {
+            return null;
+        }
+
+        Application application = applicationRepository.save(Application
+                .builder()
+                .postingNo(posting)
+                .memberNo(member)
+                .applicationTitle(resume.getResumeTitle())
+                .applicationName(resume.getResumeName())
+                .applicationEngname(resume.getResumeEngname())
+                .applicationMail(resume.getResumeMail())
+                .applicationTel(resume.getResumeTel())
+                .applicationAddress(resume.getResumeAddress())
+                .applicationBirthday(resume.getResumeBirthday())
+                .applicationGender(resume.getResumeGender())
+                .applicationImg(resume.getResumeImg())
+                .applicationPortfolio(resume.getResumePortfolio())
+                .applicationAmbition(resume.getResumeAmbition())
+                .applicationArmyType(resume.getResumeArmyType())
+                .applicationArmyDate(resume.getResumeArmyDate())
+                .applicationArmyEnd(resume.getResumeArmyEnd())
+                .applicationArmyPart(resume.getResumeArmyPart())
+                .applicationDisabilityType(resume.getResumeDisabilityType())
+                .applicationDisability(resume.getResumeDisability())
+                .applicationRewardingPatriotism(resume.getResumeRewardingPatriotism())
+                .applicationDate(LocalDateTime.now())
+                .applicationEndDate(posting.getPostingDeadline())
+                .applicationStatus(ApplicationStatus.SUBMIT)
+                .applicationAlarm(false)
+                .applicationGrade(null)
+                .applicationResult(false)
+                .applicationPf(null)
+                .applicationCreate(LocalDateTime.now())
+                .build());
+
+        for (ResumeAward resumeAward : resumeAwardRepository.findByResumeNo(resume)) {
+            applicationAwardRepository.save(ApplicationAward
+                    .builder()
+                    .applicationNo(application)
+                    .aAwaTitle(resumeAward.getAwaTitle())
+                    .aAwaCompetitionName(resumeAward.getAwaCompetitionName())
+                    .aAwaOrgan(resumeAward.getAwaOrgan())
+                    .aAwaDate(resumeAward.getAwaDate())
+                    .aAwaContent(resumeAward.getAwaContent())
+                    .build());
+        }
+        for (ResumeCertificate resumeCertificate : resumeCertificateRepository.findByResumeNo(resume)) {
+            applicationCertificateRepository.save(ApplicationCertificate
+                    .builder()
+                    .applicationNo(application)
+                    .aCerTitle(resumeCertificate.getCerTitle())
+                    .aCerIssuingAuthority(resumeCertificate.getCerIssuingAuthority())
+                    .aCerDate(resumeCertificate.getCerDate())
+                    .aCerExpire(resumeCertificate.getCerExpire())
+                    .build());
+        }
+        for (ResumeEducation resumeEducation : resumeEducationRepository.findByResumeNo(resume)) {
+            applicationEducationRepository.save(ApplicationEducation
+                    .builder()
+                    .applicationNo(application)
+                    .aEduTitle(resumeEducation.getEduTitle())
+                    .aEduOrgan(resumeEducation.getEduOrgan())
+                    .aEuContent(resumeEducation.getEduContent())
+                    .aEduTime(resumeEducation.getEduTime())
+                    .aEduStartDate(resumeEducation.getEduStartDate())
+                    .aEduEndDate(resumeEducation.getEduEndDate())
+                    .build());
+        }
+        for (ResumeExperience resumeExperience : resumeExperienceRepository.findByResumeNo(resume)) {
+            applicationExperienceRepository.save(ApplicationExperience
+                    .builder()
+                    .applicationNo(application)
+                    .aExpCompanyName(resumeExperience.getExpCompanyName())
+                    .aExpPosition(resumeExperience.getExpPosition())
+                    .aExpStartDate(resumeExperience.getExpStartDate())
+                    .aExpEndDate(resumeExperience.getExpEndDate())
+                    .aExpPart(resumeExperience.getExpPart())
+                    .aExpAchievement(resumeExperience.getExpAchievement())
+                    .aExpIsCurrent(resumeExperience.getExpIsCurrent())
+                    .build());
+        }
+        for (ResumeSchool resumeSchool : resumeSchoolRepository.findByResumeNo(resume)) {
+            applicationSchoolRepository.save(ApplicationSchool
+                    .builder()
+                    .applicationNo(application)
+                    .aSchName(resumeSchool.getSchName())
+                    .aSchMajor(resumeSchool.getSchMajor())
+                    .aSchMinor(resumeSchool.getSchMinor())
+                    .aSchMultiple(resumeSchool.getSchMultiple())
+                    .aSchDegree(resumeSchool.getSchDegree())
+                    .aSchGraduationDate(resumeSchool.getSchGraduationDate())
+                    .aSchAdmissionDate(resumeSchool.getSchAdmissionDate())
+                    .aSchGpa(resumeSchool.getSchGpa())
+                    .aSchStandardGpa(resumeSchool.getSchStandardGpa())
+                    .aSchDescription(resumeSchool.getSchDescription())
+                    .aSchPart(resumeSchool.getSchPart())
+                    .aSchLev(resumeSchool.getSchLev())
+                    .build());
+        }
+        for (ApplicationMemberApplyQuestionRequestDTO questionRequestDTO : requestDTO.getQuestion()) {
+            coverLetterRepository.save(CoverLetter
+                    .builder()
+                    .applicationNo(application)
+                    .coverQuestion(questionRequestDTO.getQuestion())
+                    .coverContent(questionRequestDTO.getQuestionContent())
+                    .coverLength(questionRequestDTO.getQuestionLength())
+                    .build());
+        }
+
+
+        ApplicationMemberApplyResponseDTO applyResponseDTO = new ApplicationMemberApplyResponseDTO();
+        applyResponseDTO.setMessage("Success");
+        return applyResponseDTO;
     }
 
     // 기업이 등록한 채용 공고 목록 조회

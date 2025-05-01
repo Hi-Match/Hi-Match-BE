@@ -17,10 +17,17 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     // 지원 상태에 따른 페이지 수 구하기
     @Override
     public Long selectMaxPageByApplicationStatus(ApplicationStatus applicationStatus, Long memberNo) {
-        return queryFactory.select(application.count())
-                .from(application)
-                .where(application.applicationStatus.eq(applicationStatus).and(application.memberNo.memberNo.eq(memberNo)))
-                .fetchFirst();
+        if (ApplicationStatus.TOTAL.equals(applicationStatus)) {
+            return queryFactory.select(application.count())
+                    .from(application)
+                    .where(application.memberNo.memberNo.eq(memberNo))
+                    .fetchFirst();
+        } else {
+            return queryFactory.select(application.count())
+                    .from(application)
+                    .where(application.applicationStatus.eq(applicationStatus).and(application.memberNo.memberNo.eq(memberNo)))
+                    .fetchFirst();
+        }
     }
 
     // 지원 상태에 따른 페이지 수 구하기

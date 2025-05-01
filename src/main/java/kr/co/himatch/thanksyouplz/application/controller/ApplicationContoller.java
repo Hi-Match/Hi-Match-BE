@@ -54,6 +54,15 @@ public class ApplicationContoller {
         return new ResponseEntity<>(detailResponseDTO, HttpStatus.OK);
     }
 
+    // 개인 사용자가 1개의 기업에 채용 지원
+    @PostMapping("/member/apply")
+    public ResponseEntity<?> memberApply(@RequestBody ApplicationMemberApplyRequestDTO applyRequestDTO) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        ApplicationMemberApplyResponseDTO responseDTO = applicationService.applyPosting(applyRequestDTO, memberNo);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+
     //  기업 공고 등록 전, 기업이 요구할 자기소개서 질문지 조회
     @GetMapping("/company/question-list")
     public ResponseEntity<?> companyQuestionList() {
