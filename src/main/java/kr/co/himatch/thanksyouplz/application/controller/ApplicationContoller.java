@@ -120,4 +120,12 @@ public class ApplicationContoller {
         return new ResponseEntity<>(deleteResponseDTO, HttpStatus.OK);
     }
 
+    // 기업 - 이력서 상세 조회
+    @GetMapping("/company/apply-detail")
+    public ResponseEntity<?> companyApplyDetail(@RequestParam Long applicationNo) {
+        ApplicationCompanyApplyDetailResponseDTO detailResponseDTO = applicationService.selectApplication(applicationNo);
+        return new ResponseEntity<>(detailResponseDTO, HttpStatus.OK);
+    }
+
+
 }

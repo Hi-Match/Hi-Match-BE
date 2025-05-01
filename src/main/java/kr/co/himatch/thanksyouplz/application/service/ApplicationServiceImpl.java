@@ -357,4 +357,39 @@ public class ApplicationServiceImpl implements ApplicationService {
         deleteResponseDTO.setMessage("Success");
         return deleteResponseDTO;
     }
+
+    // 기업 - 이력서 상세 조회
+    @Override
+    public ApplicationCompanyApplyDetailResponseDTO selectApplication(Long applicationNo) {
+        Application application = applicationRepository.getReferenceById(applicationNo);
+
+        ApplicationCompanyApplyDetailResponseDTO detailResponseDTO = new ApplicationCompanyApplyDetailResponseDTO();
+        detailResponseDTO.setApplicationNo(application.getApplicationNo());
+        detailResponseDTO.setApplicationTitle(application.getApplicationTitle());
+        detailResponseDTO.setApplicationName(application.getApplicationName());
+        detailResponseDTO.setApplicationEngName(application.getApplicationEngname());
+        detailResponseDTO.setApplicationMail(application.getApplicationEngname());
+        detailResponseDTO.setApplicationTel(application.getApplicationTel());
+        detailResponseDTO.setApplicationAddress(application.getApplicationAddress());
+        detailResponseDTO.setApplicationBirthDay(application.getApplicationBirthday());
+        detailResponseDTO.setApplicationGender(application.getApplicationGender());
+        detailResponseDTO.setApplicationIMG(application.getApplicationImg());
+        detailResponseDTO.setApplicationDate(application.getApplicationDate());
+        detailResponseDTO.setApplicationPortFolio(application.getApplicationPortfolio());
+        detailResponseDTO.setApplicationAmbition(application.getApplicationAmbition());
+        detailResponseDTO.setApplicationArmyType(application.getApplicationArmyType());
+        detailResponseDTO.setApplicationArmyDate(application.getApplicationArmyDate());
+        detailResponseDTO.setApplicationArmyEnd(application.getApplicationArmyEnd());
+        detailResponseDTO.setApplicationArmyPart(application.getApplicationArmyPart());
+        detailResponseDTO.setApplicationDisability(application.getApplicationDisability());
+        detailResponseDTO.setApplicationDisabilityType(application.getApplicationDisabilityType());
+        detailResponseDTO.setApplicationRewardingPatriotism(application.getApplicationRewardingPatriotism());
+        detailResponseDTO.setApplicationCover(coverLetterRepository.selectQuestionListByApplicationNo(applicationNo));
+        detailResponseDTO.setApplicationSchool(applicationSchoolRepository.selectSchool(applicationNo));
+        detailResponseDTO.setApplicationExperience(applicationExperienceRepository.selectExperience(applicationNo));
+        detailResponseDTO.setApplicationCertificate(applicationCertificateRepository.selectCertificate(applicationNo));
+        detailResponseDTO.setApplicationEducation(applicationEducationRepository.selectEducation(applicationNo));
+        detailResponseDTO.setApplicationAward(applicationAwardRepository.selectAward(applicationNo));
+        return detailResponseDTO;
+    }
 }
