@@ -83,6 +83,12 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationRepository.selectPageByStatus(applicationStatus, memberNo, page);
     }
 
+    //  기업 공고 등록 전, 기업이 요구할 자기소개서 질문지 조회
+    @Override
+    public List<ApplicationMemberQuestionResponseDTO> selectQuestionList() {
+        return coverLetterCategoryRepository.selectQuestionList();
+    }
+
     // 지원서 상세 보기
     @Override
     public ApplicationMemberDetailResponseDTO selectApplicationDetail(Long applicationNo) {
