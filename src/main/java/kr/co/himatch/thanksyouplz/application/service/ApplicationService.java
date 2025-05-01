@@ -22,5 +22,8 @@ public interface ApplicationService {
     ApplicationCompanySelectResponseDTO selectJobPosting(Long postingNo);
 
     // 채용 공고 등록
-    ApplicationCompanyRegisterResponseDTO posingRegister(ApplicationCompanyRegisterRequestDTO registerRequestDTO, Long memberNo);
+    ApplicationCompanyRegisterResponseDTO postingRegister(ApplicationCompanyRegisterRequestDTO registerRequestDTO, Long memberNo);
+
+    // 채용 공고 수정
+    ApplicationCompanyModifyResponseDTO postingModify(ApplicationCompanyModifyRequestDTO modifyRequestDTO);
 }

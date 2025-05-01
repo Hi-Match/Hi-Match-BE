@@ -68,4 +68,21 @@ public class JobPosting {
     @Column(name = "POSTING_UPDATE")
     private LocalDateTime postingUpdate;
 
+    public void changePostingInfo(String postingTitle, String postingContent, String postingPart, Integer postingSal, String postingExperience, String postingEducation, String postingLocation, String postingType, String postingWorkType, LocalDateTime postingWorkStartTime, LocalDateTime postingWorkEndTime, Boolean postingIsFinish, LocalDateTime postingDeadLine) {
+        this.postingTitle = postingTitle;
+        this.postingContent = postingContent;
+        this.postingPart = postingPart;
+        this.postingSal = postingSal;
+        this.postingExperience = postingExperience;
+        this.postingEducation = postingEducation;
+        this.postingLocation = postingLocation;
+        this.postingType = postingType;
+        this.postingWorkType = postingWorkType;
+        this.postingWorkStartTime = postingWorkStartTime;
+        this.postingWorkEndTime = postingWorkEndTime;
+        this.postingIsFinish = postingIsFinish;
+        this.postingDeadline = postingDeadLine;
+        this.postingUpdate = LocalDateTime.now();
+    }
+
 }

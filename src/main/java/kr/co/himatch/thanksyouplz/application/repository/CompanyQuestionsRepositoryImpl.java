@@ -22,4 +22,11 @@ public class CompanyQuestionsRepositoryImpl implements CompanyQuestionsRepositor
                 .where(companyQuestions.postingNo.postingNo.eq(postingNo))
                 .fetch();
     }
+
+    @Override
+    public void deleteQuestionByPostingNo(Long postingNo) {
+        queryFactory.delete(companyQuestions)
+                .where(companyQuestions.postingNo.postingNo.eq(postingNo))
+                .execute();
+    }
 }

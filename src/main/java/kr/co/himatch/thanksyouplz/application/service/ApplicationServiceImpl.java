@@ -120,7 +120,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     // 채용 공고 등록
     @Override
-    public ApplicationCompanyRegisterResponseDTO posingRegister(ApplicationCompanyRegisterRequestDTO registerRequestDTO, Long memberNo) {
+    public ApplicationCompanyRegisterResponseDTO postingRegister(ApplicationCompanyRegisterRequestDTO registerRequestDTO, Long memberNo) {
         Company company = companyRepository.getReferenceById(memberNo);
         JobPosting jobPosting = jobPostingRepository.save(JobPosting
                 .builder()
@@ -156,5 +156,36 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationCompanyRegisterResponseDTO registerResponseDTO = new ApplicationCompanyRegisterResponseDTO();
         registerResponseDTO.setMessage("Success");
         return registerResponseDTO;
+    }
+
+    // 채용 공고 수정
+    @Override
+    public ApplicationCompanyModifyResponseDTO postingModify(ApplicationCompanyModifyRequestDTO modifyRequestDTO) {
+        JobPosting jobPosting = jobPostingRepository.getReferenceById(modifyRequestDTO.getPostingNo());
+
+        jobPosting.changePostingInfo(modifyRequestDTO.getPostingTitle(), modifyRequestDTO.getPostingContent(),
+                modifyRequestDTO.getPostingPart(), modifyRequestDTO.getPostingSal(),
+                modifyRequestDTO.getPostingExperience(), modifyRequestDTO.getPostingEducation(),
+                modifyRequestDTO.getPostingLocation(), modifyRequestDTO.getPostingType(),
+                modifyRequestDTO.getPostingWorkType(), modifyRequestDTO.getPostingWorkStartTime(),
+                modifyRequestDTO.getPostingWorkEndTime(), modifyRequestDTO.getPostingIsFinish(),
+                modifyRequestDTO.getPostingDeadLine());
+
+        companyQuestionsRepository.deleteQuestionByPostingNo(modifyRequestDTO.getPostingNo());
+
+        for (ApplicationCompanyModifyListRequestDTO question : modifyRequestDTO.getPostingQuestion()) {
+            companyQuestionsRepository.save(
+                    CompanyQuestions
+                            .builder()
+                            .postingNo(jobPosting)
+                            .questionTitle(question.getQuestion())
+                            .questionLength(question.getQuestionLength())
+                            .build()
+            );
+        }
+
+        ApplicationCompanyModifyResponseDTO modifyResponseDTO = new ApplicationCompanyModifyResponseDTO();
+        modifyResponseDTO.setMessage("Success");
+        return modifyResponseDTO;
     }
 }

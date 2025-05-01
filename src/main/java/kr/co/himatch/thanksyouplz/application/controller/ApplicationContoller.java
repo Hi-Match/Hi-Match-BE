@@ -66,7 +66,15 @@ public class ApplicationContoller {
     @PostMapping("/company/register")
     public ResponseEntity<?> companyRegister(@RequestBody ApplicationCompanyRegisterRequestDTO registerListRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-        ApplicationCompanyRegisterResponseDTO responseDTO = applicationService.posingRegister(registerListRequestDTO, memberNo);
+        ApplicationCompanyRegisterResponseDTO responseDTO = applicationService.postingRegister(registerListRequestDTO, memberNo);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    // 채용 공고 수정
+    @PutMapping("/company/modify")
+    public ResponseEntity<?> companyModify(@RequestBody ApplicationCompanyModifyRequestDTO modifyListRequestDTO) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        ApplicationCompanyModifyResponseDTO modifyResponseDTO = applicationService.postingModify(modifyListRequestDTO);
+        return new ResponseEntity<>(modifyResponseDTO, HttpStatus.OK);
     }
 }
