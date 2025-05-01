@@ -55,9 +55,9 @@ public class ApplicationContoller {
     }
 
     //  기업 공고 등록 전, 기업이 요구할 자기소개서 질문지 조회
-    @GetMapping("/member/question-list")
-    public ResponseEntity<?> memberQuestionList() {
-        List<ApplicationMemberQuestionResponseDTO> responseDTOList = applicationService.selectQuestionList();
+    @GetMapping("/company/question-list")
+    public ResponseEntity<?> companyQuestionList() {
+        List<ApplicationCompanyQuestionResponseDTO> responseDTOList = applicationService.selectQuestionList();
         return new ResponseEntity<>(responseDTOList, HttpStatus.OK);
     }
 

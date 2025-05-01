@@ -16,7 +16,7 @@ public interface ApplicationService {
     List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page);
 
     // 기업 공고 등록 전, 기업이 요구할 자기소개서 질문지 조회
-    List<ApplicationMemberQuestionResponseDTO> selectQuestionList();
+    List<ApplicationCompanyQuestionResponseDTO> selectQuestionList();
 
     // 지원서 상세 보기
     ApplicationMemberDetailResponseDTO selectApplicationDetail(Long applicationNo);

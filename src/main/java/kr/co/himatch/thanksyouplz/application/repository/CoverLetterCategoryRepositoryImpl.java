@@ -2,7 +2,7 @@ package kr.co.himatch.thanksyouplz.application.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberQuestionResponseDTO;
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationCompanyQuestionResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -14,9 +14,9 @@ public class CoverLetterCategoryRepositoryImpl implements CoverLetterCategoryRep
     private JPAQueryFactory queryFactory;
 
     @Override
-    public List<ApplicationMemberQuestionResponseDTO> selectQuestionList() {
+    public List<ApplicationCompanyQuestionResponseDTO> selectQuestionList() {
         return queryFactory.select(
-                        Projections.constructor(ApplicationMemberQuestionResponseDTO.class, coverLetterCategory.coverCategoryTitle)
+                        Projections.constructor(ApplicationCompanyQuestionResponseDTO.class, coverLetterCategory.coverCategoryTitle)
                 )
                 .from(coverLetterCategory)
                 .fetch();

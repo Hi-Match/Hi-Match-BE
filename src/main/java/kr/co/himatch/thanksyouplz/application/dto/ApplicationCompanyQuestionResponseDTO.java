@@ -6,10 +6,10 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class ApplicationMemberQuestionResponseDTO {
+public class ApplicationCompanyQuestionResponseDTO {
     private String question;
 
-    public ApplicationMemberQuestionResponseDTO(String question) {
+    public ApplicationCompanyQuestionResponseDTO(String question) {
         this.question = question;
     }
 }

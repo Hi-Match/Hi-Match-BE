@@ -85,7 +85,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     //  기업 공고 등록 전, 기업이 요구할 자기소개서 질문지 조회
     @Override
-    public List<ApplicationMemberQuestionResponseDTO> selectQuestionList() {
+    public List<ApplicationCompanyQuestionResponseDTO> selectQuestionList() {
         return coverLetterCategoryRepository.selectQuestionList();
     }
 
