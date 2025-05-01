@@ -95,6 +95,12 @@ public class ApplicationServiceImpl implements ApplicationService {
         return detailResponseDTO;
     }
 
+    // 기업이 등록한 채용 공고 목록 조회
+    @Override
+    public List<ApplicationCompanyPostingResponseDTO> selectPostingList(Long memberNo) {
+        return jobPostingRepository.selectPostingList(memberNo);
+    }
+
     @Override
     public ApplicationCompanySelectResponseDTO selectJobPosting(Long postingNo) {
         JobPosting posting = jobPostingRepository.getReferenceById(postingNo);

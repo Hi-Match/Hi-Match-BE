@@ -18,6 +18,9 @@ public interface ApplicationService {
     // 지원서 상세 보기
     ApplicationMemberDetailResponseDTO selectApplicationDetail(Long applicationNo);
 
+    // 기업이 등록한 채용 공고 목록 조회
+    List<ApplicationCompanyPostingResponseDTO> selectPostingList(Long memberNo);
+
     // 채용 공고 조회
     ApplicationCompanySelectResponseDTO selectJobPosting(Long postingNo);
 

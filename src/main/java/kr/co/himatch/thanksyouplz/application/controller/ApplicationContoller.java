@@ -54,6 +54,14 @@ public class ApplicationContoller {
         return new ResponseEntity<>(detailResponseDTO, HttpStatus.OK);
     }
 
+    // 기업이 등록한 채용 공고 목록 조회
+    @GetMapping("/company/posting-list")
+    public ResponseEntity<?> companyPostingList() {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        List<ApplicationCompanyPostingResponseDTO> list = applicationService.selectPostingList(memberNo);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     // 채용 공고 조회
     @GetMapping("/company/select")
     public ResponseEntity<?> companySelect(@RequestParam Long posingNo) {
