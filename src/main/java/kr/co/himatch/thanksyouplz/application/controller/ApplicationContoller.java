@@ -143,5 +143,24 @@ public class ApplicationContoller {
         return new ResponseEntity<>(detailResponseDTO, HttpStatus.OK);
     }
 
+    // 서류 합격 API
+    @PostMapping("/company/resume-pass")
+    public ResponseEntity<?> companyResumePass(@RequestBody ApplicationCompanyResumeStatusRequestDTO requestDTO) {
+        ApplicationCompanyResumeStatusResponseDTO responseDTO = applicationService.applicationStatusModify(requestDTO.getApplicationNo(), ApplicationStatus.RESUME_PASS);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
 
+    // 최종 합격 API
+    @PostMapping("/company/final-pass")
+    public ResponseEntity<?> companyFinalPass(@RequestBody ApplicationCompanyResumeStatusRequestDTO requestDTO) {
+        ApplicationCompanyResumeStatusResponseDTO responseDTO = applicationService.applicationStatusModify(requestDTO.getApplicationNo(), ApplicationStatus.FINAL_PASS);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    // 불합격 API
+    @PostMapping("/company/personal-fail")
+    public ResponseEntity<?> companyPersonalFail(@RequestBody ApplicationCompanyResumeStatusRequestDTO requestDTO) {
+        ApplicationCompanyResumeStatusResponseDTO responseDTO = applicationService.applicationStatusModify(requestDTO.getApplicationNo(), ApplicationStatus.FAIL);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
 }

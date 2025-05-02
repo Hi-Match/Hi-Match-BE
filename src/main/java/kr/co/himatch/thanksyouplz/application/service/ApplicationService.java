@@ -47,4 +47,7 @@ public interface ApplicationService {
 
     // 기업 - 이력서 상세 조회
     ApplicationCompanyApplyDetailResponseDTO selectApplication(Long applicationNo);
+
+    // 기업 - 이력서 서류 상태 변경
+    ApplicationCompanyResumeStatusResponseDTO applicationStatusModify(Long applicationNo, ApplicationStatus status);
 }

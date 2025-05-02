@@ -420,4 +420,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         detailResponseDTO.setApplicationAward(applicationAwardRepository.selectAward(applicationNo));
         return detailResponseDTO;
     }
+
+    @Override
+    public ApplicationCompanyResumeStatusResponseDTO applicationStatusModify(Long applicationNo, ApplicationStatus status) {
+        Application application = applicationRepository.getReferenceById(applicationNo);
+        application.changeApplicationStatus(status);
+
+        ApplicationCompanyResumeStatusResponseDTO resumeStatusResponseDTO = new ApplicationCompanyResumeStatusResponseDTO();
+        resumeStatusResponseDTO.setMessage("Success");
+        return resumeStatusResponseDTO;
+    }
 }

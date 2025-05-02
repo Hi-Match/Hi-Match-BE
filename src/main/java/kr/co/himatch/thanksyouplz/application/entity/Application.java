@@ -116,5 +116,8 @@ public class Application {
     @Column(name = "APPLICATION_UPDATE")
     private LocalDateTime applicationUpdate;
 
+    public void changeApplicationStatus(ApplicationStatus status) {
+        this.applicationStatus = status;
+    }
 
 }
