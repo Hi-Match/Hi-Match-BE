@@ -488,6 +488,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public ApplicationMemberSearchPageResponseDTO selectSearchPageCount(ApplicationMemberSearchPageRequestDTO requestDTO) {
         Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getKeyword());
+        count = (long) Math.ceil((double) count / 10);
         ApplicationMemberSearchPageResponseDTO responseDTO = new ApplicationMemberSearchPageResponseDTO();
         responseDTO.setPage(count);
         return responseDTO;
