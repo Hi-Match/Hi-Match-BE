@@ -94,6 +94,13 @@ public class ApplicationContoller {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    // 채용 공고의 지원자 목록 조회
+    @GetMapping("/company/list")
+    public ResponseEntity<?> companyList(@RequestParam Long posingNo) {
+        List<ApplicationCompanyListResponseDTO> list = applicationService.selectCompanyList(posingNo);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 
     // 채용 공고 등록
     @PostMapping("/company/register")

@@ -3,6 +3,7 @@ package kr.co.himatch.thanksyouplz.application.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationCompanyApplyDetailSchoolResponseDTO;
+import kr.co.himatch.thanksyouplz.resume.entity.SchPart;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -21,5 +22,14 @@ public class ApplicationSchoolRepositoryImpl implements ApplicationSchoolReposit
                 .from(applicationSchool)
                 .where(applicationSchool.applicationNo.applicationNo.eq(applicationNo))
                 .fetch();
+    }
+
+    @Override
+    public SchPart selectLastEducationPartByApplicationNo(Long applicationNo) {
+        return queryFactory.select(applicationSchool.aSchPart)
+                .from(applicationSchool)
+                .where(applicationSchool.applicationNo.applicationNo.eq(applicationNo))
+                .orderBy(applicationSchool.aSchLev.desc())
+                .fetchFirst();
     }
 }

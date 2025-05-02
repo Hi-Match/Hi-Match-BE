@@ -1,5 +1,6 @@
 package kr.co.himatch.thanksyouplz.application.repository;
 
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationCompanyListResponseDTO;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
 import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
 
@@ -22,5 +23,8 @@ public interface ApplicationRepositoryCustom {
     Long selectPageSearchCountByStatus(String keyword, ApplicationStatus applicationStatus, Long memberNo);
 
     // 지원자 지원 목록 검색 조회
-    List<ApplicationMemberStatusResponseDTO> selectPageSearchByStatus(String keyword, ApplicationStatus applicationStatus,Long page, Long memberNo);
+    List<ApplicationMemberStatusResponseDTO> selectPageSearchByStatus(String keyword, ApplicationStatus applicationStatus, Long page, Long memberNo);
+
+    // 채용 공고의 지원자 목록 조회
+    List<ApplicationCompanyListResponseDTO> selectCompanyListByPostingNo(Long posingNo);
 }

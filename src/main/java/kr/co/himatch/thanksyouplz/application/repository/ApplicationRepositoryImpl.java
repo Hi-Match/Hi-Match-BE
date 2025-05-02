@@ -3,6 +3,7 @@ package kr.co.himatch.thanksyouplz.application.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationCompanyListResponseDTO;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
 import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,17 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 )
                 .offset(10L * page)
                 .limit(10L)
+                .fetch();
+    }
+
+    // 채용 공고의 지원자 목록 조회
+    @Override
+    public List<ApplicationCompanyListResponseDTO> selectCompanyListByPostingNo(Long posingNo) {
+        return queryFactory.select(
+                        Projections.constructor(ApplicationCompanyListResponseDTO.class, application.applicationNo, application.applicationDate, application.applicationStatus, application.applicationName, application.applicationGrade)
+                )
+                .from(application)
+                .where(application.postingNo.postingNo.eq(posingNo))
                 .fetch();
     }
 

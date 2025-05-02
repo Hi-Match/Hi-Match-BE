@@ -13,7 +13,7 @@ public interface ApplicationService {
     ApplicationMemberCountResponseDTO selectCountByStatus(Long memberNo);
 
     // 지원자 지원 목록 검색 조회 API
-    ApplicationMemberSearchResponseDTO selectSearchPageByStatus(ApplicationMemberSearchRequestDTO requestDTO,Long memberNo);
+    ApplicationMemberSearchResponseDTO selectSearchPageByStatus(ApplicationMemberSearchRequestDTO requestDTO, Long memberNo);
 
     // 지원서 상태에 따른 지원서 조회
     List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page);
@@ -32,6 +32,9 @@ public interface ApplicationService {
 
     // 채용 공고 조회
     ApplicationCompanySelectResponseDTO selectJobPosting(Long postingNo);
+
+    // 채용 공고의 지원자 목록 조회
+    List<ApplicationCompanyListResponseDTO> selectCompanyList(Long postingNo);
 
     // 채용 공고 등록
     ApplicationCompanyRegisterResponseDTO postingRegister(ApplicationCompanyRegisterRequestDTO registerRequestDTO, Long memberNo);

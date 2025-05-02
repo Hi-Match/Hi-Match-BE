@@ -286,6 +286,17 @@ public class ApplicationServiceImpl implements ApplicationService {
         return responseDTO;
     }
 
+    // 채용 공고의 지원자 목록 조회
+    @Override
+    public List<ApplicationCompanyListResponseDTO> selectCompanyList(Long postingNo) {
+        List<ApplicationCompanyListResponseDTO> responseDTOList = applicationRepository.selectCompanyListByPostingNo(postingNo);
+        for (ApplicationCompanyListResponseDTO responseDTO : responseDTOList) {
+            SchPart schPart = applicationSchoolRepository.selectLastEducationPartByApplicationNo(responseDTO.getApplicationNo());
+            responseDTO.setApplicationPart(schPart);
+        }
+        return responseDTOList;
+    }
+
     // 채용 공고 등록
     @Override
     public ApplicationCompanyRegisterResponseDTO postingRegister(ApplicationCompanyRegisterRequestDTO registerRequestDTO, Long memberNo) {
