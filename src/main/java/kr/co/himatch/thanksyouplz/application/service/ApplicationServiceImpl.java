@@ -90,6 +90,23 @@ public class ApplicationServiceImpl implements ApplicationService {
         return countResponseDTO;
     }
 
+    // 지원자 지원 목록 검색 조회 API
+    @Override
+    public ApplicationMemberSearchResponseDTO selectSearchPageByStatus(ApplicationMemberSearchRequestDTO requestDTO, Long memberNo) {
+        Long page = requestDTO.getPage();
+        if (page >= 1) {
+            page--;
+        }
+
+        Long maxPage = applicationRepository.selectPageSearchCountByStatus(requestDTO.getKeyword(), requestDTO.getCategory(), memberNo);
+        List<ApplicationMemberStatusResponseDTO> list = applicationRepository.selectPageSearchByStatus(requestDTO.getKeyword(), requestDTO.getCategory(), page, memberNo);
+
+        ApplicationMemberSearchResponseDTO responseDTO = new ApplicationMemberSearchResponseDTO();
+        responseDTO.setMaxPage(maxPage);
+        responseDTO.setList(list);
+        return responseDTO;
+    }
+
     // 지원서 상태에 따른 지원서 조회
     @Override
     public List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page) {

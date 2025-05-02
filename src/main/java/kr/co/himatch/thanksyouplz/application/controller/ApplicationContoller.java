@@ -37,6 +37,15 @@ public class ApplicationContoller {
         return new ResponseEntity<>(countResponseDTO, HttpStatus.OK);
     }
 
+    ///himatch/application/member/search
+    // 지원자 지원 목록 검색 조회 API
+    @PostMapping("/member/search")
+    public ResponseEntity<?> memberSearch(@RequestBody ApplicationMemberSearchRequestDTO searchRequestDTO) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        ApplicationMemberSearchResponseDTO responseDTO = applicationService.selectSearchPageByStatus(searchRequestDTO, memberNo);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
     // 지원서 상태에 따른 지원서 조회
     @GetMapping("/member/{applicationStatus}")
     public ResponseEntity<?> memberApplicationStatus(@PathVariable String applicationStatus, @RequestParam Long page) {

@@ -1,10 +1,12 @@
 package kr.co.himatch.thanksyouplz.application.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberStatusResponseDTO;
 import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -51,25 +53,48 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     // 지원 상태에 따른 지원서 구하기
     @Override
     public List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page) {
-        if (applicationStatus.equals(ApplicationStatus.TOTAL)) {
-            return queryFactory.select(
-                            Projections.constructor(ApplicationMemberStatusResponseDTO.class, application.applicationNo, application.applicationName, application.postingNo.postingPart, application.applicationTel, application.applicationDate, application.applicationStatus)
-                    )
-                    .from(application)
-                    .where(application.memberNo.memberNo.eq(memberNo))
-                    .offset(10 * page)
-                    .limit(10L)
-                    .fetch();
-        } else {
-            return queryFactory.select(
-                            Projections.constructor(ApplicationMemberStatusResponseDTO.class, application.applicationNo, application.applicationName, application.postingNo.postingPart, application.applicationTel, application.applicationDate, application.applicationStatus)
-                    )
-                    .from(application)
-                    .where(application.applicationStatus.eq(applicationStatus).and(application.memberNo.memberNo.eq(memberNo)))
-                    .offset(10 * page)
-                    .limit(10L)
-                    .fetch();
-        }
+        return queryFactory.select(
+                        Projections.constructor(ApplicationMemberStatusResponseDTO.class, application.applicationNo, application.applicationTitle, application.postingNo.postingPart, application.postingNo.postingType, application.applicationDate, application.applicationStatus)
+                )
+                .from(application)
+                .where(application.memberNo.memberNo.eq(memberNo)
+                        , equalsApplicationStatus(applicationStatus))
+                .offset(10 * page)
+                .limit(10L)
+                .fetch();
     }
 
+    @Override
+    public Long selectPageSearchCountByStatus(String keyword, ApplicationStatus applicationStatus, Long memberNo) {
+        return queryFactory.select(application.count())
+                .from(application)
+                .where(application.memberNo.memberNo.eq(memberNo)
+                        , likeApplicationTitle(keyword)
+                        , equalsApplicationStatus(applicationStatus)
+                )
+                .fetchFirst();
+    }
+
+    @Override
+    public List<ApplicationMemberStatusResponseDTO> selectPageSearchByStatus(String keyword, ApplicationStatus applicationStatus, Long page, Long memberNo) {
+        return queryFactory.select(
+                        Projections.constructor(ApplicationMemberStatusResponseDTO.class, application.applicationNo, application.applicationTitle, application.postingNo.postingPart, application.postingNo.postingType, application.applicationDate, application.applicationStatus)
+                )
+                .from(application)
+                .where(application.memberNo.memberNo.eq(memberNo)
+                        , likeApplicationTitle(keyword)
+                        , equalsApplicationStatus(applicationStatus)
+                )
+                .offset(10L * page)
+                .limit(10L)
+                .fetch();
+    }
+
+    private BooleanExpression likeApplicationTitle(String keyword) {
+        return StringUtils.hasText(keyword) ? application.applicationTitle.like("%" + keyword + "%") : null;
+    }
+
+    private BooleanExpression equalsApplicationStatus(ApplicationStatus status) {
+        return ApplicationStatus.TOTAL.equals(status) ? null : application.applicationStatus.eq(status);
+    }
 }

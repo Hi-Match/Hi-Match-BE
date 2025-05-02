@@ -12,6 +12,9 @@ public interface ApplicationService {
     // 지원서 상태에 따른 count
     ApplicationMemberCountResponseDTO selectCountByStatus(Long memberNo);
 
+    // 지원자 지원 목록 검색 조회 API
+    ApplicationMemberSearchResponseDTO selectSearchPageByStatus(ApplicationMemberSearchRequestDTO requestDTO,Long memberNo);
+
     // 지원서 상태에 따른 지원서 조회
     List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page);
 
