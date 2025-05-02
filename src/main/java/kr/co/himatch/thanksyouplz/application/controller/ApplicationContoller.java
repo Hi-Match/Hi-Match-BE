@@ -171,10 +171,17 @@ public class ApplicationContoller {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    //himatch/application/company/early-finish
+    // 기업 - 조기 마감 API
     @PostMapping("/company/early-finish")
     public ResponseEntity<?> companyEarlyFinish(@RequestBody ApplicationCompanyEarlyFinishRequestDTO requestDTO) {
         ApplicationCompanyEarlyFinishResponseDTO responseDTO = applicationService.applicationEarlyFinish(requestDTO.getPostingNo());
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    // 기업 - 1개의 지원 타입에 대한 전체 불합격
+    @PostMapping("/company/category-fail")
+    public ResponseEntity<?> companyCategoryFail(@RequestBody ApplicationCompanyCategoryFailRequestDTO requestDTO) {
+        ApplicationCompanyCategoryFailResponseDTO responseDTO = applicationService.applicationCategoryFail(requestDTO.getPostingNo(), requestDTO.getCategory());
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 

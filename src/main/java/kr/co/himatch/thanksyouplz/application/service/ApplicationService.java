@@ -56,4 +56,7 @@ public interface ApplicationService {
 
     // 기업 - 조기 마감 API
     ApplicationCompanyEarlyFinishResponseDTO applicationEarlyFinish(Long postingNo);
+
+    // 기업 - 1개의 지원 타입에 대한 전체 불합격
+    ApplicationCompanyCategoryFailResponseDTO applicationCategoryFail(Long postingNo, ApplicationStatus status);
 }

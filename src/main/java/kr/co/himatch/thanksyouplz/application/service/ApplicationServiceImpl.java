@@ -457,4 +457,20 @@ public class ApplicationServiceImpl implements ApplicationService {
         responseDTO.setMessage("Success");
         return responseDTO;
     }
+
+    // 기업 - 1개의 지원 타입에 대한 전체 불합격
+    @Override
+    public ApplicationCompanyCategoryFailResponseDTO applicationCategoryFail(Long postingNo, ApplicationStatus status) {
+        JobPosting posting = jobPostingRepository.getReferenceById(postingNo);
+        List<Application> applicationList = applicationRepository.findByPostingNo(posting);
+        for (Application application : applicationList) {
+            if (application.getApplicationStatus().equals(status) || ApplicationStatus.TOTAL.equals(status)) {
+                application.changeApplicationStatus(ApplicationStatus.FAIL);
+            }
+        }
+
+        ApplicationCompanyCategoryFailResponseDTO responseDTO = new ApplicationCompanyCategoryFailResponseDTO();
+        responseDTO.setMessage("Success");
+        return responseDTO;
+    }
 }
