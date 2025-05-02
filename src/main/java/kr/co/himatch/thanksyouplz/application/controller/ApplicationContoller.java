@@ -163,4 +163,12 @@ public class ApplicationContoller {
         ApplicationCompanyResumeStatusResponseDTO responseDTO = applicationService.applicationStatusModify(requestDTO.getApplicationNo(), ApplicationStatus.FAIL);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+    // 기업 - 지원서 열람 후 점수 입력 API
+    @PostMapping("/company/score")
+    public ResponseEntity<?> companyScore(@RequestBody ApplicationCompanyScoreRequestDTO requestDTO) {
+        ApplicationCompanyScoreResponseDTO responseDTO = applicationService.applicationScoreInput(requestDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
 }

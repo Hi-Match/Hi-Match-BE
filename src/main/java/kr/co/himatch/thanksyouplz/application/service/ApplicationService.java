@@ -50,4 +50,7 @@ public interface ApplicationService {
 
     // 기업 - 이력서 서류 상태 변경
     ApplicationCompanyResumeStatusResponseDTO applicationStatusModify(Long applicationNo, ApplicationStatus status);
+
+    // 기업 - 지원서 열람 후 점수 입력 API
+    ApplicationCompanyScoreResponseDTO applicationScoreInput(ApplicationCompanyScoreRequestDTO requestDTO);
 }

@@ -430,4 +430,15 @@ public class ApplicationServiceImpl implements ApplicationService {
         resumeStatusResponseDTO.setMessage("Success");
         return resumeStatusResponseDTO;
     }
+
+    // 기업 - 지원서 열람 후 점수 입력 API
+    @Override
+    public ApplicationCompanyScoreResponseDTO applicationScoreInput(ApplicationCompanyScoreRequestDTO requestDTO) {
+        Application application = applicationRepository.getReferenceById(requestDTO.getApplicationNo());
+        application.changeApplicationGrade(requestDTO.getApplicationGrade());
+
+        ApplicationCompanyScoreResponseDTO responseDTO = new ApplicationCompanyScoreResponseDTO();
+        responseDTO.setMessage("Success");
+        return responseDTO;
+    }
 }

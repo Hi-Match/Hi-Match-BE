@@ -118,6 +118,13 @@ public class Application {
 
     public void changeApplicationStatus(ApplicationStatus status) {
         this.applicationStatus = status;
+        this.applicationUpdate = LocalDateTime.now();
+    }
+
+    public void changeApplicationGrade(Integer grade) {
+        this.applicationGrade = grade;
+        this.applicationStatus = ApplicationStatus.PROGRESS;
+        this.applicationUpdate = LocalDateTime.now();
     }
 
 }
