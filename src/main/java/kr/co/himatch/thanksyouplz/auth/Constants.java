@@ -18,7 +18,7 @@ public class Constants {
             "/himatch/company/member/idfind", "/himatch/company/member/pwfind", "/himatch/company/member/idcheck",
             "/himatch/company/member/login", "/himatch/company/member/idfind", "/himatch/company/member/pwfind",
             "/himatch/company/member/modify-pass", "/himatch/company/member/license",
-
+            "/himatch/application/member/job-list",  "/himatch/application/member/search-page",
     };
 
     //Authorization == JWT 사용을 위함

@@ -59,4 +59,10 @@ public interface ApplicationService {
 
     // 기업 - 1개의 지원 타입에 대한 전체 불합격
     ApplicationCompanyCategoryFailResponseDTO applicationCategoryFail(Long postingNo, ApplicationStatus status);
+
+    // 개인 - 채용 목록 page 조회 시 나오는 모든 공고에 대한 목록 및 검색 API
+    List<ApplicationMemberJobListResponseDTO> selectJobList(ApplicationMemberJobListRequestDTO requestDTO);
+
+    // 개인 - 체용 목록 page 검색 시, 몇 페이지까지 있는지 조회하는 API
+    ApplicationMemberSearchPageResponseDTO selectSearchPageCount(ApplicationMemberSearchPageRequestDTO requestDTO);
 }

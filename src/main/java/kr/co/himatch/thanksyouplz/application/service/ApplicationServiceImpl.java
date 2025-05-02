@@ -473,4 +473,24 @@ public class ApplicationServiceImpl implements ApplicationService {
         responseDTO.setMessage("Success");
         return responseDTO;
     }
+
+    // 개인 - 채용 목록 page 조회 시 나오는 모든 공고에 대한 목록 및 검색 API
+    @Override
+    public List<ApplicationMemberJobListResponseDTO> selectJobList(ApplicationMemberJobListRequestDTO requestDTO) {
+        Long page = requestDTO.getPage();
+        if (page >= 1) {
+            page--;
+        }
+        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getKeyword(), page);
+    }
+
+    // 개인 - 체용 목록 page 검색 시, 몇 페이지까지 있는지 조회하는 API
+    @Override
+    public ApplicationMemberSearchPageResponseDTO selectSearchPageCount(ApplicationMemberSearchPageRequestDTO requestDTO) {
+        Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getKeyword());
+        count = (long) Math.ceil((double) count / 10);
+        ApplicationMemberSearchPageResponseDTO responseDTO = new ApplicationMemberSearchPageResponseDTO();
+        responseDTO.setPage(count);
+        return responseDTO;
+    }
 }

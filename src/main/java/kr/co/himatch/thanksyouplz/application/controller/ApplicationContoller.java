@@ -71,6 +71,19 @@ public class ApplicationContoller {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    // 개인 - 채용 목록 page 조회 시 나오는 모든 공고에 대한 목록 및 검색 API
+    @PostMapping("/member/job-list")
+    public ResponseEntity<?> memberJobList(@RequestBody ApplicationMemberJobListRequestDTO requestDTO) {
+        List<ApplicationMemberJobListResponseDTO> list = applicationService.selectJobList(requestDTO);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    // 개인 - 체용 목록 page 검색 시, 몇 페이지까지 있는지 조회하는 API
+    @PostMapping("/member/search-page")
+    public ResponseEntity<?> memberSearchPage(@RequestBody ApplicationMemberSearchPageRequestDTO requestDTO) {
+        ApplicationMemberSearchPageResponseDTO responseDTO = applicationService.selectSearchPageCount(requestDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
 
     //  기업 공고 등록 전, 기업이 요구할 자기소개서 질문지 조회
     @GetMapping("/company/question-list")
