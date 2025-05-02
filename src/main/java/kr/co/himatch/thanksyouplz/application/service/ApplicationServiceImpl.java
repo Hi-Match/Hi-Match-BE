@@ -441,4 +441,20 @@ public class ApplicationServiceImpl implements ApplicationService {
         responseDTO.setMessage("Success");
         return responseDTO;
     }
+
+    // 기업 - 조기 마감 API
+    @Override
+    public ApplicationCompanyEarlyFinishResponseDTO applicationEarlyFinish(Long postingNo) {
+        JobPosting posting = jobPostingRepository.getReferenceById(postingNo);
+        List<Application> applicationList = applicationRepository.findByPostingNo(posting);
+        for (Application application : applicationList) {
+            if (!application.getApplicationStatus().equals(ApplicationStatus.FINAL_PASS)) {
+                application.changeApplicationStatus(ApplicationStatus.FAIL);
+            }
+        }
+
+        ApplicationCompanyEarlyFinishResponseDTO responseDTO = new ApplicationCompanyEarlyFinishResponseDTO();
+        responseDTO.setMessage("Success");
+        return responseDTO;
+    }
 }

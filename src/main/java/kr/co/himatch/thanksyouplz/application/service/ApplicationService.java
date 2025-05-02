@@ -53,4 +53,7 @@ public interface ApplicationService {
 
     // 기업 - 지원서 열람 후 점수 입력 API
     ApplicationCompanyScoreResponseDTO applicationScoreInput(ApplicationCompanyScoreRequestDTO requestDTO);
+
+    // 기업 - 조기 마감 API
+    ApplicationCompanyEarlyFinishResponseDTO applicationEarlyFinish(Long postingNo);
 }

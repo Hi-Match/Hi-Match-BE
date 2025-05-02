@@ -171,4 +171,11 @@ public class ApplicationContoller {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    //himatch/application/company/early-finish
+    @PostMapping("/company/early-finish")
+    public ResponseEntity<?> companyEarlyFinish(@RequestBody ApplicationCompanyEarlyFinishRequestDTO requestDTO) {
+        ApplicationCompanyEarlyFinishResponseDTO responseDTO = applicationService.applicationEarlyFinish(requestDTO.getPostingNo());
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
 }
