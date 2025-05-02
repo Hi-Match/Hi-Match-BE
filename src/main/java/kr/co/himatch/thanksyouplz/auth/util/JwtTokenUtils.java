@@ -7,17 +7,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import kr.co.himatch.thanksyouplz.auth.exception.ErrorResponse;
 import kr.co.himatch.thanksyouplz.auth.jwt.JsonWebToken;
 import org.springframework.http.HttpStatus;
+
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Date;
 
 public class JwtTokenUtils {
     //우리 프로젝트 만의 시크릿 키
-//    private static final String SECRET_KEY = Base64.getEncoder().encodeToString("xyz-jwt-secret-key".getBytes());
-//    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    //    private byte[] keyBytes = Decoders.BASE64.decode("xyz-jwt-secret-key");
-    private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public static byte[] keyBytes;
 //    // access 토큰 1시간 실제
 //    public static final long ACCESS_PERIOD = 1000L * 60L * 60L * 1L;
 
@@ -42,11 +40,11 @@ public class JwtTokenUtils {
             return new JsonWebToken(
                     jwtBuilder.setIssuedAt(now)
                             .setExpiration(new Date(now.getTime() + ACCESS_PERIOD))
-                            .signWith(key, SignatureAlgorithm.HS256)                //암호화. JWT에는 권한까지 되어있기 때문에 중요.
+                            .signWith(SignatureAlgorithm.HS256, keyBytes)                //암호화. JWT에는 권한까지 되어있기 때문에 중요.
                             .compact(),
                     jwtBuilder.setIssuedAt(now)
                             .setExpiration(new Date(now.getTime() + REFRESH_PERIOD))        //암호화. JWT에는 권한까지 되어있기 때문에 중요.
-                            .signWith(key, SignatureAlgorithm.HS256)
+                            .signWith(SignatureAlgorithm.HS256, keyBytes)
                             .compact()
             );
         } catch (Exception e) {
@@ -66,7 +64,7 @@ public class JwtTokenUtils {
             Date now = new Date();
             return jwtBuilder.setIssuedAt(now)
                     .setExpiration(new Date(now.getTime() + ACCESS_PERIOD))
-                    .signWith(key, SignatureAlgorithm.HS256)                //암호화. JWT에는 권한까지 되어있기 때문에 중요.
+                    .signWith(SignatureAlgorithm.HS256, keyBytes)                //암호화. JWT에는 권한까지 되어있기 때문에 중요.
                     .compact();
         } catch (Exception e) {
             throw new ErrorResponse(HttpStatus.FORBIDDEN, "잘못된 토큰입니다.");
@@ -75,6 +73,7 @@ public class JwtTokenUtils {
 
     public static Claims getClaims(String token) throws RuntimeException {
         try {
+            Key key = Keys.hmacShaKeyFor(keyBytes);
             return Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (Exception e) {
             throw new ErrorResponse(HttpStatus.FORBIDDEN, "잘못된 토큰입니다.(2)");
@@ -88,6 +87,7 @@ public class JwtTokenUtils {
     //토큰 유효 시간 검사
     public static boolean isValidToken(String token) {//throws RuntimeException
         try {
+            Key key = Keys.hmacShaKeyFor(keyBytes);
             Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
             if (Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration().before(new Date())) {
                 return false;
