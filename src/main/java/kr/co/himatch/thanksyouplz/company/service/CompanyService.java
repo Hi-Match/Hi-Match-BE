@@ -30,7 +30,7 @@ public interface CompanyService {
     CompanyChangeMailResponseDTO companyChangeMail(CompanyChangeMailRequestDTO companyChangeMailRequestDTO, Long memberNo);
 
     // 기업용 회원 프로필 편집 - 비밀번호 변경
-    CompanyChangePassResponseDTO companyChangePass(CompanyChangePassRequestDTO companyChangePassRequestDTO);
+    CompanyChangePassResponseDTO companyChangePass(CompanyChangePassRequestDTO companyChangePassRequestDTO, Long memberNo);
 
     // 기업용 회원 탈퇴
     CompanyMemberDeleteResponseDTO companyDelete(Long memberNo);

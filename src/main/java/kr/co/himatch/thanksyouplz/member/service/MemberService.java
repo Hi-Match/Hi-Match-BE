@@ -34,7 +34,7 @@ public interface MemberService {
     MemberChangeMailResponseDTO changeMail(MemberChangeMailRequestDTO memberChangeMailRequestDTO, Long memberNo);
 
     // 프로필 편집 - 비밀번호 변경
-    MemberChangePassResponseDTO changePass(MemberChangePassRequestDTO memberChangePassRequestDTO);
+    MemberChangePassResponseDTO changePass(MemberChangePassRequestDTO memberChangePassRequestDTO, Long memberNo);
 
     // 회원 탈퇴
     MemberDeleteResponseDTO memberDelete(Long memberNo);

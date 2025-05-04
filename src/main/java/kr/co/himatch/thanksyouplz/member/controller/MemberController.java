@@ -254,7 +254,7 @@ public class MemberController {
     public ResponseEntity<?> changePass(@RequestBody MemberChangePassRequestDTO memberChangePassRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
-        MemberChangePassResponseDTO changePass = memberService.changePass(memberChangePassRequestDTO);
+        MemberChangePassResponseDTO changePass = memberService.changePass(memberChangePassRequestDTO, memberNo);
 
         if (changePass == null) {
             return new ResponseEntity<>("잘못된 접근입니다. 다시 시도해주세요", HttpStatus.BAD_REQUEST);

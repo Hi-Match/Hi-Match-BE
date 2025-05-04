@@ -254,7 +254,9 @@ public class CompanyController {
     @PutMapping("/member/modify-pass")
     public ResponseEntity<?> companyChangePass(@RequestBody CompanyChangePassRequestDTO companyChangePassRequestDTO) {
 
-        CompanyChangePassResponseDTO companyChangePass = companyService.companyChangePass(companyChangePassRequestDTO);
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        CompanyChangePassResponseDTO companyChangePass = companyService.companyChangePass(companyChangePassRequestDTO, memberNo);
 
         if (companyChangePass == null) {
             return new ResponseEntity<>("잘못된 접근입니다. 다시 시도하세요", HttpStatus.BAD_REQUEST);
