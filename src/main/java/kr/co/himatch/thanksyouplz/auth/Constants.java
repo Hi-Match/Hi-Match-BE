@@ -10,14 +10,14 @@ public class Constants {
     // Token값이 필요없이 접근 가능한 일부러 보안을 풀어둔 링크들 모음
     public static final String[] SECURITY_HTTP_EXCLUDE_URIS = {"/himatch/member/access-token", "/himatch/member/signup",
             "/himatch/member/phone", "/himatch/member/login/callback/**", "/himatch/member/idcheck",
-            "/himatch/member/login", "/himatch/member/idfind", "/himatch/member/pwfind", "/himatch/member/modify-pass",
+            "/himatch/member/login", "/himatch/member/idfind", "/himatch/member/pwfind",
             "/himatch/member/login/**", "/himatch/resources/**", "/himatch/swagger*/**", "favicon.ico",
             "/himatch/webjars/**", "/himatch/swagger-ui/**",
             "/himatch/v3/api-docs/**", "/himatch/swagger-ui/**", "/himatch/swagger-resources/**",
             "/himatch/company/member/signup", "/himatch/company/member/login",
             "/himatch/company/member/idfind", "/himatch/company/member/pwfind", "/himatch/company/member/idcheck",
             "/himatch/company/member/login", "/himatch/company/member/idfind", "/himatch/company/member/pwfind",
-            "/himatch/company/member/modify-pass", "/himatch/company/member/license",
+            "/himatch/company/member/license",
             "/himatch/application/member/job-list",  "/himatch/application/member/search-page",
     };
 

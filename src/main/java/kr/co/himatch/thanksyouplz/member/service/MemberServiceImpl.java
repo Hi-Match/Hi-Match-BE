@@ -182,15 +182,13 @@ public class MemberServiceImpl implements MemberService {
 
     // 프로필 편집 - 비밀번호 변경
     @Override
-    public MemberChangePassResponseDTO changePass(MemberChangePassRequestDTO memberChangePassRequestDTO) {
-        Optional<Member> selectPass = memberRepository.selectPass(memberChangePassRequestDTO.getMemberID(),
-                memberChangePassRequestDTO.getMemberName(), memberChangePassRequestDTO.getMemberPhone());
+    public MemberChangePassResponseDTO changePass(MemberChangePassRequestDTO memberChangePassRequestDTO, Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
 
-        if (selectPass.isEmpty()){
+        if (member.getSocialType() != SocialType.NORMAL){
             return null;
         }else{
-            selectPass.get().changePass(BCrypt.hashpw(memberChangePassRequestDTO.getMemberPass(), BCrypt.gensalt()));
-
+            member.changePass(BCrypt.hashpw(memberChangePassRequestDTO.getMemberPass(), BCrypt.gensalt()));
             MemberChangePassResponseDTO memberChangePassResponseDTO = new MemberChangePassResponseDTO();
             memberChangePassResponseDTO.setMessage("Success!");
 

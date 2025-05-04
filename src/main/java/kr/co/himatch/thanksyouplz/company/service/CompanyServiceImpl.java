@@ -146,21 +146,16 @@ public class CompanyServiceImpl implements CompanyService {
 
     // 기업용 회원 프로필 편집 - 비밀번호 변경
     @Override
-    public CompanyChangePassResponseDTO companyChangePass(CompanyChangePassRequestDTO companyChangePassRequestDTO) {
-        Optional<Company> companyChangePass = companyRepository.selectCompanyPass(companyChangePassRequestDTO.getMemberID(), companyChangePassRequestDTO.getMemberName(), companyChangePassRequestDTO.getMemberPhone());
+    public CompanyChangePassResponseDTO companyChangePass(CompanyChangePassRequestDTO companyChangePassRequestDTO, Long memberNo) {
+        Company company = companyRepository.getReferenceById(memberNo);
 
-        if (companyChangePass.isEmpty()) {
-            return null;
-        } else {
-            companyChangePass.get().companyChangePass(BCrypt.hashpw(companyChangePassRequestDTO.getMemberPass(), BCrypt.gensalt()));
+        company.companyChangePass(BCrypt.hashpw(companyChangePassRequestDTO.getMemberPass(), BCrypt.gensalt()));
+        CompanyChangePassResponseDTO companyChangePassResponseDTO = new CompanyChangePassResponseDTO();
+        companyChangePassResponseDTO.setMessage("Success!");
 
-            CompanyChangePassResponseDTO companyChangePassResponseDTO = new CompanyChangePassResponseDTO();
-            companyChangePassResponseDTO.setMessage("Success!");
-
-            return companyChangePassResponseDTO;
-        }
-
+        return companyChangePassResponseDTO;
     }
+
 
     // 기업용 회원 탈퇴
     // 비밀번호의 경우, Bcrypt로 암호화 되어있으나 Log의 기능만을 하고 있기 때문에 그대로 뽑아서 바로 넣는다.
