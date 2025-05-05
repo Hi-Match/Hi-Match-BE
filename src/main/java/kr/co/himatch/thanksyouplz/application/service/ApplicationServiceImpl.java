@@ -236,7 +236,6 @@ public class ApplicationServiceImpl implements ApplicationService {
                     .aSchAdmissionDate(resumeSchool.getSchAdmissionDate())
                     .aSchGpa(resumeSchool.getSchGpa())
                     .aSchStandardGpa(resumeSchool.getSchStandardGpa())
-                    .aSchDescription(resumeSchool.getSchDescription())
                     .aSchPart(resumeSchool.getSchPart())
                     .aSchLev(resumeSchool.getSchLev())
                     .build());

@@ -19,7 +19,7 @@ public class CompanyLog {
     @Column(name = "COMPANY_ID", nullable = false, length = 100, unique = true)
     private String companyID;
 
-    @Column(name = "COMPANY_PW", nullable = false, length = 255)
+    @Column(name = "COMPANY_PASS", nullable = false, length = 255)
     private String companyPass;
 
     @Column(name = "COMPANY_NAME", nullable = false, length = 100)

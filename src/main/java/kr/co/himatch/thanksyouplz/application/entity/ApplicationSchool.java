@@ -54,9 +54,6 @@ public class ApplicationSchool {
     @Column(name = "A_SCH_STANDARD_GPA", precision = 3, scale = 2)
     private BigDecimal aSchStandardGpa;
 
-    @Column(name = "A_SCH_DESCRIPTION", columnDefinition = "LONGTEXT")
-    private String aSchDescription;
-
     @Convert(converter = SchPartConverter.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "A_SCH_PART")
