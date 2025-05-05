@@ -34,6 +34,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Autowired
     private ResumeSchoolRepository resumeSchoolRepository;
 
+    // 이력서 목록 조회
     @Override
     public List<ResumeListResponseDTO> findResumeList(Long memberNo) {
         return resumeRepository.selectResumeList(memberNo);
