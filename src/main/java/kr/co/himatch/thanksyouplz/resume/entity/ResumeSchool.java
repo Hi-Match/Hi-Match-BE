@@ -34,7 +34,7 @@ public class ResumeSchool {
     private String schMultiple;
 
     @Convert(converter = SchTypeConverter.class)
-    @Column(name = "SCH_TYPE")
+    @Column(name = "SCH_DEGREE")
     private SchType schDegree;
 
     @Column(name = "SCH_GRADUATION_DATE")

@@ -39,6 +39,7 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeRepository.selectResumeList(memberNo);
     }
 
+    // 이력서 상제 조회 API
     @Override
     public ResumeDetailDTO findResumeDetail(Long memberNo, Long resumeNo) {
         ResumeDetailDTO detail = resumeRepository.selectResumeDetail(memberNo, resumeNo);
@@ -50,6 +51,7 @@ public class ResumeServiceImpl implements ResumeService {
         return detail;
     }
 
+    // 이력서 등록 API
     @Override
     public ResumeDetailResponseDTO registerResumeDetail(ResumeDetailDTO resumeDetailDTO, Long memberNo) {
         Long count = resumeRepository.countResumeDetailByMember(memberNo);
@@ -64,6 +66,7 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeDetailResponseDTO;
     }
 
+    // 이력서 삭제 API
     @Override
     public ResumeDetailResponseDTO deleteResumeDetail(Long resumeNo, Long memberNo) {
         Long count = resumeRepository.countResumeDetailByMemberAndResume(memberNo, resumeNo);
@@ -82,7 +85,7 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeDetailResponseDTO;
     }
 
-
+    // 이력서 등록 기능 메서드 추출
     void saveResume(ResumeDetailDTO resumeDetailDTO, Long memberNo) {
         Member member = memberRepository.getReferenceById(memberNo);
         Resume resume = resumeRepository.save(Resume

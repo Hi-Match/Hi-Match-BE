@@ -39,7 +39,7 @@ public class ApplicationSchool {
     private String aSchMultiple;
 
     @Convert(converter = SchTypeConverter.class)
-    @Column(name = "A_SCH_TYPE")
+    @Column(name = "A_SCH_DEGREE")
     private SchType aSchDegree;
 
     @Column(name = "A_SCH_GRADUATION_DATE")
