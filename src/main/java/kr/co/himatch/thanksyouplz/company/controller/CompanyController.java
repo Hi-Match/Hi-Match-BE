@@ -282,8 +282,8 @@ public class CompanyController {
         CompanyMemberMyhomeResponseDTO companyMemberMyhomeResponseDTO = companyService.companyMemberMyhome(memberNo);
         return new ResponseEntity<>(companyMemberMyhomeResponseDTO, HttpStatus.OK);
     }
-
-
+    
+    // 회사 정보 상세 조회
     @GetMapping("/info/detail")
     public ResponseEntity<?> infoDetail() {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -291,6 +291,7 @@ public class CompanyController {
         return new ResponseEntity<>(companyInfoDetailResponseDTO, HttpStatus.OK);
     }
 
+    // 회사 정보 상세 수정
     @PostMapping("/info/register")
     public ResponseEntity<?> infoRegister(@RequestBody CompanyInfoRegisterRequestDTO registerRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
