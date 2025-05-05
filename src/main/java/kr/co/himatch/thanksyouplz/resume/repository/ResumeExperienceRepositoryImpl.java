@@ -19,6 +19,7 @@ public class ResumeExperienceRepositoryImpl implements ResumeExperienceRepositor
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 이력서 경력 조회
     @Override
     public List<ResumeExperienceDTO> selectResumeExperience(Long resumeNo) {
         return queryFactory.select(
@@ -36,6 +37,7 @@ public class ResumeExperienceRepositoryImpl implements ResumeExperienceRepositor
                 .fetch();
     }
 
+    // 이력서 경력 삭제
     @Override
     public void deleteResumeExperience(Long resumeNo) {
         queryFactory.delete(resumeExperience)

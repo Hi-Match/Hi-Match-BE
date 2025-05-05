@@ -14,6 +14,7 @@ public class ResumeCertificateRepositoryImpl implements ResumeCertificateReposit
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 이력서 자격증 조회
     @Override
     public List<ResumeCertificateDTO> selectResumeCertificate(Long resumeNo) {
         return queryFactory.select(
@@ -28,6 +29,7 @@ public class ResumeCertificateRepositoryImpl implements ResumeCertificateReposit
                 .fetch();
     }
 
+    // 이력서 자격증 삭제
     @Override
     public void deleteResumeCertificate(Long resumeNo) {
         queryFactory.delete(resumeCertificate)

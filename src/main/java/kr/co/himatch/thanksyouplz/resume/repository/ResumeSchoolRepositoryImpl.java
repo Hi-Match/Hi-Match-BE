@@ -14,6 +14,7 @@ public class ResumeSchoolRepositoryImpl implements ResumeSchoolRepositoryCustom 
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    //이력서 학력 조회
     @Override
     public List<ResumeSchoolDTO> selectResumeSchool(Long resumeNo) {
         return queryFactory.select(Projections.constructor(ResumeSchoolDTO.class, resumeSchool.schName, resumeSchool.schMajor,resumeSchool.schMinor,resumeSchool.schMultiple, resumeSchool.schDegree, resumeSchool.schGraduationDate, resumeSchool.schAdmissionDate, resumeSchool.schGpa, resumeSchool.schStandardGpa, resumeSchool.schPart, resumeSchool.schLev))
@@ -22,6 +23,7 @@ public class ResumeSchoolRepositoryImpl implements ResumeSchoolRepositoryCustom 
                 .fetch();
     }
 
+    //이력서 학력 삭제
     @Override
     public void deleteResumeSchool(Long resumeNo) {
         queryFactory.delete(resumeSchool)

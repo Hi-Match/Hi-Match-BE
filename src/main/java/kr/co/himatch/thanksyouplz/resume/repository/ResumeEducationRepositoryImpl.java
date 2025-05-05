@@ -21,6 +21,7 @@ public class ResumeEducationRepositoryImpl implements ResumeEducationRepositoryC
     private JPAQueryFactory queryFactory;
 
 
+    // 이력서 교욱 조회
     @Override
     public List<ResumeEducationDTO> selectResumeEducation(Long resumeNo) {
         return queryFactory.select(
@@ -37,6 +38,7 @@ public class ResumeEducationRepositoryImpl implements ResumeEducationRepositoryC
                 .fetch();
     }
 
+    // 이력서 교욱 삭제
     @Override
     public void deleteResumeEducation(Long resumeNo) {
         queryFactory.delete(resumeEducation)
