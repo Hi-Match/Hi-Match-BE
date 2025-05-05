@@ -13,6 +13,7 @@ public class CoverLetterRepositoryImpl implements CoverLetterRepositoryCustom {
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 지원서 번호로 자기소개서 작성글 조회
     @Override
     public List<ApplicationMemberDetailListResponseDTO> selectQuestionListByApplicationNo(Long applicationNo) {
         return queryFactory.select(

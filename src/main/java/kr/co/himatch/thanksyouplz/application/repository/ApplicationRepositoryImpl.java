@@ -65,6 +65,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .fetch();
     }
 
+    // 지원자 지원 목록 검색 조회에 따른 페이지수 구하기
     @Override
     public Long selectPageSearchCountByStatus(String keyword, ApplicationStatus applicationStatus, Long memberNo) {
         return queryFactory.select(application.count())
@@ -76,6 +77,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .fetchFirst();
     }
 
+    // 지원자 지원 목록 검색 조회
     @Override
     public List<ApplicationMemberStatusResponseDTO> selectPageSearchByStatus(String keyword, ApplicationStatus applicationStatus, Long page, Long memberNo) {
         return queryFactory.select(
@@ -102,10 +104,12 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .fetch();
     }
 
+    // 동적 쿼리를 이용한 검색 기능 메서드 분리(지원서 제목 조회)
     private BooleanExpression likeApplicationTitle(String keyword) {
         return StringUtils.hasText(keyword) ? application.applicationTitle.like("%" + keyword + "%") : null;
     }
 
+    // 동적 쿼리를 이용한 검색 기능 추가(지원서 상태 조회)
     private BooleanExpression equalsApplicationStatus(ApplicationStatus status) {
         return ApplicationStatus.TOTAL.equals(status) ? null : application.applicationStatus.eq(status);
     }

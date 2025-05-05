@@ -13,6 +13,7 @@ public class CoverLetterCategoryRepositoryImpl implements CoverLetterCategoryRep
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 기업에서 선택할 자기소개서 조회
     @Override
     public List<ApplicationCompanyQuestionResponseDTO> selectQuestionList() {
         return queryFactory.select(

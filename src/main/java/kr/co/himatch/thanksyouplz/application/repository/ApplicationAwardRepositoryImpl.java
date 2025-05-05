@@ -13,6 +13,7 @@ public class ApplicationAwardRepositoryImpl implements ApplicationAwardRepositor
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 지원서 수상 내역 조회
     @Override
     public List<ApplicationCompanyApplyDetailAwardResponseDTO> selectAward(Long applicationNo) {
         return queryFactory.select(
