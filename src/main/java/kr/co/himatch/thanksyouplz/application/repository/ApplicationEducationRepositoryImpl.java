@@ -13,6 +13,7 @@ public class ApplicationEducationRepositoryImpl implements ApplicationEducationR
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 지원서 교육 조회
     @Override
     public List<ApplicationCompanyApplyDetailEducationResponseDTO> selectEducation(Long applicationNo) {
         return queryFactory.select(

@@ -13,6 +13,7 @@ public class ApplicationExperienceRepositoryImpl implements ApplicationExperienc
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 지원서 경력 조회
     @Override
     public List<ApplicationCompanyApplyDetailExperienceResponseDTO> selectExperience(Long applicationNo) {
         return queryFactory.select(

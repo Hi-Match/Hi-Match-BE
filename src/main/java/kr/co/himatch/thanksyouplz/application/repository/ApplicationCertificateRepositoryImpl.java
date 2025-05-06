@@ -13,6 +13,7 @@ public class ApplicationCertificateRepositoryImpl implements ApplicationCertific
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 지원서 자격증 조회
     @Override
     public List<ApplicationCompanyApplyDetailCertificateResponseDTO> selectCertificate(Long applicationNo) {
         return queryFactory.select(

@@ -13,6 +13,7 @@ public class CompanyQuestionsRepositoryImpl implements CompanyQuestionsRepositor
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 지원서 자소서 조회
     @Override
     public List<ApplicationCompanySelectListResponseDTO> selectQuestionByPostingNo(Long postingNo) {
         return queryFactory.select(
@@ -23,6 +24,7 @@ public class CompanyQuestionsRepositoryImpl implements CompanyQuestionsRepositor
                 .fetch();
     }
 
+    // 지원서 자소서 삭제
     @Override
     public void deleteQuestionByPostingNo(Long postingNo) {
         queryFactory.delete(companyQuestions)

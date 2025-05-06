@@ -103,12 +103,11 @@ public class Application {
     @Column(name = "APPLICATION_GRADE")
     private Integer applicationGrade;
 
-    @Column(name = "APPLICATION_RESUILT")
+    @Column(name = "APPLICATION_RESULT")
     private Boolean applicationResult;
 
     @Column(name = "APPLICATION_PF")
     private Boolean applicationPf;
-
 
     @Column(name = "APPLICATION_CREATE")
     private LocalDateTime applicationCreate;

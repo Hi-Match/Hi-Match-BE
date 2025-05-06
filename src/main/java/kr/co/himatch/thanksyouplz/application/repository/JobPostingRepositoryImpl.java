@@ -16,6 +16,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 채용 공고 목록 조회
     @Override
     public List<ApplicationCompanyPostingResponseDTO> selectPostingList(Long memberNo) {
         return queryFactory.select(
@@ -26,6 +27,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                 .fetch();
     }
 
+    // 검색 필터링에 따른 채용 공고 목록 조회
     @Override
     public List<ApplicationMemberJobListResponseDTO> selectPostingBySearch(List<String> address, List<String> part, List<String> type, String keyword, Long page) {
         BooleanBuilder builder = new BooleanBuilder();
@@ -56,6 +58,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                 .fetch();
     }
 
+    // 검색 필터링에 따른 채용 공고 목록 페이지 수 조회
     @Override
     public Long selectPostingCountBySearch(List<String> address, List<String> part, List<String> type, String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
@@ -75,6 +78,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                 .fetchFirst();
     }
 
+    // 동적 쿼리를 위한 필터링 기능 추가 ( 주소 포함 여부로 조회)
     private Predicate buildAddressPredicate(List<String> address) {
         if (address == null || address.isEmpty()) {
             return null;
@@ -86,6 +90,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
         return addressCondition;
     }
 
+    // 동적 쿼리를 위한 필터링 기능 추가 ( 채용 직무 포함 여부로 조회)
     private Predicate buildPartPredicate(List<String> part) {
         if (part == null || part.isEmpty()) {
             return null;
@@ -99,6 +104,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
         return partCondition;
     }
 
+    // 동적 쿼리를 위한 필터링 기능 추가 ( 채용 타입 포함 여부로 조회)
     private Predicate buildTypePredicate(List<String> type) {
         if (type == null || type.isEmpty()) {
             return null;

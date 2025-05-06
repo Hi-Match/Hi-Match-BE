@@ -14,6 +14,7 @@ public class ApplicationSchoolRepositoryImpl implements ApplicationSchoolReposit
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 지원서 학력 조회
     @Override
     public List<ApplicationCompanyApplyDetailSchoolResponseDTO> selectSchool(Long applicationNo) {
         return queryFactory.select(
@@ -24,6 +25,7 @@ public class ApplicationSchoolRepositoryImpl implements ApplicationSchoolReposit
                 .fetch();
     }
 
+    // 지원서 최종학력 조회
     @Override
     public SchPart selectLastEducationPartByApplicationNo(Long applicationNo) {
         return queryFactory.select(applicationSchool.aSchPart)

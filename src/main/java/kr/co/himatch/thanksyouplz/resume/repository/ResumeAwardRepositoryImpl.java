@@ -13,6 +13,7 @@ public class ResumeAwardRepositoryImpl implements ResumeAwardRepositoryCustom {
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 이력서 수상 내역 조회
     @Override
     public List<ResumeAwardDTO> selectResumeAward(Long resumeNo) {
         return queryFactory.select(
@@ -28,6 +29,7 @@ public class ResumeAwardRepositoryImpl implements ResumeAwardRepositoryCustom {
                 .fetch();
     }
 
+    // 이력서 수상 내역 등록
     @Override
     public void deleteResumeAward(Long resumeNo) {
         queryFactory.delete(resumeAward)

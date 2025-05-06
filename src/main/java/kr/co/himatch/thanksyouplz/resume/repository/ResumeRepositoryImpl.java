@@ -14,6 +14,7 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
     @Autowired
     private JPAQueryFactory queryFactory;
 
+    // 이력서 목록 조회
     @Override
     public List<ResumeListResponseDTO> selectResumeList(Long memberNo) {
         return queryFactory.select(
@@ -23,6 +24,7 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
                 .fetch();
     }
 
+    // 이력서 상세 조회
     @Override
     public ResumeDetailDTO selectResumeDetail(Long memberNo, Long resumeNo) {
         return queryFactory.select(
@@ -54,6 +56,7 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
                 .fetchFirst();
     }
 
+    // 이력서 삭제
     @Override
     public void deleteResumeDetail(Long memberNo, Long resumeNo) {
         queryFactory.delete(resume)
@@ -62,6 +65,7 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
                 .execute();
     }
 
+    // 이력서 존재여부 확인
     @Override
     public Long countResumeDetailByMemberAndResume(Long memberNo, Long resumeNo) {
         return queryFactory.select(resume.count())
@@ -71,6 +75,7 @@ public class ResumeRepositoryImpl implements ResumeRepositoryCustom {
                 .fetchFirst();
     }
 
+    // 개인별 이력서 수 조회
     @Override
     public Long countResumeDetailByMember(Long memberNo) {
         return queryFactory.select(resume.count())

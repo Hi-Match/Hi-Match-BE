@@ -22,6 +22,7 @@ public class ResumeController {
     @Autowired
     private ResumeService resumeService;
 
+    // 이력서 목록 조회
     @GetMapping("/list")
     public ResponseEntity<?> list() {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -29,6 +30,7 @@ public class ResumeController {
         return new ResponseEntity<>(resumeList, HttpStatus.OK);
     }
 
+    // 이력서 상세 조회
     @GetMapping("/detail")
     public ResponseEntity<?> detail(@RequestParam Long resumeNo) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -36,6 +38,7 @@ public class ResumeController {
         return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 
+    // 이력서 등록
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody ResumeDetailDTO resumeDetailDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -48,6 +51,7 @@ public class ResumeController {
         return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 
+    // 이력서 수정
     @PutMapping("/modify")
     public ResponseEntity<?> modify(@RequestBody ResumeDetailDTO resumeDetailDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -61,6 +65,7 @@ public class ResumeController {
         return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 
+    // 이력서 삭제
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestParam Long resumeNo) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());

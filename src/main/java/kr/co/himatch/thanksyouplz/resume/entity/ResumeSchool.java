@@ -49,9 +49,6 @@ public class ResumeSchool {
     @Column(name = "SCH_STANDARD_GPA", precision = 3, scale = 2)
     private BigDecimal schStandardGpa;
 
-    @Column(name = "SCH_DESCRIPTION", columnDefinition = "LONGTEXT")
-    private String schDescription;
-
     @Convert(converter = SchPartConverter.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "SCH_PART")

@@ -16,6 +16,7 @@ public class TagServiceImpl implements TagService {
     @Autowired
     private TagRepository tagRepository;
 
+    // 모든 태그 조회
     @Override
     public List<CompanyInfoTagResponseDTO> tagList() {
         return tagRepository.selectTags();
