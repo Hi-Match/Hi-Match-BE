@@ -5,6 +5,7 @@ import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -72,41 +73,58 @@ public class Member {
     @Column(name = "member_update")
     private LocalDateTime memberUpdate;
 
+    @Column(name = "member_suitability", length = 20)
+    private String memberSuitability;
+
+    @Column(name = "member_description", columnDefinition = "LONGTEXT")
+    private String memberDescription;
+
+    @Column(name = "member_code_time")
+    private LocalDateTime memberCodeTime;
+
     // 프로필 편집 - 휴대폰 번호 변경
-    public void changePhone(String memberPhone){
+    public void changePhone(String memberPhone) {
         this.memberPhone = memberPhone;
         this.memberUpdate = LocalDateTime.now();
     }
 
     // 프로필 편집 - 메일 변경
-    public void changeMail(String memberMail){
+    public void changeMail(String memberMail) {
         this.memberMail = memberMail;
         this.memberUpdate = LocalDateTime.now();
     }
 
     // 프로필 편집 - 비밀번호 변경
-    public void changePass(String memberPass){
+    public void changePass(String memberPass) {
         this.memberPass = memberPass;
         this.memberUpdate = LocalDateTime.now();
     }
 
     // Token 재발급
-    public void changeToken(String memberRefreshToken){
+    public void changeToken(String memberRefreshToken) {
         this.memberRefreshToken = memberRefreshToken;
     }
 
     // 비밀번호 찾기 시 > 임시 비밀번호로 변경
-    public void temporaryChangePass(String memberPass){
+    public void temporaryChangePass(String memberPass) {
         this.memberPass = BCrypt.hashpw(memberPass, BCrypt.gensalt());
     }
 
     // 지원자가 마이페이지에서 저장하는 원하는 기업의 정보들(주소, 고용형태, 직무)
     public void changeMemberCompanyInfo(String memberWantedCompanyAddressInfo
-            , String memberWantedCompanyPartInfo, String memberWantedCompanyTypeInfo){
+            , String memberWantedCompanyPartInfo, String memberWantedCompanyTypeInfo) {
 
         this.memberCompanyAddress = memberWantedCompanyAddressInfo;
         this.memberCompanyPart = memberWantedCompanyPartInfo;
         this.memberCompanyContract = memberWantedCompanyTypeInfo;
 
+    }
+
+    // 사용자 인성검사 저장
+    public void changeCodeTestResult(String memberSuitability, String memberDescription, String memberCode) {
+        this.memberSuitability = memberSuitability;
+        this.memberDescription = memberDescription;
+        this.memberCode = memberCode;
+        this.memberCodeTime = LocalDateTime.now();
     }
 }
