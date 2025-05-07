@@ -1,5 +1,8 @@
 package kr.co.himatch.thanksyouplz.code.service;
 
+import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
+import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
+import kr.co.himatch.thanksyouplz.code.repository.PersonalTestRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class CodeServiceImpl implements CodeService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private PersonalTestRepository personalTestRepository;
 
     public CodeServiceImpl() {
         this.webClient = WebClient.builder()
@@ -63,5 +69,15 @@ public class CodeServiceImpl implements CodeService {
         Member member = memberRepository.findById(memberNo)
                 .orElseThrow(() -> new NoSuchElementException("Member not found with id: " + memberNo));
         member.changeCodeTestResult(memberSuitability, memberDescription, code);
+    }
+
+
+    //개인 인성검사 - 문제 조회 API - type을 받아서 호출
+    @Override
+    public List<CodeMemberQuestionListResponseDTO> selectQuestionList(QuestionType questionType) {
+        return personalTestRepository.findByPerType(questionType)
+                .stream()
+                .map(test -> new CodeMemberQuestionListResponseDTO(test.getPerQuestion()))
+                .toList();
     }
 }

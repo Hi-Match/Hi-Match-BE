@@ -1,7 +1,9 @@
 package kr.co.himatch.thanksyouplz.code.controller;
 
+import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberResultRequestDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberResultResponseDTO;
+import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
 import kr.co.himatch.thanksyouplz.code.service.CodeServiceImpl;
 import kr.co.himatch.thanksyouplz.code.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -80,9 +82,23 @@ public class CodeController {
                     String code = (String) results[0];
                     String description = (String) results[1];
                     String suitability = (String) results[2];
-                    codeService.changeMemberCode(memberNo, suitability,description,code);
+                    codeService.changeMemberCode(memberNo, suitability, description, code);
                     return new CodeMemberResultResponseDTO(code, description);
                 })
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+    }
+
+    //개인 인성검사 - 문제 조회 API - A유형(예/아니오) 120문제
+    @GetMapping("/member/question-list-a")
+    public ResponseEntity<?> memberQuestionListA() {
+        List<CodeMemberQuestionListResponseDTO> list = codeService.selectQuestionList(QuestionType.A);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    //개인 인성검사 - 문제 조회 API - B유형(6단계) 100문제
+    @GetMapping("/member/question-list-b")
+    public ResponseEntity<?> memberQuestionListB() {
+        List<CodeMemberQuestionListResponseDTO> list = codeService.selectQuestionList(QuestionType.B);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
