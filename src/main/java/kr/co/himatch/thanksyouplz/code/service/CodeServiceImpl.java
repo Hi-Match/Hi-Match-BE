@@ -1,6 +1,7 @@
 package kr.co.himatch.thanksyouplz.code.service;
 
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
+import kr.co.himatch.thanksyouplz.code.dto.CodeMemberTimeResponseDTO;
 import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
 import kr.co.himatch.thanksyouplz.code.repository.PersonalTestRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
@@ -79,5 +80,14 @@ public class CodeServiceImpl implements CodeService {
                 .stream()
                 .map(test -> new CodeMemberQuestionListResponseDTO(test.getPerQuestion()))
                 .toList();
+    }
+
+    //마지막 인성검사 시간 조회
+    @Override
+    public CodeMemberTimeResponseDTO selectCodeTime(Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        CodeMemberTimeResponseDTO responseDTO = new CodeMemberTimeResponseDTO();
+        responseDTO.setDate(member.getMemberCodeTime());
+        return responseDTO;
     }
 }

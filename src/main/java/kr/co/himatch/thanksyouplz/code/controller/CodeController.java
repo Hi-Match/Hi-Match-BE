@@ -3,6 +3,7 @@ package kr.co.himatch.thanksyouplz.code.controller;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberResultRequestDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberResultResponseDTO;
+import kr.co.himatch.thanksyouplz.code.dto.CodeMemberTimeResponseDTO;
 import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
 import kr.co.himatch.thanksyouplz.code.service.CodeServiceImpl;
 import kr.co.himatch.thanksyouplz.code.util.FileUtil;
@@ -100,5 +101,13 @@ public class CodeController {
     public ResponseEntity<?> memberQuestionListB() {
         List<CodeMemberQuestionListResponseDTO> list = codeService.selectQuestionList(QuestionType.B);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    //최근 응시 내역 시간 API
+    @GetMapping("/member/time")
+    public ResponseEntity<?> memberTime() {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        CodeMemberTimeResponseDTO responseDTO = codeService.selectCodeTime(memberNo);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }
