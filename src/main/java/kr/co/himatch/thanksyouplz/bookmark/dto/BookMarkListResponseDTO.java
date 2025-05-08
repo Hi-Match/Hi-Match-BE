@@ -9,14 +9,16 @@ import java.time.LocalDateTime;
 @ToString
 public class BookMarkListResponseDTO {
     private Long bookMarkNo;
+    private Long postingNo;
     private String companyName;
     private String postingTitle;
     private String companyAddress;
     private String postingEducation;
     private LocalDateTime postingDeadLine;
 
-    public BookMarkListResponseDTO(Long bookMarkNo, String companyName, String postingTitle, String companyAddress, String postingEducation, LocalDateTime postingDeadLine) {
+    public BookMarkListResponseDTO(Long bookMarkNo, Long postingNo, String companyName, String postingTitle, String companyAddress, String postingEducation, LocalDateTime postingDeadLine) {
         this.bookMarkNo = bookMarkNo;
+        this.postingNo = postingNo;
         this.companyName = companyName;
         this.postingTitle = postingTitle;
         this.companyAddress = companyAddress;
