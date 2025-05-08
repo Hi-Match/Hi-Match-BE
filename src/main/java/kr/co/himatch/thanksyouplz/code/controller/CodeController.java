@@ -80,6 +80,9 @@ public class CodeController {
                     String code = (String) results[0];
                     String description = (String) results[1];
                     String suitability = (String) results[2];
+
+                    suitability = suitability.replaceAll("[\\r\\n]", "");
+                    code = code.replaceAll("[\\r\\n]", "");
                     codeService.changeMemberCode(memberNo, suitability, description, code);
                     return new CodeMemberResultResponseDTO(code, description);
                 })
