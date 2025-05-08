@@ -1,9 +1,12 @@
 package kr.co.himatch.thanksyouplz.code.service;
 
+import kr.co.himatch.thanksyouplz.code.dto.CodeCompanyRegisterResponseDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberTimeResponseDTO;
 import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
 import kr.co.himatch.thanksyouplz.code.repository.PersonalTestRepository;
+import kr.co.himatch.thanksyouplz.company.entity.Company;
+import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,9 @@ public class CodeServiceImpl implements CodeService {
 
     @Autowired
     private PersonalTestRepository personalTestRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public CodeServiceImpl() {
         this.webClient = WebClient.builder()
@@ -88,6 +94,17 @@ public class CodeServiceImpl implements CodeService {
         Member member = memberRepository.getReferenceById(memberNo);
         CodeMemberTimeResponseDTO responseDTO = new CodeMemberTimeResponseDTO();
         responseDTO.setDate(member.getMemberCodeTime());
+        return responseDTO;
+    }
+
+    //기업 인재상 등록 API
+    @Override
+    public CodeCompanyRegisterResponseDTO companyCodeRegister(Long memberNo, String code) {
+        Company company = companyRepository.getReferenceById(memberNo);
+        company.companyChangeCode(code);
+
+        CodeCompanyRegisterResponseDTO responseDTO = new CodeCompanyRegisterResponseDTO();
+        responseDTO.setMessage("Success");
         return responseDTO;
     }
 }

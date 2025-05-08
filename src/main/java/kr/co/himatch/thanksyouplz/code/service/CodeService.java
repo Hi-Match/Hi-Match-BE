@@ -1,5 +1,6 @@
 package kr.co.himatch.thanksyouplz.code.service;
 
+import kr.co.himatch.thanksyouplz.code.dto.CodeCompanyRegisterResponseDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
 import kr.co.himatch.thanksyouplz.code.dto.CodeMemberTimeResponseDTO;
 import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
@@ -19,4 +20,7 @@ public interface CodeService {
 
     //마지막 인성검사 시간 조회
     CodeMemberTimeResponseDTO selectCodeTime(Long memberNo);
+
+    //기업 인재상 등록 API
+    CodeCompanyRegisterResponseDTO companyCodeRegister(Long memberNo, String code);
 }

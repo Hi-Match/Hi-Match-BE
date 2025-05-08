@@ -1,11 +1,8 @@
 package kr.co.himatch.thanksyouplz.code.controller;
 
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberResultRequestDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberResultResponseDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberTimeResponseDTO;
+import kr.co.himatch.thanksyouplz.code.dto.*;
 import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
-import kr.co.himatch.thanksyouplz.code.service.CodeServiceImpl;
+import kr.co.himatch.thanksyouplz.code.service.CodeService;
 import kr.co.himatch.thanksyouplz.code.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +22,7 @@ import java.util.List;
 public class CodeController {
 
     @Autowired
-    private CodeServiceImpl codeService;
+    private CodeService codeService;
 
     // 인성검사 후 인재상 코드를 AI로 불러오는 함수
     private Mono<String> callGeminiForCode(List<CodeMemberResultRequestDTO> requestDTOList, String codeFileContent) {
@@ -110,4 +107,14 @@ public class CodeController {
         CodeMemberTimeResponseDTO responseDTO = codeService.selectCodeTime(memberNo);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+    //기업 인재상 등록 API
+    @PostMapping("/company/register")
+    public ResponseEntity<?> companyRegister(@RequestBody CodeCompanyRegisterRequestDTO requestDTO) {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        CodeCompanyRegisterResponseDTO responseDTO = codeService.companyCodeRegister(memberNo, requestDTO.getCode().getColumData());
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+
 }

@@ -108,5 +108,10 @@ public class Company {
         this.companyLogo = companyLogo;
     }
 
+    // 기업의 인재상코드 변경
+    public void companyChangeCode(String companyCode){
+        this.companyCode = companyCode;
+    }
+
 
 }
