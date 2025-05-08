@@ -1,17 +1,17 @@
 package kr.co.himatch.thanksyouplz.member.service;
 
 import jakarta.transaction.Transactional;
+import kr.co.himatch.thanksyouplz.code.util.PersonalTypeEnum;
 import kr.co.himatch.thanksyouplz.member.dto.*;
-import kr.co.himatch.thanksyouplz.member.entity.MemberLog;
-import kr.co.himatch.thanksyouplz.member.repository.MemberLogRepository;
-import lombok.extern.slf4j.Slf4j;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
+import kr.co.himatch.thanksyouplz.member.entity.MemberLog;
 import kr.co.himatch.thanksyouplz.member.entity.SocialType;
+import kr.co.himatch.thanksyouplz.member.repository.MemberLogRepository;
 import kr.co.himatch.thanksyouplz.member.repository.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -146,9 +146,9 @@ public class MemberServiceImpl implements MemberService {
         Optional<Member> findPass = memberRepository.selectMemberIdAndNameAndPhone(memberFindPassRequestDTO.getMemberID(),
                 memberFindPassRequestDTO.getMemberName(), memberFindPassRequestDTO.getMemberPhone());
 
-        if (findPass.isEmpty()){
+        if (findPass.isEmpty()) {
             return null;
-        }else{
+        } else {
 
             // 유저의 비밀번호를 임시 비멀번호로 변경한다.
             findPass.get().temporaryChangePass(memberPass);
@@ -185,9 +185,9 @@ public class MemberServiceImpl implements MemberService {
     public MemberChangePassResponseDTO changePass(MemberChangePassRequestDTO memberChangePassRequestDTO, Long memberNo) {
         Member member = memberRepository.getReferenceById(memberNo);
 
-        if (member.getSocialType() != SocialType.NORMAL){
+        if (member.getSocialType() != SocialType.NORMAL) {
             return null;
-        }else{
+        } else {
             member.changePass(BCrypt.hashpw(memberChangePassRequestDTO.getMemberPass(), BCrypt.gensalt()));
             MemberChangePassResponseDTO memberChangePassResponseDTO = new MemberChangePassResponseDTO();
             memberChangePassResponseDTO.setMessage("Success!");
@@ -251,25 +251,25 @@ public class MemberServiceImpl implements MemberService {
 
         // 사용자가 원하는 기업의 주소지들을 배열로 입력받는다.
         // 사용자가 원하는 기업의 주소(근무지)는 여러 군데 일 수 있기 때문이다.
-        if (member.getMemberCompanyAddress() == null){
+        if (member.getMemberCompanyAddress() == null) {
             memberInfoResponseDTO.setCompanyAddress(null);
-        }else{
+        } else {
             memberInfoResponseDTO.setCompanyAddress(Arrays.stream(member.getMemberCompanyAddress().split(",")).toList());
         }
 
         // 사용자가 원하는 기업의 직무들을 배열로 입력받는다.
         // 사용자가 원하는 기업의 직무 여러개일 수 있기 때문이다.
-        if (member.getMemberCompanyPart() == null){
+        if (member.getMemberCompanyPart() == null) {
             memberInfoResponseDTO.setCompanyPart(null);
-        }else{
+        } else {
             memberInfoResponseDTO.setCompanyPart(Arrays.stream(member.getMemberCompanyPart().split(",")).toList());
         }
 
         // 사용자가 원하는 기업의 고용형태들을 배열로 입력받는다.
         // 사용자가 원하는 기업의 고용형태가 다양할 수 있기 때문이다.
-        if (member.getMemberCompanyContract() == null){
+        if (member.getMemberCompanyContract() == null) {
             memberInfoResponseDTO.setCompanyType(null);
-        }else{
+        } else {
             memberInfoResponseDTO.setCompanyType(Arrays.stream(member.getMemberCompanyContract().split(",")).toList());
         }
 
@@ -285,7 +285,7 @@ public class MemberServiceImpl implements MemberService {
         List<String> memberCompanyInfoAddress = memberCompanyInfoRequestDTO.getCompanyAddress();
         String memberWantedCompanyAddressInfo = String.valueOf("");
 
-        if (memberCompanyInfoAddress != null && !memberCompanyInfoAddress.isEmpty()){
+        if (memberCompanyInfoAddress != null && !memberCompanyInfoAddress.isEmpty()) {
             memberWantedCompanyAddressInfo = String.join(",", memberCompanyInfoAddress);
         }
 
@@ -293,7 +293,7 @@ public class MemberServiceImpl implements MemberService {
         List<String> memberCompanyInfoPart = memberCompanyInfoRequestDTO.getCompanyPart();
         String memberWantedCompanyPartInfo = String.valueOf("");
 
-        if (memberCompanyInfoPart != null && !memberCompanyInfoPart.isEmpty()){
+        if (memberCompanyInfoPart != null && !memberCompanyInfoPart.isEmpty()) {
             memberWantedCompanyPartInfo = String.join(",", memberCompanyInfoPart);
         }
 
@@ -301,7 +301,7 @@ public class MemberServiceImpl implements MemberService {
         List<String> memberCompanyInfoType = memberCompanyInfoRequestDTO.getCompanyType();
         String memberWantedCompanyTypeInfo = String.valueOf("");
 
-        if (memberCompanyInfoType != null && !memberCompanyInfoType.isEmpty()){
+        if (memberCompanyInfoType != null && !memberCompanyInfoType.isEmpty()) {
             memberWantedCompanyTypeInfo = String.join(",", memberCompanyInfoType);
         }
 
@@ -311,6 +311,23 @@ public class MemberServiceImpl implements MemberService {
         memberCompanyInfoResponseDTO.setMessage("Success!");
 
         return memberCompanyInfoResponseDTO;
+    }
+
+
+    // 지원자의 인재상 타입 및 인성 검사 시간 조회
+    @Override
+    public MemberMyHomeCodeResponseDTO selectMemberCodeInfo(Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        MemberMyHomeCodeResponseDTO responseDTO = new MemberMyHomeCodeResponseDTO();
+
+        String code = member.getMemberCode();
+        PersonalTypeEnum codeEnum = PersonalTypeEnum.fromString(code);
+        if (codeEnum != null) {
+            responseDTO.setSlogan(codeEnum.getSlogan());
+        }
+        responseDTO.setLastDateTime(member.getMemberCodeTime());
+
+        return responseDTO;
     }
 
 }

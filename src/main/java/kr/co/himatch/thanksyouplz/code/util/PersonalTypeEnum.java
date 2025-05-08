@@ -1,7 +1,5 @@
 package kr.co.himatch.thanksyouplz.code.util;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public enum PersonalTypeEnum {
     NDCO("NDCO", "유쾌한 감각과 유연한 리더십으로 팀을 이끄는 나침반"),
     NDCS("NDCS", "팀 분위기를 깨우는 에너지 중심의 분위기 메이커"),
@@ -28,8 +26,25 @@ public enum PersonalTypeEnum {
         this.slogan = slogan;
     }
 
-    @JsonValue
     public String getColumData() {
         return columData;
+    }
+
+    public String getSlogan() {
+        return slogan;
+    }
+
+    public static PersonalTypeEnum fromString(String sloganString) {
+        if (sloganString == null) {
+            return null;
+        }
+
+        for (PersonalTypeEnum type : PersonalTypeEnum.values()) {
+            if (type.getColumData().equals(sloganString)) {
+                return type;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown value: " + sloganString);
     }
 }

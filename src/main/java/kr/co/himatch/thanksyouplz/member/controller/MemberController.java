@@ -4,12 +4,19 @@ import jakarta.mail.Authenticator;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.validation.Valid;
+import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberCountResponseDTO;
+import kr.co.himatch.thanksyouplz.application.service.ApplicationService;
 import kr.co.himatch.thanksyouplz.auth.jwt.JsonWebToken;
 import kr.co.himatch.thanksyouplz.auth.util.EmailUtil;
 import kr.co.himatch.thanksyouplz.auth.util.JwtTokenUtils;
+import kr.co.himatch.thanksyouplz.bookmark.dto.BookMarkListRequestDTO;
+import kr.co.himatch.thanksyouplz.bookmark.dto.BookMarkListResponseDTO;
+import kr.co.himatch.thanksyouplz.bookmark.service.BookMarkService;
 import kr.co.himatch.thanksyouplz.config.AuthConfig;
 import kr.co.himatch.thanksyouplz.member.dto.*;
 import kr.co.himatch.thanksyouplz.member.service.MemberService;
+import kr.co.himatch.thanksyouplz.resume.dto.ResumeListResponseDTO;
+import kr.co.himatch.thanksyouplz.resume.service.ResumeService;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
@@ -41,6 +48,12 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private BookMarkService bookMarkService;
+    @Autowired
+    private ResumeService resumeService;
+    @Autowired
+    private ApplicationService applicationService;
 
     // 휴대폰 인증번호 발신
     public static DefaultMessageService messageService;
@@ -286,7 +299,7 @@ public class MemberController {
 
     // 회원 탈퇴
     @DeleteMapping("/delete")
-    public ResponseEntity<?> memberDelete(){
+    public ResponseEntity<?> memberDelete() {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
         MemberDeleteResponseDTO memberDelete = memberService.memberDelete(memberNo);
@@ -296,7 +309,7 @@ public class MemberController {
 
     // 마이 페이지 접속 시 보이는 회원 정보
     @GetMapping("/info")
-    public ResponseEntity<?> memberInfo(){
+    public ResponseEntity<?> memberInfo() {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
         MemberInfoResponseDTO memberInfo = memberService.memberInfo(memberNo);
@@ -306,7 +319,7 @@ public class MemberController {
 
     // 지원자의 니즈에 맞춰 공고 검색 시 저장하는 키워드
     @PostMapping("/company-info")
-    public ResponseEntity<?> memberWantedCompanyInfo(@RequestBody MemberCompanyInfoRequestDTO memberCompanyInfoRequestDTO){
+    public ResponseEntity<?> memberWantedCompanyInfo(@RequestBody MemberCompanyInfoRequestDTO memberCompanyInfoRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
         MemberCompanyInfoResponseDTO memberCompanyInfo = memberService.memberCompanyInfo(memberCompanyInfoRequestDTO, memberNo);
@@ -314,4 +327,23 @@ public class MemberController {
         return new ResponseEntity<>(memberCompanyInfo, HttpStatus.OK);
     }
 
+    // 마이 홈
+    @GetMapping("/myhome")
+    public ResponseEntity<?> myHome() {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        List<BookMarkListResponseDTO> listBookMark = bookMarkService.listBookMark(new BookMarkListRequestDTO(0L), memberNo)
+                .stream().limit(4).toList();
+        MemberMyHomeCodeResponseDTO codeResponseDTO = memberService.selectMemberCodeInfo(memberNo);
+        ApplicationMemberCountResponseDTO countResponseDTO = applicationService.selectCountByStatus(memberNo);
+        List<ResumeListResponseDTO> resumeList = resumeService.findResumeList(memberNo);
+
+        MemberMyHomeResponseDTO responseDTO = new MemberMyHomeResponseDTO();
+        responseDTO.setBookmark(listBookMark);
+        responseDTO.setCode(codeResponseDTO);
+        responseDTO.setApplication(countResponseDTO);
+        responseDTO.setResume(resumeList);
+
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
 }
