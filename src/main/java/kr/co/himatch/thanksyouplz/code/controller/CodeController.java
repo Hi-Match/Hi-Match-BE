@@ -116,5 +116,12 @@ public class CodeController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    //기업 인재상 삭제 API
+    @DeleteMapping("/company/delete")
+    public ResponseEntity<?> companyDelete() {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        CodeCompanyRegisterResponseDTO responseDTO = codeService.companyCodeRegister(memberNo, null);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
 
 }
