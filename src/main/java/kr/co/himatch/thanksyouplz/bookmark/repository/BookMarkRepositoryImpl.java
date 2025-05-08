@@ -12,7 +12,8 @@ import java.util.List;
 import static kr.co.himatch.thanksyouplz.bookmark.entity.QBookMark.*;
 import static kr.co.himatch.thanksyouplz.application.entity.QJobPosting.*;
 import static kr.co.himatch.thanksyouplz.company.entity.QCompany.*;
-public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
+
+public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom {
 
     @Autowired
     private JPAQueryFactory queryFactory;
@@ -22,9 +23,9 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
     @Override
     public List<BookMarkListResponseDTO> selectBookMark(Long memberNo, Long page) {
         return queryFactory.select(Projections.constructor(BookMarkListResponseDTO.class, bookMark.bookMarkNo,
-                bookMark.postingNo.companyNo.companyName, bookMark.postingNo.postingTitle,
-                bookMark.postingNo.companyNo.companyAddress, bookMark.postingNo.postingEducation,
-                bookMark.postingNo.postingDeadline))
+                        bookMark.postingNo.postingNo, bookMark.postingNo.companyNo.companyName,
+                        bookMark.postingNo.postingTitle, bookMark.postingNo.companyNo.companyAddress,
+                        bookMark.postingNo.postingEducation, bookMark.postingNo.postingDeadline))
                 .from(bookMark)
                 .where(bookMark.memberNo.memberNo.eq(memberNo))
                 .limit(10)
@@ -53,16 +54,16 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
     // 북마크 검색
     @Override
     public List<BookMarkSearchResponseDTO> selectKeywordByBookMark(String keyword, Long page, Long memberNo) {
-                return queryFactory.select(Projections.constructor(BookMarkSearchResponseDTO.class,
-                bookMark.bookMarkNo, bookMark.postingNo.companyNo.companyName,
-                bookMark.postingNo.postingTitle, bookMark.postingNo.companyNo.companyAddress,
-                bookMark.postingNo.postingEducation, bookMark.postingNo.postingDeadline))
+        return queryFactory.select(Projections.constructor(BookMarkSearchResponseDTO.class,
+                        bookMark.bookMarkNo, bookMark.postingNo.companyNo.companyName,
+                        bookMark.postingNo.postingTitle, bookMark.postingNo.companyNo.companyAddress,
+                        bookMark.postingNo.postingEducation, bookMark.postingNo.postingDeadline))
                 .from(bookMark)
                 .join(bookMark.postingNo, jobPosting)
                 .join(jobPosting.companyNo, company)
                 .where(bookMark.memberNo.memberNo.eq(memberNo)
-                                .and(bookMark.postingNo.postingTitle.like("%" + keyword + "%")
-                                                .or(bookMark.postingNo.companyNo.companyName.like("%" + keyword + "%"))))
+                        .and(bookMark.postingNo.postingTitle.like("%" + keyword + "%")
+                                .or(bookMark.postingNo.companyNo.companyName.like("%" + keyword + "%"))))
                 .limit(10)
                 .offset(page * 10)
                 .orderBy(bookMark.bookMarkNo.desc())
