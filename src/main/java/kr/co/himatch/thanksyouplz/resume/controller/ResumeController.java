@@ -1,7 +1,9 @@
 package kr.co.himatch.thanksyouplz.resume.controller;
 
+import kr.co.himatch.thanksyouplz.member.service.S3UploadService;
 import kr.co.himatch.thanksyouplz.resume.dto.ResumeDetailDTO;
 import kr.co.himatch.thanksyouplz.resume.dto.ResumeDetailResponseDTO;
+import kr.co.himatch.thanksyouplz.resume.dto.ResumeFileResponseDTO;
 import kr.co.himatch.thanksyouplz.resume.dto.ResumeListResponseDTO;
 import kr.co.himatch.thanksyouplz.resume.service.ResumeService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.service.annotation.PostExchange;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,6 +23,8 @@ import java.util.List;
 public class ResumeController {
     @Autowired
     private ResumeService resumeService;
+    @Autowired
+    private S3UploadService s3UploadService;
 
     // 이력서 목록 조회
     @GetMapping("/list")
@@ -76,6 +80,16 @@ public class ResumeController {
             return new ResponseEntity<>(detail, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(detail, HttpStatus.OK);
+    }
+
+    // 파일을 URL 링크로 변환 하는 API
+    @PostMapping("/file")
+    public ResponseEntity<?> file(@RequestParam("file") MultipartFile file) {
+        String url = s3UploadService.upload(file, "himatch");
+
+        ResumeFileResponseDTO responseDTO = new ResumeFileResponseDTO();
+        responseDTO.setFile(url);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 }
