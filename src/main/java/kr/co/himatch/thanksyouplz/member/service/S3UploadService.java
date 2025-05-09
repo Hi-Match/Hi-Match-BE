@@ -48,8 +48,9 @@ public class S3UploadService {
         try {
             String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1)
                     .toLowerCase();
+            //정해진 파일만 넣기 위함 (png, jpg, jpeg, mp3, mp4, avi, pdf)
             if (!(extension.equals("png") || extension.equals("jpg") || extension.equals("jpeg") ||
-                    extension.equals("mp3") || extension.equals("mp4") || extension.equals("avi"))) {        //정해진 파일만 넣기 위함
+                    extension.equals("mp3") || extension.equals("mp4") || extension.equals("avi") || extension.equals("pdf"))) {
                 throw new ErrorResponse(HttpStatus.BAD_REQUEST, "정해진 파일 형식만 받을 수 있습니다.(png,jpg,jpeg 추가가능)");
             }
             return extension;
