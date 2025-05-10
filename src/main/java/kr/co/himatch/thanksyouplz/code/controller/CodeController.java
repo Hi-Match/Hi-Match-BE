@@ -57,20 +57,21 @@ public class CodeController {
         String codePrompt =
                 "당신은 인재상 분석 전문가입니다. 아래는 한 응답자의 '질문과 답변 목록'이며, 각 문항은 특정 인재상 코드 쌍(N vs F, D vs B, C vs L, S vs O)에 대응됩니다.\n\n" +
 
-                        "당신의 임무는 이 응답자의 성향을 분석하여, 4가지 인재상 코드 쌍에 대해 각 항목의 비율을 **100% 기준**으로 산출하는 것입니다:\n" +
+                        "당신의 임무는 이 응답자의 성향을 분석하여, 4가지 인재상 코드 쌍에 대해 각 항목의 비율을 **100% 기준**으로 정확하게 산출하는 것입니다:\n" +
                         "- N (Network, 소통) vs F (Focus, 몰입)\n" +
                         "- D (Drive, 주도) vs B (Balance, 안정)\n" +
                         "- C (Creative, 창의) vs L (Logical, 분석)\n" +
                         "- S (Structure, 수직) vs O (Open, 수평)\n\n" +
 
-                        "**주의사항**:\n" +
-                        "- 단순히 문항 수(N 문항이 몇 개인지 등)로 판단하지 마세요.\n" +
-                        "- 각 응답자의 실제 '답변 내용'(예/아니오, 매우 그렇다/매우 아니다 등)에 따라 성향을 판단해야 합니다.\n" +
-                        "- 예를 들어, '나는 혼자 일할 때 효율이 높다'에 '예'라고 답했다면, 이는 'Focus'에 가까운 성향입니다.\n\n" +
+                        "**분석 시 반드시 지켜야 할 원칙**:\n" +
+                        "- 응답자가 어떤 성향인지 '답변 내용'을 기반으로 판단해야 합니다.\n" +
+                        "- 각 문항은 해당 코드에 속하지만, 응답 내용이 긍정이면 해당 코드에 가산하고, 부정이면 반대 코드에 가산해야 합니다.\n" +
+                        "- 예: '나는 혼자 일할 때 효율이 높다'가 Focus 코드라면,\n" +
+                        "  → '예'라고 답하면 Focus에 가산, '아니오'라고 답하면 Network에 가산\n" +
+                        "- '매우 그렇다'는 가장 강한 가중치, '약간 아니다'는 낮은 가중치로 해석하세요.\n" +
+                        "- 총합은 반드시 각 쌍별로 100%가 되어야 하며, 소수점 1자리까지 반올림하세요.\n\n" +
 
-                        "각 문항이 어떤 코드 쌍에 대응되는지는 **아래 '질문별 코드 매핑 정보'에 정확히 명시되어 있으니 반드시 참고하여 분석**하세요.\n\n" +
-
-                        "최종 결과는 아래 예시처럼 **순수한 JSON 형식으로만** 반환하세요. 다른 텍스트나 해석은 포함하지 마세요:\n\n" +
+                        "**다른 설명이나 텍스트 없이 오직 아래 형식으로 된 JSON만 출력하세요. 아래 이외의 키(`code`, `description`, `slogan` 등)는 절대 포함하지 마세요:**\n\n" +
                         "```json\n" +
                         "{\n" +
                         "  \"N\": \"45.3\",\n" +
@@ -83,10 +84,12 @@ public class CodeController {
                         "  \"O\": \"59.8\"\n" +
                         "}\n" +
                         "```\n\n" +
+
                         "응답자의 질문과 답변 목록:\n" +
                         modelData + "\n\n" +
                         "질문별 코드 매핑 정보:\n" +
                         codeFileContent;
+
 
         return codeService.callGemini(codePrompt).map(response -> {
             try {
@@ -109,7 +112,8 @@ public class CodeController {
     // 인성검사 후 인재상 적합 여부를 AI로 불러오는 함수
     private Mono<String> callGeminiForSuitability(String modelData, String suitabilityFileContent) {
         String suitabilityPrompt = modelData + "적합인지 부적합인지 반드시 하나만 선택해서 알려줘 \n다소 부정적인 문항이 포함되어 있더라도," +
-                "자기 성찰, 회복력, 협업 의지가 보인다면 적합으로 판단해줘. \n단순히 부정적 문장이 많다고 무조건 부적합으로 분류하면 안돼."
+                "자기 성찰, 회복력, 협업 의지가 보인다면 적합으로 판단해줘. \n단순히 부정적 문장이 많다고 무조건 부적합으로 분류하면 안돼." +
+                "충분히 분석하고 나서 문장으로 설명하지 말고 '적합'인지 '부적합'인지 판단해줘."
                 + suitabilityFileContent;
         return codeService.callGemini(suitabilityPrompt);
     }

@@ -123,7 +123,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
 
     // 동적 쿼리를 이용한 검색 기능 메서드 분리(지원서 제목 조회)
     private BooleanExpression likeApplicationTitle(String keyword) {
-        return StringUtils.hasText(keyword) ? application.applicationTitle.like("%" + keyword + "%") : null;
+        return StringUtils.hasText(keyword) ? application.postingNo.companyNo.companyName.like("%" + keyword + "%") : null;
     }
 
     // 동적 쿼리를 이용한 검색 기능 추가(지원서 상태 조회)
