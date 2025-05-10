@@ -65,6 +65,9 @@ public class MemberLog {
     @Column(name = "member_code", length = 20)
     private String memberCode;
 
+    @Column(name = "member_code_rate", length = 1000)
+    private String memberCodeRate;
+
     @Column(name = "member_test_date")
     private LocalDateTime memberTestDate;
 
