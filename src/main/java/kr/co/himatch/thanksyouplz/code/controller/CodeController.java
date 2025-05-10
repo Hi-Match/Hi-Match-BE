@@ -155,6 +155,14 @@ public class CodeController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    // 기업 인재상 조회 API
+    @GetMapping("/company/select")
+    public ResponseEntity<?> companySelect(@RequestParam String code) {
+        CodeCompanySelectResponseDTO responseDTO = codeService.selectCodeSelect(code);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+
     //기업 인재상 등록 API
     @PostMapping("/company/register")
     public ResponseEntity<?> companyRegister(@RequestBody CodeCompanyRegisterRequestDTO requestDTO) {

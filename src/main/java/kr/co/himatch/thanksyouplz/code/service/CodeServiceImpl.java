@@ -80,6 +80,16 @@ public class CodeServiceImpl implements CodeService {
         member.changeCodeTestResult(memberSuitability, memberDescription, code, codeRate);
     }
 
+    //기업 인재상 조회 API
+    @Override
+    public CodeCompanySelectResponseDTO selectCodeSelect(String code) {
+        PersonalTypeEnum enumType = PersonalTypeEnum.fromString(code);
+
+        CodeCompanySelectResponseDTO responseDTO = new CodeCompanySelectResponseDTO();
+        responseDTO.setDetail(PersonalTypeConstants.fromCodeToInfo(enumType));
+        return responseDTO;
+    }
+
 
     //개인 인성검사 - 문제 조회 API - type을 받아서 호출
     @Override
