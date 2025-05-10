@@ -29,12 +29,13 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
 
     // 검색 필터링에 따른 채용 공고 목록 조회
     @Override
-    public List<ApplicationMemberJobListResponseDTO> selectPostingBySearch(List<String> address, List<String> part, List<String> type, String keyword, Long page) {
+    public List<ApplicationMemberJobListResponseDTO> selectPostingBySearch(List<String> address, List<String> part, List<String> type, List<String> education, String keyword, Long page) {
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(buildAddressPredicate(address));
         builder.and(buildPartPredicate(part));
         builder.and(buildTypePredicate(type));
+        builder.and(buildEducationPredicate(education));
 
         if (keyword != null && !keyword.isEmpty()) {
             builder.and(jobPosting.postingTitle.like("%" + keyword + "%")
@@ -47,6 +48,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                                 jobPosting.companyNo.companyName,
                                 jobPosting.postingTitle,
                                 jobPosting.companyNo.companyAddress,
+                                jobPosting.postingType,
                                 jobPosting.postingEducation,
                                 jobPosting.postingDeadline
                         )
@@ -66,6 +68,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
         builder.and(buildAddressPredicate(address));
         builder.and(buildPartPredicate(part));
         builder.and(buildTypePredicate(type));
+//        builder.and(buildEducationPredicate(education));
 
         if (keyword != null && !keyword.isEmpty()) {
             builder.and(jobPosting.postingTitle.like("%" + keyword + "%")
@@ -115,5 +118,19 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
             typeCondition.or(jobPosting.postingType.like("%" + t + "%"));
         }
         return typeCondition;
+    }
+
+    // 동적 쿼리를 위한 필터링 기능 추가 ( 학력 타입 포함 여부로 조회)
+    private  Predicate buildEducationPredicate(List<String> education){
+        if (education == null || education.isEmpty()) {
+            return null;
+        }
+        BooleanBuilder educationCondition = new BooleanBuilder();
+
+        for (String e : education) {
+            educationCondition.or(jobPosting.postingEducation.like("%" + e + "%"));
+        }
+        return educationCondition;
+
     }
 }

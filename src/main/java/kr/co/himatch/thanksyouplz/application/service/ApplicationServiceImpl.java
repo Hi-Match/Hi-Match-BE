@@ -480,7 +480,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (page >= 1) {
             page--;
         }
-        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getKeyword(), page);
+        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(),requestDTO.getPostingEducation(), requestDTO.getKeyword(), page);
     }
 
     // 개인 - 체용 목록 page 검색 시, 몇 페이지까지 있는지 조회하는 API
