@@ -1,10 +1,12 @@
 package kr.co.himatch.thanksyouplz.code.service;
 
-import kr.co.himatch.thanksyouplz.code.dto.CodeCompanyRegisterResponseDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberTimeResponseDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.himatch.thanksyouplz.code.dto.*;
 import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
 import kr.co.himatch.thanksyouplz.code.repository.PersonalTestRepository;
+import kr.co.himatch.thanksyouplz.code.util.PersonalTypeConstants;
+import kr.co.himatch.thanksyouplz.code.util.PersonalTypeEnum;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
@@ -72,10 +74,10 @@ public class CodeServiceImpl implements CodeService {
 
     //개인 인성검사 후, DB에 저장
     @Override
-    public void changeMemberCode(Long memberNo, String memberSuitability, String memberDescription, String code) {
+    public void changeMemberCode(Long memberNo, String memberSuitability, String memberDescription, String code, String codeRate) {
         Member member = memberRepository.findById(memberNo)
                 .orElseThrow(() -> new NoSuchElementException("Member not found with id: " + memberNo));
-        member.changeCodeTestResult(memberSuitability, memberDescription, code);
+        member.changeCodeTestResult(memberSuitability, memberDescription, code, codeRate);
     }
 
 
@@ -94,6 +96,25 @@ public class CodeServiceImpl implements CodeService {
         Member member = memberRepository.getReferenceById(memberNo);
         CodeMemberTimeResponseDTO responseDTO = new CodeMemberTimeResponseDTO();
         responseDTO.setDate(member.getMemberCodeTime());
+        return responseDTO;
+    }
+
+    //개인의 인성검사 결과 조회
+    @Override
+    public CodeMemberResultResponseDTO selectCodeResultByMember(Long memberNo) throws JsonProcessingException {
+        Member member = memberRepository.getReferenceById(memberNo);
+        String memberCode = member.getMemberCode();
+        PersonalTypeEnum enumType = PersonalTypeEnum.fromString(memberCode);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        CodeMemberResultRateDTO rateDTO = objectMapper.readValue(member.getMemberCodeRate(), CodeMemberResultRateDTO.class);
+
+        CodeMemberResultResponseDTO responseDTO = new CodeMemberResultResponseDTO();
+        responseDTO.setCode(member.getMemberCode());
+        responseDTO.setDescription(member.getMemberDescription());
+        responseDTO.setRate(rateDTO);
+        responseDTO.setSlogan(enumType.getSlogan());
+        responseDTO.setDetail(PersonalTypeConstants.fromCodeToInfo(enumType));
         return responseDTO;
     }
 

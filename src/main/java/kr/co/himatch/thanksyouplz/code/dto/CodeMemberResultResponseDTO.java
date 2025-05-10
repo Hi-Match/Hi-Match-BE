@@ -1,8 +1,11 @@
 package kr.co.himatch.thanksyouplz.code.dto;
 
+import kr.co.himatch.thanksyouplz.code.util.PersonalTypeVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -10,9 +13,7 @@ import lombok.ToString;
 public class CodeMemberResultResponseDTO {
     private String code;
     private String description;
-
-    public CodeMemberResultResponseDTO(String code, String description) {
-        this.code = code;
-        this.description = description;
-    }
+    private CodeMemberResultRateDTO rate;
+    private String slogan;
+    private List<PersonalTypeVO> detail;
 }

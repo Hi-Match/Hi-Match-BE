@@ -67,6 +67,9 @@ public class Member {
     @Column(name = "member_code", length = 20)
     private String memberCode;
 
+    @Column(name = "member_code_rate", length = 1000)
+    private String memberCodeRate;
+
     @Column(name = "member_test_date")
     private LocalDateTime memberTestDate;
 
@@ -121,10 +124,11 @@ public class Member {
     }
 
     // 사용자 인성검사 저장
-    public void changeCodeTestResult(String memberSuitability, String memberDescription, String memberCode) {
+    public void changeCodeTestResult(String memberSuitability, String memberDescription, String memberCode, String codeRate) {
         this.memberSuitability = memberSuitability;
         this.memberDescription = memberDescription;
         this.memberCode = memberCode;
+        this.memberCodeRate = codeRate;
         this.memberCodeTime = LocalDateTime.now();
     }
 }
