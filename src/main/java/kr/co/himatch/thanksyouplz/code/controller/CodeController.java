@@ -54,7 +54,40 @@ public class CodeController {
 
     // 인성검사 후 인재상 코드를 비율을 불러오는 함수
     private Mono<String> callGeminiForRate(String modelData, String codeFileContent) {
-        String codePrompt = modelData + "당신은 인재상 분석 전문가입니다. 다음 인재상 질문과 응답, 그리고 각 자리에 해당하는 2가지 코드 정보를 바탕으로 가능한 8가지 인재상 코드 조합과 그 비율을 **순수한 JSON 형식으로만** 생성해 주세요. 다른 설명이나 해석은 필요 없습니다.\n\n인재상 코드 정보:\n1. 소통하는 (N) vs 집중하는 (F)\n2. 주도적인 (D) vs 안정적인 (B)\n3. 창의적인 (C) vs 분석적인 (L)\n4. 수직적인 (S) vs 수평적인 (O)\n\n대립된 코드들을 서로 합하여 100%가 됩니다. 총 8가지의 4자리 인재상 코드와 그 비율을 JSON 형태로 나타내 주세요. 예시는 다음과 같습니다.\n\n```json\n{\n\t\"N\" : \"20.3\",\n\t\"F\" : \"79.7\",\n\t\"D\" : \"30.12\",\n\t\"B\" : \"69.88\",\n\t\"C\" : \"16.11\",\n\t\"L\" : \"83.89\",\n\t\"S\" : \"54.2\",\n\t\"O\" : \"45.8\"\n}\n```\n\n다음 내용을 바탕으로 전달해주세요." + codeFileContent;
+        String codePrompt =
+                "당신은 인재상 분석 전문가입니다. 아래는 한 응답자의 '질문과 답변 목록'이며, 각 문항은 특정 인재상 코드 쌍(N vs F, D vs B, C vs L, S vs O)에 대응됩니다.\n\n" +
+
+                        "당신의 임무는 이 응답자의 성향을 분석하여, 4가지 인재상 코드 쌍에 대해 각 항목의 비율을 **100% 기준**으로 산출하는 것입니다:\n" +
+                        "- N (Network, 소통) vs F (Focus, 몰입)\n" +
+                        "- D (Drive, 주도) vs B (Balance, 안정)\n" +
+                        "- C (Creative, 창의) vs L (Logical, 분석)\n" +
+                        "- S (Structure, 수직) vs O (Open, 수평)\n\n" +
+
+                        "**주의사항**:\n" +
+                        "- 단순히 문항 수(N 문항이 몇 개인지 등)로 판단하지 마세요.\n" +
+                        "- 각 응답자의 실제 '답변 내용'(예/아니오, 매우 그렇다/매우 아니다 등)에 따라 성향을 판단해야 합니다.\n" +
+                        "- 예를 들어, '나는 혼자 일할 때 효율이 높다'에 '예'라고 답했다면, 이는 'Focus'에 가까운 성향입니다.\n\n" +
+
+                        "각 문항이 어떤 코드 쌍에 대응되는지는 **아래 '질문별 코드 매핑 정보'에 정확히 명시되어 있으니 반드시 참고하여 분석**하세요.\n\n" +
+
+                        "최종 결과는 아래 예시처럼 **순수한 JSON 형식으로만** 반환하세요. 다른 텍스트나 해석은 포함하지 마세요:\n\n" +
+                        "```json\n" +
+                        "{\n" +
+                        "  \"N\": \"45.3\",\n" +
+                        "  \"F\": \"54.7\",\n" +
+                        "  \"D\": \"62.1\",\n" +
+                        "  \"B\": \"37.9\",\n" +
+                        "  \"C\": \"50.0\",\n" +
+                        "  \"L\": \"50.0\",\n" +
+                        "  \"S\": \"40.2\",\n" +
+                        "  \"O\": \"59.8\"\n" +
+                        "}\n" +
+                        "```\n\n" +
+                        "응답자의 질문과 답변 목록:\n" +
+                        modelData + "\n\n" +
+                        "질문별 코드 매핑 정보:\n" +
+                        codeFileContent;
+
         return codeService.callGemini(codePrompt).map(response -> {
             try {
                 String jsonString = response.replaceAll("```json", "").replaceAll("```", "").trim();
@@ -75,7 +108,9 @@ public class CodeController {
 
     // 인성검사 후 인재상 적합 여부를 AI로 불러오는 함수
     private Mono<String> callGeminiForSuitability(String modelData, String suitabilityFileContent) {
-        String suitabilityPrompt = modelData + "당신은 채용 적합성 평가 전문가입니다. 제공된 질문과 답변, 그리고 관련 정보를 바탕으로 이 지원자가 해당 직무에 '적합'한지 혹은 '부적합'한지 명확하게 판단하여 단어로만 알려주세요. 판단 근거는 내부적으로 활용하며, 외부로 설명할 필요는 없습니다. \n\n" + suitabilityFileContent;
+        String suitabilityPrompt = modelData + "적합인지 부적합인지 반드시 하나만 선택해서 알려줘 \n다소 부정적인 문항이 포함되어 있더라도," +
+                "자기 성찰, 회복력, 협업 의지가 보인다면 적합으로 판단해줘. \n단순히 부정적 문장이 많다고 무조건 부적합으로 분류하면 안돼."
+                + suitabilityFileContent;
         return codeService.callGemini(suitabilityPrompt);
     }
 

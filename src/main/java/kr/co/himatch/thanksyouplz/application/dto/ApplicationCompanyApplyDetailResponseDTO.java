@@ -1,6 +1,5 @@
 package kr.co.himatch.thanksyouplz.application.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import kr.co.himatch.thanksyouplz.resume.entity.ArmyPart;
 import kr.co.himatch.thanksyouplz.resume.entity.ArmyType;
 import kr.co.himatch.thanksyouplz.resume.entity.Gender;
@@ -8,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -37,6 +34,8 @@ public class ApplicationCompanyApplyDetailResponseDTO {
     private String applicationDisability;
     private String applicationDisabilityType;
     private String applicationRewardingPatriotism;
+    private String applicationMemberCode;
+    private String applicationMemberSuitability;
     private List<ApplicationMemberDetailListResponseDTO> applicationCover;
     private List<ApplicationCompanyApplyDetailSchoolResponseDTO> applicationSchool;
     private List<ApplicationCompanyApplyDetailExperienceResponseDTO> applicationExperience;
@@ -44,7 +43,7 @@ public class ApplicationCompanyApplyDetailResponseDTO {
     private List<ApplicationCompanyApplyDetailEducationResponseDTO> applicationEducation;
     private List<ApplicationCompanyApplyDetailAwardResponseDTO> applicationAward;
 
-    public ApplicationCompanyApplyDetailResponseDTO(Long applicationNo, String applicationTitle, String applicationName, String applicationEngName, String applicationMail, String applicationTel, String applicationAddress, String applicationBirthDay, Gender applicationGender, String applicationIMG, LocalDateTime applicationDate, String applicationPortFolio, String applicationAmbition, ArmyType applicationArmyType, LocalDateTime applicationArmyDate, LocalDateTime applicationArmyEnd, ArmyPart applicationArmyPart, String applicationDisability, String applicationDisabilityType, String applicationRewardingPatriotism) {
+    public ApplicationCompanyApplyDetailResponseDTO(Long applicationNo, String applicationTitle, String applicationName, String applicationEngName, String applicationMail, String applicationTel, String applicationAddress, String applicationBirthDay, Gender applicationGender, String applicationIMG, LocalDateTime applicationDate, String applicationPortFolio, String applicationAmbition, ArmyType applicationArmyType, LocalDateTime applicationArmyDate, LocalDateTime applicationArmyEnd, ArmyPart applicationArmyPart, String applicationDisability, String applicationDisabilityType, String applicationRewardingPatriotism, String applicationMemberCode, String applicationMemberSuitability) {
         this.applicationNo = applicationNo;
         this.applicationTitle = applicationTitle;
         this.applicationName = applicationName;
@@ -65,6 +64,8 @@ public class ApplicationCompanyApplyDetailResponseDTO {
         this.applicationDisability = applicationDisability;
         this.applicationDisabilityType = applicationDisabilityType;
         this.applicationRewardingPatriotism = applicationRewardingPatriotism;
+        this.applicationMemberCode = applicationMemberCode;
+        this.applicationMemberSuitability = applicationMemberSuitability;
     }
 
 

@@ -452,6 +452,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         detailResponseDTO.setApplicationCertificate(applicationCertificateRepository.selectCertificate(applicationNo));
         detailResponseDTO.setApplicationEducation(applicationEducationRepository.selectEducation(applicationNo));
         detailResponseDTO.setApplicationAward(applicationAwardRepository.selectAward(applicationNo));
+        detailResponseDTO.setApplicationMemberCode(application.getMemberNo().getMemberCode());
+        detailResponseDTO.setApplicationMemberSuitability(application.getMemberNo().getMemberSuitability());
+
         return detailResponseDTO;
     }
 
