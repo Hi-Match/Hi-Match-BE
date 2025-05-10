@@ -51,6 +51,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                                 jobPosting.companyNo.companyAddress,
                                 jobPosting.postingType,
                                 jobPosting.postingEducation,
+                                jobPosting.companyNo.companyImgA,
                                 jobPosting.postingDeadline
                         )
                 )
@@ -82,6 +83,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                                 jobPosting.companyNo.companyAddress,
                                 jobPosting.postingType,
                                 jobPosting.postingEducation,
+                                jobPosting.companyNo.companyImgA,
                                 jobPosting.postingDeadline
                         )
                 )

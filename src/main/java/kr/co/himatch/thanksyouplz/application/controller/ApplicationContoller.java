@@ -74,7 +74,15 @@ public class ApplicationContoller {
     // 개인 - 채용 목록 page 조회 시 나오는 모든 공고에 대한 목록 및 검색 API
     @PostMapping("/member/job-list")
     public ResponseEntity<?> memberJobList(@RequestBody ApplicationMemberJobListRequestDTO requestDTO) {
-        List<ApplicationMemberJobListResponseDTO> list = applicationService.selectJobList(requestDTO);
+        List<ApplicationMemberJobListResponseDTO> list;
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString())) {
+            log.info("here");
+            list = applicationService.selectJobList(requestDTO);
+        } else {
+            Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            list = applicationService.selectJobList(requestDTO, memberNo);
+        }
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
