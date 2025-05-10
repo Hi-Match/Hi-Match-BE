@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import kr.co.himatch.thanksyouplz.application.dto.*;
 import kr.co.himatch.thanksyouplz.application.entity.*;
 import kr.co.himatch.thanksyouplz.application.repository.*;
+import kr.co.himatch.thanksyouplz.bookmark.entity.BookMark;
+import kr.co.himatch.thanksyouplz.bookmark.repository.BookMarkRepository;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
@@ -13,6 +15,7 @@ import kr.co.himatch.thanksyouplz.resume.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -59,6 +62,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ResumeExperienceRepository resumeExperienceRepository;
     @Autowired
     private ResumeSchoolRepository resumeSchoolRepository;
+    @Autowired
+    private BookMarkRepository bookMarkRepository;
 
 
     // 지원서 상태에 따른 max page
@@ -386,6 +391,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         return deleteResponseDTO;
     }
 
+    // 추천 채용 직무
     @Override
     public List<ApplicationMemberJobListResponseDTO> selectPostingByMember(Long memberNo) {
         Member member = memberRepository.getReferenceById(memberNo);
@@ -402,7 +408,16 @@ public class ApplicationServiceImpl implements ApplicationService {
             type = Arrays.stream(member.getMemberCompanyContract().split(",")).toList();
         }
 
-        return jobPostingRepository.selectPostingByMember(address, part, type, member.getMemberCode());
+        List<ApplicationMemberJobListResponseDTO> list =  jobPostingRepository.selectPostingByMember(address, part, type, member.getMemberCode());
+
+        for (ApplicationMemberJobListResponseDTO dto : list) {
+            JobPosting posting = jobPostingRepository.getReferenceById(dto.getPostingNo());
+            List<BookMark> bookMarkList = bookMarkRepository.findByMemberNoAndPostingNo(member, posting);
+            if (!ObjectUtils.isEmpty(bookMarkList) && !bookMarkList.isEmpty()) {
+                dto.setBookMarkNo(bookMarkList.get(0).getBookMarkNo());
+            }
+        }
+        return list;
     }
 
     // 기업 - 이력서 상세 조회
@@ -493,14 +508,48 @@ public class ApplicationServiceImpl implements ApplicationService {
         return responseDTO;
     }
 
-    // 개인 - 채용 목록 page 조회 시 나오는 모든 공고에 대한 목록 및 검색 API
+    // 개인 - 채용 목록 page 조회 시 나오는 모든 공고에 대한 목록 및 검색 API (비회원)
     @Override
     public List<ApplicationMemberJobListResponseDTO> selectJobList(ApplicationMemberJobListRequestDTO requestDTO) {
         Long page = requestDTO.getPage();
         if (page >= 1) {
             page--;
         }
-        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getPostingEducation(), requestDTO.getKeyword(), page);
+        log.info("here2");
+        return jobPostingRepository.selectPostingBySearch(
+                requestDTO.getCompanyAddress(),
+                requestDTO.getCompanyPart(),
+                requestDTO.getCompanyType(),
+                requestDTO.getPostingEducation(),
+                requestDTO.getKeyword(),
+                page);
+    }
+
+    // 개인 - 채용 목록 page 조회 시 나오는 모든 공고에 대한 목록 및 검색 API (회원)
+    @Override
+    public List<ApplicationMemberJobListResponseDTO> selectJobList(ApplicationMemberJobListRequestDTO requestDTO, Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        Long page = requestDTO.getPage();
+        if (page >= 1) {
+            page--;
+        }
+
+        List<ApplicationMemberJobListResponseDTO> list = jobPostingRepository.selectPostingBySearch(
+                requestDTO.getCompanyAddress(),
+                requestDTO.getCompanyPart(),
+                requestDTO.getCompanyType(),
+                requestDTO.getPostingEducation(),
+                requestDTO.getKeyword(),
+                page);
+        for (ApplicationMemberJobListResponseDTO dto : list) {
+            JobPosting posting = jobPostingRepository.getReferenceById(dto.getPostingNo());
+            List<BookMark> bookMarkList = bookMarkRepository.findByMemberNoAndPostingNo(member, posting);
+            if (!ObjectUtils.isEmpty(bookMarkList) && !bookMarkList.isEmpty()) {
+                dto.setBookMarkNo(bookMarkList.get(0).getBookMarkNo());
+            }
+        }
+
+        return list;
     }
 
     // 개인 - 체용 목록 page 검색 시, 몇 페이지까지 있는지 조회하는 API

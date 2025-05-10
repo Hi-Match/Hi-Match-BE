@@ -18,8 +18,10 @@ public class Constants {
             "/himatch/company/member/idfind", "/himatch/company/member/pwfind", "/himatch/company/member/idcheck",
             "/himatch/company/member/login", "/himatch/company/member/idfind", "/himatch/company/member/pwfind",
             "/himatch/company/member/license", "/himatch/resume/file",
-            "/himatch/application/member/job-list",  "/himatch/application/member/search-page",
+            "/himatch/application/member/search-page",
     };
+
+    public static final String[] SECURITY_HTTP_NON_MEMBER_ALLOW_URIS = {"/himatch/application/member/job-list"};
 
     //Authorization == JWT 사용을 위함
     // 해더에서 허용할 부분 설정

@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 import static kr.co.himatch.thanksyouplz.auth.Constants.SECURITY_HTTP_EXCLUDE_URIS;
+import static kr.co.himatch.thanksyouplz.auth.Constants.SECURITY_HTTP_NON_MEMBER_ALLOW_URIS;
 
 
 //@Transactional
@@ -44,6 +45,26 @@ public class JsonWebTokenCheckFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+        }
+
+        //비회원, 회원 동시 허용 URI에 대한 로직
+        for (String str : SECURITY_HTTP_NON_MEMBER_ALLOW_URIS) {
+            if (antPathMatcher.match(str, request.getRequestURI())) {
+                String access = null;
+                for (Cookie cookie : request.getCookies()) {
+                    if (cookie.getName().equals("Refresh")) {
+                        access = cookie.getValue();
+                    }
+                }
+
+                if (access != null && JwtTokenUtils.isValidToken(access)) {
+                    Authentication authentication = jsonWebTokenProvider.getAuthentication(access); // 정상 토큰이면 SecurityContext 저장
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+                filterChain.doFilter(request, response);
+                return;
+            }
+
         }
 
         // request에 모든 Cookie를 읽는다. > refresh라고 적혀있는 쿠키가 있다면 access라는 String에 넣는다.
