@@ -118,15 +118,15 @@ public class ApplicationContoller {
 
     // 채용 공고 조회
     @GetMapping("/company/select")
-    public ResponseEntity<?> companySelect(@RequestParam Long posingNo) {
-        ApplicationCompanySelectResponseDTO responseDTO = applicationService.selectJobPosting(posingNo);
+    public ResponseEntity<?> companySelect(@RequestParam Long postingNo) {
+        ApplicationCompanySelectResponseDTO responseDTO = applicationService.selectJobPosting(postingNo);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     // 채용 공고의 지원자 목록 조회
     @GetMapping("/company/list")
-    public ResponseEntity<?> companyList(@RequestParam Long posingNo) {
-        List<ApplicationCompanyListResponseDTO> list = applicationService.selectCompanyList(posingNo);
+    public ResponseEntity<?> companyList(@RequestParam Long postingNo) {
+        List<ApplicationCompanyListResponseDTO> list = applicationService.selectCompanyList(postingNo);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
