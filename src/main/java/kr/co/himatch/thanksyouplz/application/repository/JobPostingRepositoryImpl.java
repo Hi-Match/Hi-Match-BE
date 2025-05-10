@@ -62,13 +62,13 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
 
     // 검색 필터링에 따른 채용 공고 목록 페이지 수 조회
     @Override
-    public Long selectPostingCountBySearch(List<String> address, List<String> part, List<String> type, String keyword) {
+    public Long selectPostingCountBySearch(List<String> address, List<String> part, List<String> type, List<String> education, String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(buildAddressPredicate(address));
         builder.and(buildPartPredicate(part));
         builder.and(buildTypePredicate(type));
-//        builder.and(buildEducationPredicate(education));
+        builder.and(buildEducationPredicate(education));
 
         if (keyword != null && !keyword.isEmpty()) {
             builder.and(jobPosting.postingTitle.like("%" + keyword + "%")
@@ -121,7 +121,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
     }
 
     // 동적 쿼리를 위한 필터링 기능 추가 ( 학력 타입 포함 여부로 조회)
-    private  Predicate buildEducationPredicate(List<String> education){
+    private Predicate buildEducationPredicate(List<String> education) {
         if (education == null || education.isEmpty()) {
             return null;
         }

@@ -480,13 +480,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (page >= 1) {
             page--;
         }
-        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(),requestDTO.getPostingEducation(), requestDTO.getKeyword(), page);
+        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getPostingEducation(), requestDTO.getKeyword(), page);
     }
 
     // 개인 - 체용 목록 page 검색 시, 몇 페이지까지 있는지 조회하는 API
     @Override
     public ApplicationMemberSearchPageResponseDTO selectSearchPageCount(ApplicationMemberSearchPageRequestDTO requestDTO) {
-        Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getKeyword());
+        Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getPostingEducation(), requestDTO.getKeyword());
         count = (long) Math.ceil((double) count / 10);
         ApplicationMemberSearchPageResponseDTO responseDTO = new ApplicationMemberSearchPageResponseDTO();
         responseDTO.setPage(count);
