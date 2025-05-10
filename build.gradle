@@ -81,3 +81,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// 빌드시 해당 파일 추가
+sourceSets {
+	main {
+		resources {
+			srcDirs = ['src/main/resources']
+			include 'code.txt'
+			include 'data.txt' 
+		}
+	}
+}
