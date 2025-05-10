@@ -9,15 +9,21 @@ import java.time.LocalDateTime;
 @ToString
 public class BookMarkSearchResponseDTO {
     private Long bookMarkNo;
+    private Long postingNo;
+    private String companyImgA;
     private String companyName;
+    private String companyType;
     private String postingTitle;
     private String companyAddress;
     private String postingEducation;
     private LocalDateTime postingDeadLine;
 
-    public BookMarkSearchResponseDTO(Long bookMarkNo, String companyName, String postingTitle, String companyAddress, String postingEducation, LocalDateTime postingDeadLine) {
+    public BookMarkSearchResponseDTO(Long bookMarkNo, Long postingNo, String companyImgA, String companyName, String companyType, String postingTitle, String companyAddress, String postingEducation, LocalDateTime postingDeadLine) {
         this.bookMarkNo = bookMarkNo;
+        this.postingNo = postingNo;
+        this.companyImgA = companyImgA;
         this.companyName = companyName;
+        this.companyType = companyType;
         this.postingTitle = postingTitle;
         this.companyAddress = companyAddress;
         this.postingEducation = postingEducation;
