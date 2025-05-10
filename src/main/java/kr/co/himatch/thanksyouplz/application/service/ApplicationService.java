@@ -45,6 +45,9 @@ public interface ApplicationService {
     // 채용 공고 삭제
     ApplicationCompanyDeleteResponseDTO posingDelete(Long memberNo, Long postingNo);
 
+    // 개인 - 추천 직무 API
+    List<ApplicationMemberJobListResponseDTO> selectPostingByMember(Long memberNo);
+
     // 기업 - 이력서 상세 조회
     ApplicationCompanyApplyDetailResponseDTO selectApplication(Long applicationNo);
 

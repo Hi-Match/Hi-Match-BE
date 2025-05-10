@@ -3,6 +3,7 @@ package kr.co.himatch.thanksyouplz.application.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationCompanyPostingResponseDTO;
 import kr.co.himatch.thanksyouplz.application.dto.ApplicationMemberJobListResponseDTO;
@@ -57,6 +58,37 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                 .where(builder)
                 .offset(10L * page)
                 .limit(10L)
+                .fetch();
+    }
+
+    //개인 - 추천 직무 API
+    @Override
+    public List<ApplicationMemberJobListResponseDTO> selectPostingByMember(List<String> address, List<String> part, List<String> type, String code) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(buildAddressPredicate(address));
+        builder.and(buildPartPredicate(part));
+        builder.and(buildTypePredicate(type));
+
+        if (code != null && !code.isEmpty()) {
+            builder.and(jobPosting.companyNo.companyCode.like("%" + code + "%"));
+        }
+
+        return queryFactory.select(
+                        Projections.constructor(ApplicationMemberJobListResponseDTO.class,
+                                jobPosting.postingNo,
+                                jobPosting.companyNo.companyName,
+                                jobPosting.postingTitle,
+                                jobPosting.companyNo.companyAddress,
+                                jobPosting.postingType,
+                                jobPosting.postingEducation,
+                                jobPosting.postingDeadline
+                        )
+                )
+                .from(jobPosting)
+                .where(builder)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+                .limit(8L)
                 .fetch();
     }
 

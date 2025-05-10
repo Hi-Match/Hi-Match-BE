@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -383,6 +384,25 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationCompanyDeleteResponseDTO deleteResponseDTO = new ApplicationCompanyDeleteResponseDTO();
         deleteResponseDTO.setMessage("Success");
         return deleteResponseDTO;
+    }
+
+    @Override
+    public List<ApplicationMemberJobListResponseDTO> selectPostingByMember(Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        List<String> address = null;
+        List<String> part = null;
+        List<String> type = null;
+        if (member.getMemberCompanyAddress() != null) {
+            address = Arrays.stream(member.getMemberCompanyAddress().split(",")).toList();
+        }
+        if (member.getMemberCompanyPart() != null) {
+            part = Arrays.stream(member.getMemberCompanyPart().split(",")).toList();
+        }
+        if (member.getMemberCompanyContract() != null) {
+            type = Arrays.stream(member.getMemberCompanyContract().split(",")).toList();
+        }
+
+        return jobPostingRepository.selectPostingByMember(address, part, type, member.getMemberCode());
     }
 
     // 기업 - 이력서 상세 조회
