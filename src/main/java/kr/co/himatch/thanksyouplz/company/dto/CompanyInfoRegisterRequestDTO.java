@@ -38,5 +38,14 @@ public class CompanyInfoRegisterRequestDTO {
     @Schema(description = "회사 로고 이미지 파일명", example = "profile.png")
     private String companyLogo;
 
+    @Schema(description = "회사 대표 이미지A", example = "profile.png")
+    private String companyImgA;
+
+    @Schema(description = "회사 대표 이미지B", example = "profile.png")
+    private String companyImgB;
+
+    @Schema(description = "회사 대표 이미지C", example = "profile.png")
+    private String companyImgC;
+
     private List<CompanyInfoTagRegisterDTO> tag;
 }

@@ -12,14 +12,16 @@ public class ApplicationMemberJobListResponseDTO {
     private String companyName;
     private String postingTitle;
     private String companyAddress;
+    private String companyType;
     private String postingEducation;
     private LocalDateTime postingDeadLine;
 
-    public ApplicationMemberJobListResponseDTO(Long postingNo, String companyName, String postingTitle, String companyAddress, String postingEducation, LocalDateTime postingDeadLine) {
+    public ApplicationMemberJobListResponseDTO(Long postingNo, String companyName, String postingTitle, String companyAddress, String companyType, String postingEducation, LocalDateTime postingDeadLine) {
         this.postingNo = postingNo;
         this.companyName = companyName;
         this.postingTitle = postingTitle;
         this.companyAddress = companyAddress;
+        this.companyType = companyType;
         this.postingEducation = postingEducation;
         this.postingDeadLine = postingDeadLine;
     }

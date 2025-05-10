@@ -11,6 +11,7 @@ public class ApplicationMemberJobListRequestDTO {
     private List<String> companyAddress;
     private List<String> companyPart;
     private List<String> companyType;
+    private List<String> postingEducation;
     private String keyword;
     private Long page;
 }

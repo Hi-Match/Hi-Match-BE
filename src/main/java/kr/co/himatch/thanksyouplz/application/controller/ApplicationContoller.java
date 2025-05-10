@@ -85,6 +85,14 @@ public class ApplicationContoller {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    // 개인 - 추천 직무 API
+    @GetMapping("/member/recommend")
+    public ResponseEntity<?> memberRecommend() {
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        List<ApplicationMemberJobListResponseDTO> responseDTOList = applicationService.selectPostingByMember(memberNo);
+        return new ResponseEntity<>(responseDTOList, HttpStatus.OK);
+    }
+
     //  기업 공고 등록 전, 기업이 요구할 자기소개서 질문지 조회
     @GetMapping("/company/question-list")
     public ResponseEntity<?> companyQuestionList() {

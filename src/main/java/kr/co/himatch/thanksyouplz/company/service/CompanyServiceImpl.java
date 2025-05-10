@@ -191,14 +191,24 @@ public class CompanyServiceImpl implements CompanyService {
         companyInfoDetailResponseDTO.setCompanyEmployee(company.getCompanyEmployee());
         companyInfoDetailResponseDTO.setCompanyDescription(company.getCompanyDescription());
         companyInfoDetailResponseDTO.setCompanyLogo(company.getCompanyLogo());
+        companyInfoDetailResponseDTO.setCompanyImgA(company.getCompanyImgA());
+        companyInfoDetailResponseDTO.setCompanyImgB(company.getCompanyImgB());
+        companyInfoDetailResponseDTO.setCompanyImgC(company.getCompanyImgC());
         companyInfoDetailResponseDTO.setTag(companyTagRepository.selectCompanyTags(memberNo));
         return companyInfoDetailResponseDTO;
     }
 
+    // 기업 상세 정보 등록 및 수정(등록과 수정이 동일하므로 하나로 쓴다)
     @Override
     public CompanyInfoRegisterResponseDTO companyUpdate(CompanyInfoRegisterRequestDTO registerRequestDTO, Long memberNo) {
         Company company = companyRepository.getReferenceById(memberNo);
-        company.companyInfoModify(registerRequestDTO.getCompanyName(), registerRequestDTO.getCompanyManagerName(), registerRequestDTO.getCompanyAddress(), registerRequestDTO.getCompanyPhone(), registerRequestDTO.getCompanyMail(), registerRequestDTO.getCompanyIndustry(), registerRequestDTO.getCompanyEmployee(), registerRequestDTO.getCompanyDescription(), registerRequestDTO.getCompanyLogo());
+        company.companyInfoModify(registerRequestDTO.getCompanyName(),
+                registerRequestDTO.getCompanyManagerName(), registerRequestDTO.getCompanyAddress(),
+                registerRequestDTO.getCompanyPhone(), registerRequestDTO.getCompanyMail(),
+                registerRequestDTO.getCompanyIndustry(), registerRequestDTO.getCompanyEmployee(),
+                registerRequestDTO.getCompanyDescription(), registerRequestDTO.getCompanyLogo(),
+                registerRequestDTO.getCompanyImgA(), registerRequestDTO.getCompanyImgB(),
+                registerRequestDTO.getCompanyImgC());
         companyTagRepository.deleteCompanyTags(memberNo);
         Optional.ofNullable(registerRequestDTO.getTag()).orElseGet(List::of).forEach(companyInfoTagRegisterDTO -> companyTagRepository.save(CompanyTag.builder().companyNo(company).cTagName(companyInfoTagRegisterDTO.getTagName()).build()));
         CompanyInfoRegisterResponseDTO companyInfoRegisterResponseDTO = new CompanyInfoRegisterResponseDTO();

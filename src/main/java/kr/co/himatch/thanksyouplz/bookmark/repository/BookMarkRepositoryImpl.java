@@ -23,7 +23,8 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom {
     @Override
     public List<BookMarkListResponseDTO> selectBookMark(Long memberNo, Long page) {
         return queryFactory.select(Projections.constructor(BookMarkListResponseDTO.class, bookMark.bookMarkNo,
-                        bookMark.postingNo.postingNo, bookMark.postingNo.companyNo.companyName,
+                        bookMark.postingNo.postingNo, bookMark.postingNo.companyNo.companyImgA,
+                        bookMark.postingNo.companyNo.companyName, bookMark.postingNo.postingType,
                         bookMark.postingNo.postingTitle, bookMark.postingNo.companyNo.companyAddress,
                         bookMark.postingNo.postingEducation, bookMark.postingNo.postingDeadline))
                 .from(bookMark)

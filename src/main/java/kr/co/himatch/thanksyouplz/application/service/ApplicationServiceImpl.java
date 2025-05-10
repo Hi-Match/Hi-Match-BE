@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -385,6 +386,25 @@ public class ApplicationServiceImpl implements ApplicationService {
         return deleteResponseDTO;
     }
 
+    @Override
+    public List<ApplicationMemberJobListResponseDTO> selectPostingByMember(Long memberNo) {
+        Member member = memberRepository.getReferenceById(memberNo);
+        List<String> address = null;
+        List<String> part = null;
+        List<String> type = null;
+        if (member.getMemberCompanyAddress() != null) {
+            address = Arrays.stream(member.getMemberCompanyAddress().split(",")).toList();
+        }
+        if (member.getMemberCompanyPart() != null) {
+            part = Arrays.stream(member.getMemberCompanyPart().split(",")).toList();
+        }
+        if (member.getMemberCompanyContract() != null) {
+            type = Arrays.stream(member.getMemberCompanyContract().split(",")).toList();
+        }
+
+        return jobPostingRepository.selectPostingByMember(address, part, type, member.getMemberCode());
+    }
+
     // 기업 - 이력서 상세 조회
     @Override
     public ApplicationCompanyApplyDetailResponseDTO selectApplication(Long applicationNo) {
@@ -480,13 +500,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (page >= 1) {
             page--;
         }
-        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getKeyword(), page);
+        return jobPostingRepository.selectPostingBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getPostingEducation(), requestDTO.getKeyword(), page);
     }
 
     // 개인 - 체용 목록 page 검색 시, 몇 페이지까지 있는지 조회하는 API
     @Override
     public ApplicationMemberSearchPageResponseDTO selectSearchPageCount(ApplicationMemberSearchPageRequestDTO requestDTO) {
-        Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getKeyword());
+        Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getPostingEducation(), requestDTO.getKeyword());
         count = (long) Math.ceil((double) count / 10);
         ApplicationMemberSearchPageResponseDTO responseDTO = new ApplicationMemberSearchPageResponseDTO();
         responseDTO.setPage(count);

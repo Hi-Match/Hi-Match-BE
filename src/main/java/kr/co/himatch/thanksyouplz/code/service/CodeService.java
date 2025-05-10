@@ -1,10 +1,7 @@
 package kr.co.himatch.thanksyouplz.code.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import kr.co.himatch.thanksyouplz.code.dto.CodeCompanyRegisterResponseDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberQuestionListResponseDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberResultResponseDTO;
-import kr.co.himatch.thanksyouplz.code.dto.CodeMemberTimeResponseDTO;
+import kr.co.himatch.thanksyouplz.code.dto.*;
 import kr.co.himatch.thanksyouplz.code.entity.QuestionType;
 import reactor.core.publisher.Mono;
 
@@ -16,6 +13,9 @@ public interface CodeService {
 
     //개인 인성검사 후, DB에 저장
     void changeMemberCode(Long memberNo, String memberSuitability, String memberDescription, String code, String codeRate);
+
+    //기업 인재상 조회 API
+    CodeCompanySelectResponseDTO selectCodeSelect(String code);
 
     //인성검사 질문 리스트 조회
     List<CodeMemberQuestionListResponseDTO> selectQuestionList(QuestionType questionType);
