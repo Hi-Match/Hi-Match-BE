@@ -55,7 +55,13 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     @Override
     public List<ApplicationMemberStatusResponseDTO> selectPageByStatus(ApplicationStatus applicationStatus, Long memberNo, Long page) {
         return queryFactory.select(
-                        Projections.constructor(ApplicationMemberStatusResponseDTO.class, application.applicationNo, application.applicationTitle, application.postingNo.postingPart, application.postingNo.postingType, application.applicationDate, application.applicationStatus)
+                        Projections.constructor(ApplicationMemberStatusResponseDTO.class,
+                                application.applicationNo,
+                                application.postingNo.companyNo.companyName,
+                                application.postingNo.postingPart,
+                                application.postingNo.postingType,
+                                application.applicationDate,
+                                application.applicationStatus)
                 )
                 .from(application)
                 .where(application.memberNo.memberNo.eq(memberNo)
@@ -81,7 +87,13 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     @Override
     public List<ApplicationMemberStatusResponseDTO> selectPageSearchByStatus(String keyword, ApplicationStatus applicationStatus, Long page, Long memberNo) {
         return queryFactory.select(
-                        Projections.constructor(ApplicationMemberStatusResponseDTO.class, application.applicationNo, application.applicationTitle, application.postingNo.postingPart, application.postingNo.postingType, application.applicationDate, application.applicationStatus)
+                        Projections.constructor(ApplicationMemberStatusResponseDTO.class,
+                                application.applicationNo,
+                                application.postingNo.companyNo.companyName,
+                                application.postingNo.postingPart,
+                                application.postingNo.postingType,
+                                application.applicationDate,
+                                application.applicationStatus)
                 )
                 .from(application)
                 .where(application.memberNo.memberNo.eq(memberNo)
@@ -97,7 +109,12 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     @Override
     public List<ApplicationCompanyListResponseDTO> selectCompanyListByPostingNo(Long posingNo) {
         return queryFactory.select(
-                        Projections.constructor(ApplicationCompanyListResponseDTO.class, application.applicationNo, application.applicationDate, application.applicationStatus, application.applicationName, application.applicationGrade)
+                        Projections.constructor(ApplicationCompanyListResponseDTO.class,
+                                application.applicationNo,
+                                application.applicationDate,
+                                application.applicationStatus,
+                                application.memberNo.memberName,
+                                application.applicationGrade)
                 )
                 .from(application)
                 .where(application.postingNo.postingNo.eq(posingNo))
