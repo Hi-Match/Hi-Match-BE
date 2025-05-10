@@ -115,10 +115,11 @@ public class CodeServiceImpl implements CodeService {
         Member member = memberRepository.getReferenceById(memberNo);
         String memberCode = member.getMemberCode();
         PersonalTypeEnum enumType = PersonalTypeEnum.fromString(memberCode);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        CodeMemberResultRateDTO rateDTO = objectMapper.readValue(member.getMemberCodeRate(), CodeMemberResultRateDTO.class);
-
+        CodeMemberResultRateDTO rateDTO = new CodeMemberResultRateDTO();
+        if(member.getMemberCodeRate() != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            rateDTO = objectMapper.readValue(member.getMemberCodeRate(), CodeMemberResultRateDTO.class);
+        }
         CodeMemberResultResponseDTO responseDTO = new CodeMemberResultResponseDTO();
         responseDTO.setCode(member.getMemberCode());
         responseDTO.setDescription(member.getMemberDescription());
