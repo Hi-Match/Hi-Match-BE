@@ -19,5 +19,8 @@ public class CompanyInfoDetailResponseDTO {
     private String companyEmployee;
     private String companyDescription;
     private String companyLogo;
+    private String companyImgA;
+    private String companyImgB;
+    private String companyImgC;
     private List<CompanyInfoTagResponseDTO> tag;
 }

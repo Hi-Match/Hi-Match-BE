@@ -56,8 +56,18 @@ public class Company {
     @Column(name = "COMPANY_CODE", length = 30)
     private String companyCode;
 
-    @Column(name = "COMPANY_LOGO", length = 255)
+    // 로고 이미지 S3를 통해서 url 저장할 예정
+    @Column(name = "COMPANY_LOGO", length = 1000)
     private String companyLogo;
+
+    @Column(name = "COMPANY_IMGA", length = 1000)
+    private String companyImgA;
+
+    @Column(name = "COMPANY_IMGB", length = 1000)
+    private String companyImgB;
+
+    @Column(name = "COMPANY_IMGC", length = 1000)
+    private String companyImgC;
 
     @Column(name = "COMPANY_CREATE", nullable = false)
     private LocalDateTime companyCreate;
@@ -96,7 +106,8 @@ public class Company {
         this.companyUpdate = LocalDateTime.now();
     }
 
-    public void companyInfoModify(String companyName, String companyManagerName, String companyAddress, String companyPhone, String companyMail, String companyIndustry, String companyEmployee, String companyDescription, String companyLogo) {
+    // 기업 상세정보 등록 및 수정
+    public void companyInfoModify(String companyName, String companyManagerName, String companyAddress, String companyPhone, String companyMail, String companyIndustry, String companyEmployee, String companyDescription, String companyLogo, String companyImgA, String companyImgB, String companyImgC) {
         this.companyName = companyName;
         this.companyManagerName = companyManagerName;
         this.companyAddress = companyAddress;
@@ -106,6 +117,10 @@ public class Company {
         this.companyEmployee = companyEmployee;
         this.companyDescription = companyDescription;
         this.companyLogo = companyLogo;
+        this.companyImgA = companyImgA;
+        this.companyImgB = companyImgB;
+        this.companyImgC = companyImgC;
+
     }
 
     // 기업의 인재상코드 변경
