@@ -1,5 +1,6 @@
 package kr.co.himatch.thanksyouplz.company.repository;
 
+import kr.co.himatch.thanksyouplz.company.dto.CompanySelectLicenseResponseDTO;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 
 import java.util.List;
@@ -22,5 +23,8 @@ public interface CompanyRepositoryCustom {
     void deleteCompany(Long memberNo);
 
     Optional<Company> selectCompanyDetail(Long memberNo);
+
+    // 사업자 등록번호 조회
+    String selectByMemberNo(Long memberNo);
 
 }
