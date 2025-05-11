@@ -283,7 +283,7 @@ public class CompanyController {
         return new ResponseEntity<>(companyMemberMyhomeResponseDTO, HttpStatus.OK);
     }
 
-    // 회사 정보 상세 조회
+    // 회사 정보 상세 조회 (토큰으로 조회)
     @GetMapping("/info/detail")
     public ResponseEntity<?> infoDetail() {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -291,7 +291,7 @@ public class CompanyController {
         return new ResponseEntity<>(companyInfoDetailResponseDTO, HttpStatus.OK);
     }
 
-    // 회사 정보 상세 조회
+    // 회사 정보 상세 조회 (companyNo로 조회)
     @GetMapping("/info/detail-select")
     public ResponseEntity<?> infoDetailSelect(@RequestParam Long companyNo) {
         CompanyInfoDetailResponseDTO companyInfoDetailResponseDTO = companyService.companyDetail(companyNo);
