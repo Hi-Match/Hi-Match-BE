@@ -280,6 +280,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         List<ApplicationCompanySelectListResponseDTO> questions = companyQuestionsRepository.selectQuestionByPostingNo(postingNo);
 
         ApplicationCompanySelectResponseDTO responseDTO = new ApplicationCompanySelectResponseDTO();
+        responseDTO.setCompanyNo(posting.getCompanyNo().getCompanyNo());
         responseDTO.setCompanyName(posting.getCompanyNo().getCompanyName());
         responseDTO.setPostingTitle(posting.getPostingTitle());
         responseDTO.setPostingPart(posting.getPostingPart());
