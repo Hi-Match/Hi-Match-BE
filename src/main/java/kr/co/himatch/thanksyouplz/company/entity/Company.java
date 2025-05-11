@@ -60,6 +60,10 @@ public class Company {
     @Column(name = "COMPANY_LOGO", length = 1000)
     private String companyLogo;
 
+    // 기업 홈페이지 URL
+    @Column(name = "COMPANY_URL", length = 500)
+    private String companyURL;
+
     @Column(name = "COMPANY_IMGA", length = 1000)
     private String companyImgA;
 
@@ -107,7 +111,10 @@ public class Company {
     }
 
     // 기업 상세정보 등록 및 수정
-    public void companyInfoModify(String companyName, String companyManagerName, String companyAddress, String companyPhone, String companyMail, String companyIndustry, String companyEmployee, String companyDescription, String companyLogo, String companyImgA, String companyImgB, String companyImgC) {
+    public void companyInfoModify(String companyName, String companyManagerName, String companyAddress,
+                                  String companyPhone, String companyMail, String companyIndustry, String companyEmployee,
+                                  String companyDescription, String companyURL, String companyLogo, String companyImgA,
+                                  String companyImgB, String companyImgC) {
         this.companyName = companyName;
         this.companyManagerName = companyManagerName;
         this.companyAddress = companyAddress;
@@ -116,6 +123,7 @@ public class Company {
         this.companyIndustry = companyIndustry;
         this.companyEmployee = companyEmployee;
         this.companyDescription = companyDescription;
+        this.companyURL = companyURL;
         this.companyLogo = companyLogo;
         this.companyImgA = companyImgA;
         this.companyImgB = companyImgB;

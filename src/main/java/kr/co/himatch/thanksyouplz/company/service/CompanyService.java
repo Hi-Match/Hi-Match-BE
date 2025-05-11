@@ -43,4 +43,7 @@ public interface CompanyService {
 
     // 기업 회원 프로필 정보
     CompanyMemberMyhomeResponseDTO companyMemberMyhome(Long memberNo);
+
+    // 기업용 사업자등록번호 조회
+    CompanySelectLicenseResponseDTO companySelectLicense(Long memberNo);
 }

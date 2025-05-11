@@ -190,6 +190,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyInfoDetailResponseDTO.setCompanyIndustry(company.getCompanyIndustry());
         companyInfoDetailResponseDTO.setCompanyEmployee(company.getCompanyEmployee());
         companyInfoDetailResponseDTO.setCompanyDescription(company.getCompanyDescription());
+        companyInfoDetailResponseDTO.setCompanyURL(company.getCompanyURL());
         companyInfoDetailResponseDTO.setCompanyLogo(company.getCompanyLogo());
         companyInfoDetailResponseDTO.setCompanyImgA(company.getCompanyImgA());
         companyInfoDetailResponseDTO.setCompanyImgB(company.getCompanyImgB());
@@ -206,9 +207,10 @@ public class CompanyServiceImpl implements CompanyService {
                 registerRequestDTO.getCompanyManagerName(), registerRequestDTO.getCompanyAddress(),
                 registerRequestDTO.getCompanyPhone(), registerRequestDTO.getCompanyMail(),
                 registerRequestDTO.getCompanyIndustry(), registerRequestDTO.getCompanyEmployee(),
-                registerRequestDTO.getCompanyDescription(), registerRequestDTO.getCompanyLogo(),
-                registerRequestDTO.getCompanyImgA(), registerRequestDTO.getCompanyImgB(),
-                registerRequestDTO.getCompanyImgC());
+                registerRequestDTO.getCompanyDescription(), registerRequestDTO.getCompanyURL(),
+                registerRequestDTO.getCompanyLogo(), registerRequestDTO.getCompanyImgA(),
+                registerRequestDTO.getCompanyImgB(), registerRequestDTO.getCompanyImgC());
+
         companyTagRepository.deleteCompanyTags(memberNo);
         Optional.ofNullable(registerRequestDTO.getTag()).orElseGet(List::of).forEach(companyInfoTagRegisterDTO -> companyTagRepository.save(CompanyTag.builder().companyNo(company).cTagName(companyInfoTagRegisterDTO.getTagName()).build()));
         CompanyInfoRegisterResponseDTO companyInfoRegisterResponseDTO = new CompanyInfoRegisterResponseDTO();
@@ -226,5 +228,16 @@ public class CompanyServiceImpl implements CompanyService {
         companyMyhome.setMemberPhone(company.getCompanyPhone());
         companyMyhome.setMemberJoinDate(company.getCompanyCreate());
         return companyMyhome;
+    }
+
+    // 사업자 등록번호 조회
+    @Override
+    public CompanySelectLicenseResponseDTO companySelectLicense(Long memberNo) {
+        String selectByMemberNo = companyRepository.selectByMemberNo(memberNo);
+
+        CompanySelectLicenseResponseDTO companySelectLicenseResponseDTO = new CompanySelectLicenseResponseDTO();
+        companySelectLicenseResponseDTO.setLicenseNumber(selectByMemberNo);
+
+        return companySelectLicenseResponseDTO;
     }
 }

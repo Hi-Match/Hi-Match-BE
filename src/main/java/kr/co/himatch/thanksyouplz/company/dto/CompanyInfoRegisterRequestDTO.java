@@ -35,6 +35,9 @@ public class CompanyInfoRegisterRequestDTO {
     @Schema(description = "회사 소개", example = "오시면 좋아요")
     private String companyDescription;
 
+    @Schema(description = "회사 홈페이지 URL", example = "https://himatch.co.kr")
+    private String companyURL;
+
     @Schema(description = "회사 로고 이미지 파일명", example = "profile.png")
     private String companyLogo;
 
