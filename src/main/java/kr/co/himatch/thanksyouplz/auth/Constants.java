@@ -17,7 +17,7 @@ public class Constants {
             "/himatch/company/member/signup", "/himatch/company/member/login",
             "/himatch/company/member/idfind", "/himatch/company/member/pwfind", "/himatch/company/member/idcheck",
             "/himatch/company/member/login", "/himatch/company/member/idfind", "/himatch/company/member/pwfind",
-            "/himatch/company/member/license", "/himatch/resume/file",
+            "/himatch/company/member/license", "/himatch/resume/file", "/himatch/application/company/select",
             "/himatch/application/member/search-page",
     };
 
