@@ -1,6 +1,7 @@
 package kr.co.himatch.thanksyouplz.company.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.co.himatch.thanksyouplz.company.dto.CompanySelectLicenseResponseDTO;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -72,5 +73,14 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
                         .where(company.companyNo.eq(memberNo))
                         .fetchFirst()
         );
+    }
+
+    // 사업자 등록번호 조회
+    @Override
+    public String selectByMemberNo(Long memberNo) {
+        return queryFactory.select(company.companyLicense)
+                .from(company)
+                .where(company.companyNo.eq(memberNo))
+                .fetchFirst();
     }
 }

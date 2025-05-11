@@ -282,7 +282,7 @@ public class CompanyController {
         CompanyMemberMyhomeResponseDTO companyMemberMyhomeResponseDTO = companyService.companyMemberMyhome(memberNo);
         return new ResponseEntity<>(companyMemberMyhomeResponseDTO, HttpStatus.OK);
     }
-    
+
     // 회사 정보 상세 조회
     @GetMapping("/info/detail")
     public ResponseEntity<?> infoDetail() {
@@ -306,5 +306,13 @@ public class CompanyController {
         return new ResponseEntity<>(companyInfoTagResponseDTOList, HttpStatus.OK);
     }
 
+    // 사업자 등록번호 조회
+    @GetMapping("/select-license")
+    public ResponseEntity<?> selectLicense(){
+        Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
+        CompanySelectLicenseResponseDTO companySelectLicense = companyService.companySelectLicense(memberNo);
+
+        return new ResponseEntity<>(companySelectLicense, HttpStatus.OK);
+    }
 }

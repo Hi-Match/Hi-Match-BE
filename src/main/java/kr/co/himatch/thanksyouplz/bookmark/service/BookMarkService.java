@@ -19,5 +19,5 @@ public interface BookMarkService {
     List<BookMarkSearchResponseDTO> searchBookMark(BookMarkSearchRequestDTO bookMarkSearchRequestDTO, Long memberNo);
 
     // 북마크 페이지네이션
-    BookMarkPageResponseDTO pageBookMark(Long memberNo);
+    BookMarkPageResponseDTO pageBookMark(Long memberNo, BookMarkPageRequestDTO bookMarkPageRequestDTO);
 }
