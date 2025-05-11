@@ -52,12 +52,11 @@ public class JsonWebTokenCheckFilter extends OncePerRequestFilter {
             if (antPathMatcher.match(str, request.getRequestURI())) {
                 String access = null;
                 Cookie[] cookies = request.getCookies();
-                if (cookies == null) {
-                    throw new ErrorResponse(HttpStatus.BAD_REQUEST, "잘못된 Refresh 토큰입니다. ");
-                }
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("Refresh")) {
-                        access = cookie.getValue();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("Refresh")) {
+                            access = cookie.getValue();
+                        }
                     }
                 }
 
