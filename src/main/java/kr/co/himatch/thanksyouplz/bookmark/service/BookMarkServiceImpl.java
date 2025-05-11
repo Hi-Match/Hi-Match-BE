@@ -102,7 +102,7 @@ public class BookMarkServiceImpl implements BookMarkService{
     public BookMarkPageResponseDTO pageBookMark(Long memberNo, BookMarkPageRequestDTO bookMarkPageRequestDTO) {
         Long selectBookMarkCount = bookMarkRepository.selectBookMarkCount(memberNo, bookMarkPageRequestDTO.getKeyword());
 
-        Long maxPage = (long)Math.ceil((double) selectBookMarkCount / 10);
+        Long maxPage = (long)Math.ceil((double) selectBookMarkCount / 12);
 
         BookMarkPageResponseDTO bookMarkPageResponseDTO = new BookMarkPageResponseDTO();
         bookMarkPageResponseDTO.setMaxPage(maxPage);

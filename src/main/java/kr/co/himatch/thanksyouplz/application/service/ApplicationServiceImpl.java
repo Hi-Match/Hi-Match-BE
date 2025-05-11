@@ -70,7 +70,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public ApplicationMemberPageResponseDTO selectMaxPage(ApplicationStatus applicationStatus, Long memberNo) {
         long count = applicationRepository.selectMaxPageByApplicationStatus(applicationStatus, memberNo);
-        long maxPage = (long) Math.ceil((double) count / 10);
+        long maxPage = (long) Math.ceil((double) count / 12);
         ApplicationMemberPageResponseDTO pageResponseDTO = new ApplicationMemberPageResponseDTO();
         pageResponseDTO.setMaxPage(maxPage);
         return pageResponseDTO;
@@ -268,12 +268,15 @@ public class ApplicationServiceImpl implements ApplicationService {
         return jobPostingRepository.selectPostingList(memberNo);
     }
 
+
+    // 채용 공고 상세 조회
     @Override
     public ApplicationCompanySelectResponseDTO selectJobPosting(Long postingNo) {
         JobPosting posting = jobPostingRepository.getReferenceById(postingNo);
         List<ApplicationCompanySelectListResponseDTO> questions = companyQuestionsRepository.selectQuestionByPostingNo(postingNo);
 
         ApplicationCompanySelectResponseDTO responseDTO = new ApplicationCompanySelectResponseDTO();
+        responseDTO.setCompanyName(posting.getCompanyNo().getCompanyName());
         responseDTO.setPostingTitle(posting.getPostingTitle());
         responseDTO.setPostingPart(posting.getPostingPart());
         responseDTO.setPostingSal(posting.getPostingSal());
@@ -285,6 +288,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         responseDTO.setPostingWorkStartTime(posting.getPostingWorkStartTime());
         responseDTO.setPostingWorkEndTime(posting.getPostingWorkEndTime());
         responseDTO.setPostingIsFinish(posting.getPostingIsFinish());
+        responseDTO.setCompanyImgA(posting.getCompanyNo().getCompanyImgA());
+        responseDTO.setCompanyImgB(posting.getCompanyNo().getCompanyImgB());
+        responseDTO.setCompanyImgC(posting.getCompanyNo().getCompanyImgC());
         responseDTO.setPostingDeadLine(posting.getPostingDeadline());
         responseDTO.setPostingQuestion(questions);
 
@@ -559,7 +565,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public ApplicationMemberSearchPageResponseDTO selectSearchPageCount(ApplicationMemberSearchPageRequestDTO requestDTO) {
         Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getPostingEducation(), requestDTO.getKeyword());
-        count = (long) Math.ceil((double) count / 10);
+        count = (long) Math.ceil((double) count / 12);
         ApplicationMemberSearchPageResponseDTO responseDTO = new ApplicationMemberSearchPageResponseDTO();
         responseDTO.setPage(count);
         return responseDTO;

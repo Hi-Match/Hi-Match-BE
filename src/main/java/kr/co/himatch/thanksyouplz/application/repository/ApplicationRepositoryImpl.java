@@ -66,8 +66,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .from(application)
                 .where(application.memberNo.memberNo.eq(memberNo)
                         , equalsApplicationStatus(applicationStatus))
-                .offset(10 * page)
-                .limit(10L)
+                .offset(12 * page)
+                .limit(12L)
                 .fetch();
     }
 
@@ -100,8 +100,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         , likeApplicationTitle(keyword)
                         , equalsApplicationStatus(applicationStatus)
                 )
-                .offset(10L * page)
-                .limit(10L)
+                .offset(12L * page)
+                .limit(12L)
                 .fetch();
     }
 
