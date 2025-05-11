@@ -268,12 +268,15 @@ public class ApplicationServiceImpl implements ApplicationService {
         return jobPostingRepository.selectPostingList(memberNo);
     }
 
+
+    // 채용 공고 상세 조회
     @Override
     public ApplicationCompanySelectResponseDTO selectJobPosting(Long postingNo) {
         JobPosting posting = jobPostingRepository.getReferenceById(postingNo);
         List<ApplicationCompanySelectListResponseDTO> questions = companyQuestionsRepository.selectQuestionByPostingNo(postingNo);
 
         ApplicationCompanySelectResponseDTO responseDTO = new ApplicationCompanySelectResponseDTO();
+        responseDTO.setCompanyName(posting.getCompanyNo().getCompanyName());
         responseDTO.setPostingTitle(posting.getPostingTitle());
         responseDTO.setPostingPart(posting.getPostingPart());
         responseDTO.setPostingSal(posting.getPostingSal());
@@ -285,6 +288,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         responseDTO.setPostingWorkStartTime(posting.getPostingWorkStartTime());
         responseDTO.setPostingWorkEndTime(posting.getPostingWorkEndTime());
         responseDTO.setPostingIsFinish(posting.getPostingIsFinish());
+        responseDTO.setCompanyImgA(posting.getCompanyNo().getCompanyImgA());
+        responseDTO.setCompanyImgB(posting.getCompanyNo().getCompanyImgB());
+        responseDTO.setCompanyImgC(posting.getCompanyNo().getCompanyImgC());
         responseDTO.setPostingDeadLine(posting.getPostingDeadline());
         responseDTO.setPostingQuestion(questions);
 

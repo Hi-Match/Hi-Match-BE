@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 @ToString
 public class ApplicationCompanySelectResponseDTO {
+    private String companyName;
     private String postingTitle;
     private String postingPart;
     private Integer postingSal;
@@ -27,6 +28,9 @@ public class ApplicationCompanySelectResponseDTO {
     private LocalDateTime postingWorkEndTime;
     private Boolean postingIsFinish;
     private LocalDateTime postingDeadLine;
+    private String companyImgA;
+    private String companyImgB;
+    private String companyImgC;
     private List<ApplicationCompanySelectListResponseDTO> postingQuestion;
 
 }
