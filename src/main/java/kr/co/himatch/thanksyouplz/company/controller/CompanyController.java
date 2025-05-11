@@ -291,6 +291,12 @@ public class CompanyController {
         return new ResponseEntity<>(companyInfoDetailResponseDTO, HttpStatus.OK);
     }
 
+    // 회사 정보 상세 조회
+    @GetMapping("/info/detail-select")
+    public ResponseEntity<?> infoDetailSelect(@RequestParam Long companyNo) {
+        CompanyInfoDetailResponseDTO companyInfoDetailResponseDTO = companyService.companyDetail(companyNo);
+        return new ResponseEntity<>(companyInfoDetailResponseDTO, HttpStatus.OK);
+    }
     // 회사 정보 상세 수정
     @PostMapping("/info/register")
     public ResponseEntity<?> infoRegister(@RequestBody CompanyInfoRegisterRequestDTO registerRequestDTO) {

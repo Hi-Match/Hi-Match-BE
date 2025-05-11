@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 @ToString
 public class ApplicationCompanySelectResponseDTO {
+    private Long companyNo;
     private String companyName;
     private String postingTitle;
     private String postingPart;
