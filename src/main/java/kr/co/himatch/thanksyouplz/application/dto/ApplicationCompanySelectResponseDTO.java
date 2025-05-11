@@ -32,6 +32,7 @@ public class ApplicationCompanySelectResponseDTO {
     private String companyImgB;
     private String companyImgC;
     private String postingContent;
+    private List<String> tags;
     private List<ApplicationCompanySelectListResponseDTO> postingQuestion;
 
 }
