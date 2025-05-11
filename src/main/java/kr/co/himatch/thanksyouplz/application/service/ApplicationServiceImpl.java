@@ -7,7 +7,9 @@ import kr.co.himatch.thanksyouplz.application.repository.*;
 import kr.co.himatch.thanksyouplz.bookmark.entity.BookMark;
 import kr.co.himatch.thanksyouplz.bookmark.repository.BookMarkRepository;
 import kr.co.himatch.thanksyouplz.company.entity.Company;
+import kr.co.himatch.thanksyouplz.company.entity.CompanyTag;
 import kr.co.himatch.thanksyouplz.company.repository.CompanyRepository;
+import kr.co.himatch.thanksyouplz.company.repository.CompanyTagRepository;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.repository.MemberRepository;
 import kr.co.himatch.thanksyouplz.resume.entity.*;
@@ -64,6 +66,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ResumeSchoolRepository resumeSchoolRepository;
     @Autowired
     private BookMarkRepository bookMarkRepository;
+    @Autowired
+    private CompanyTagRepository companyTagRepository;
 
 
     // 지원서 상태에 따른 max page
@@ -294,6 +298,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         responseDTO.setPostingDeadLine(posting.getPostingDeadline());
         responseDTO.setPostingQuestion(questions);
         responseDTO.setPostingContent(posting.getPostingContent());
+        List<String> list = companyTagRepository.findByCompanyNo(posting.getCompanyNo())
+                .stream()
+                .map(CompanyTag::getCTagName)
+                .toList();
+        responseDTO.setTags(list);
 
         return responseDTO;
     }
@@ -415,7 +424,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             type = Arrays.stream(member.getMemberCompanyContract().split(",")).toList();
         }
 
-        List<ApplicationMemberJobListResponseDTO> list =  jobPostingRepository.selectPostingByMember(address, part, type, member.getMemberCode());
+        List<ApplicationMemberJobListResponseDTO> list = jobPostingRepository.selectPostingByMember(address, part, type, member.getMemberCode());
 
         for (ApplicationMemberJobListResponseDTO dto : list) {
             JobPosting posting = jobPostingRepository.getReferenceById(dto.getPostingNo());
