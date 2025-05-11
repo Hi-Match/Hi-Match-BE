@@ -88,10 +88,10 @@ public class BookMarkController {
 
     // 북마크 페이지네이션
     @GetMapping("/page")
-    public ResponseEntity<?> pageBookMark() {
+    public ResponseEntity<?> pageBookMark(@ModelAttribute BookMarkPageRequestDTO bookMarkPageRequestDTO) {
         Long memberNo = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
-        BookMarkPageResponseDTO pageBookMark = bookMarkService.pageBookMark(memberNo);
+        BookMarkPageResponseDTO pageBookMark = bookMarkService.pageBookMark(memberNo, bookMarkPageRequestDTO);
 
         return new ResponseEntity<>(pageBookMark, HttpStatus.OK);
     }
