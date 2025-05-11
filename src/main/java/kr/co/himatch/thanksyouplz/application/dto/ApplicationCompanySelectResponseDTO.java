@@ -31,6 +31,7 @@ public class ApplicationCompanySelectResponseDTO {
     private String companyImgA;
     private String companyImgB;
     private String companyImgC;
+    private String postingContent;
     private List<ApplicationCompanySelectListResponseDTO> postingQuestion;
 
 }
