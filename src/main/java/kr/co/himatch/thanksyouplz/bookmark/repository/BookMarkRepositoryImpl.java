@@ -29,8 +29,8 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom {
                         bookMark.postingNo.postingEducation, bookMark.postingNo.postingDeadline))
                 .from(bookMark)
                 .where(bookMark.memberNo.memberNo.eq(memberNo))
-                .limit(10)
-                .offset(page * 10)
+                .limit(12)
+                .offset(page * 12)
                 .fetch();
     }
 
@@ -67,8 +67,8 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom {
                 .where(bookMark.memberNo.memberNo.eq(memberNo)
                         .and(bookMark.postingNo.postingTitle.like("%" + keyword + "%")
                                 .or(bookMark.postingNo.companyNo.companyName.like("%" + keyword + "%"))))
-                .limit(10)
-                .offset(page * 10)
+                .limit(12)
+                .offset(page * 12)
                 .orderBy(bookMark.bookMarkNo.desc())
                 .fetch();
     }

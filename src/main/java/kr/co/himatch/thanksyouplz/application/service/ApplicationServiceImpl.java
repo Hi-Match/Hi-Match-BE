@@ -70,7 +70,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public ApplicationMemberPageResponseDTO selectMaxPage(ApplicationStatus applicationStatus, Long memberNo) {
         long count = applicationRepository.selectMaxPageByApplicationStatus(applicationStatus, memberNo);
-        long maxPage = (long) Math.ceil((double) count / 10);
+        long maxPage = (long) Math.ceil((double) count / 12);
         ApplicationMemberPageResponseDTO pageResponseDTO = new ApplicationMemberPageResponseDTO();
         pageResponseDTO.setMaxPage(maxPage);
         return pageResponseDTO;
@@ -565,7 +565,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public ApplicationMemberSearchPageResponseDTO selectSearchPageCount(ApplicationMemberSearchPageRequestDTO requestDTO) {
         Long count = jobPostingRepository.selectPostingCountBySearch(requestDTO.getCompanyAddress(), requestDTO.getCompanyPart(), requestDTO.getCompanyType(), requestDTO.getPostingEducation(), requestDTO.getKeyword());
-        count = (long) Math.ceil((double) count / 10);
+        count = (long) Math.ceil((double) count / 12);
         ApplicationMemberSearchPageResponseDTO responseDTO = new ApplicationMemberSearchPageResponseDTO();
         responseDTO.setPage(count);
         return responseDTO;
