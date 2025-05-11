@@ -22,6 +22,6 @@ public interface BookMarkRepositoryCustom {
 
     // 북마크 페이지네이션(몇 페이지까지 있는지?)
     // Ceil을 사용해서 소수점이 생길 경우 올림처리해서 보내준다.
-    Long selectBookMarkCount(Long memberNo);
+    Long selectBookMarkCount(Long memberNo, String keyword);
 
 }

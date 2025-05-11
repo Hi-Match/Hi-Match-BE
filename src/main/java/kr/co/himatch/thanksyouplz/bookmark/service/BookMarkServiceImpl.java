@@ -99,8 +99,8 @@ public class BookMarkServiceImpl implements BookMarkService{
     // 북마크 페이지네이션
     // 1을 더하지 않는다. 나눈 뒤, 소수점 발생을 예상하여 Ceil을 사용해서 올림처리한다.
     @Override
-    public BookMarkPageResponseDTO pageBookMark(Long memberNo) {
-        Long selectBookMarkCount = bookMarkRepository.selectBookMarkCount(memberNo);
+    public BookMarkPageResponseDTO pageBookMark(Long memberNo, BookMarkPageRequestDTO bookMarkPageRequestDTO) {
+        Long selectBookMarkCount = bookMarkRepository.selectBookMarkCount(memberNo, bookMarkPageRequestDTO.getKeyword());
 
         Long maxPage = (long)Math.ceil((double) selectBookMarkCount / 10);
 

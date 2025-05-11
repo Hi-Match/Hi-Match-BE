@@ -76,10 +76,12 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom {
     // 북마크 페이지네이션(몇 페이지까지 있는지?)
     // Ceil을 사용해서 소수점이 생길 경우 올림처리해서 보내준다.
     @Override
-    public Long selectBookMarkCount(Long memberNo) {
+    public Long selectBookMarkCount(Long memberNo, String keyword) {
         return queryFactory.select(bookMark.bookMarkNo.count())
                 .from(bookMark)
-                .where(bookMark.memberNo.memberNo.eq(memberNo))
+                .where(bookMark.memberNo.memberNo.eq(memberNo)
+                        .and(bookMark.postingNo.postingTitle.like("%" + keyword + "%")
+                        .or(bookMark.postingNo.companyNo.companyName.like("%" + keyword + "%"))))
                 .fetchFirst();
     }
 }
