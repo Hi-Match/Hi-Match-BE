@@ -51,9 +51,12 @@ public class JsonWebTokenCheckFilter extends OncePerRequestFilter {
         for (String str : SECURITY_HTTP_NON_MEMBER_ALLOW_URIS) {
             if (antPathMatcher.match(str, request.getRequestURI())) {
                 String access = null;
-                for (Cookie cookie : request.getCookies()) {
-                    if (cookie.getName().equals("Refresh")) {
-                        access = cookie.getValue();
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("Refresh")) {
+                            access = cookie.getValue();
+                        }
                     }
                 }
 
@@ -71,13 +74,17 @@ public class JsonWebTokenCheckFilter extends OncePerRequestFilter {
         // 근데 이 과정을 거쳐서도 null 이라면 BAD_REQUEST를 보낸다.
         try {
             String access = null;
-            for(Cookie cookie : request.getCookies()) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies == null) {
+                throw new ErrorResponse(HttpStatus.BAD_REQUEST, "잘못된 Refresh 토큰입니다. ");
+            }
+            for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Refresh")) {
                     access = cookie.getValue();
                 }
             }
 
-            if(access == null){
+            if (access == null) {
                 throw new ErrorResponse(HttpStatus.BAD_REQUEST, "잘못된 Refresh 토큰입니다. ");
             }
 
@@ -88,7 +95,7 @@ public class JsonWebTokenCheckFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else { // ACCESS 토큰 유효기간 지남.+ REFRESH 있음
 
-                    throw new ErrorResponse(HttpStatus.BAD_REQUEST, "잘못된 Refresh 토큰입니다. ");
+                throw new ErrorResponse(HttpStatus.BAD_REQUEST, "잘못된 Refresh 토큰입니다. ");
 
             }
 
