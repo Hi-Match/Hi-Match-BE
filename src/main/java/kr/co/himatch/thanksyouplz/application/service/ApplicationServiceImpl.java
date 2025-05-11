@@ -293,6 +293,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         responseDTO.setCompanyImgC(posting.getCompanyNo().getCompanyImgC());
         responseDTO.setPostingDeadLine(posting.getPostingDeadline());
         responseDTO.setPostingQuestion(questions);
+        responseDTO.setPostingContent(posting.getPostingContent());
 
         return responseDTO;
     }
