@@ -19,7 +19,7 @@ public class ApplicationCompanySelectResponseDTO {
     private String companyName;
     private String postingTitle;
     private String postingPart;
-    private Integer postingSal;
+    private String postingSal;
     private String postingExperience;
     private String postingEducation;
     private String postingLocation;

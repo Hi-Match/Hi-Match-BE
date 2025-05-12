@@ -32,8 +32,8 @@ public class JobPosting {
     @Column(name = "POSTING_PART", length = 20)
     private String postingPart;
 
-    @Column(name = "POSTING_SAL")
-    private Integer postingSal;
+    @Column(name = "POSTING_SAL", length = 100)
+    private String postingSal;
 
     @Column(name = "POSTING_EXPERIENCE", length = 50)
     private String postingExperience;
@@ -68,7 +68,7 @@ public class JobPosting {
     @Column(name = "POSTING_UPDATE")
     private LocalDateTime postingUpdate;
 
-    public void changePostingInfo(String postingTitle, String postingContent, String postingPart, Integer postingSal, String postingExperience, String postingEducation, String postingLocation, String postingType, String postingWorkType, LocalDateTime postingWorkStartTime, LocalDateTime postingWorkEndTime, Boolean postingIsFinish, LocalDateTime postingDeadLine) {
+    public void changePostingInfo(String postingTitle, String postingContent, String postingPart, String postingSal, String postingExperience, String postingEducation, String postingLocation, String postingType, String postingWorkType, LocalDateTime postingWorkStartTime, LocalDateTime postingWorkEndTime, Boolean postingIsFinish, LocalDateTime postingDeadLine) {
         this.postingTitle = postingTitle;
         this.postingContent = postingContent;
         this.postingPart = postingPart;

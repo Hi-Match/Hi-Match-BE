@@ -23,7 +23,7 @@ public class ApplicationCompanyRegisterRequestDTO {
     @Schema(description = "채용 분야", example = "IT직무")
     private String postingPart;
     @Schema(description = "연봉", example = "9000")
-    private Integer postingSal;
+    private String postingSal;
     @Schema(description = "경력 조건", example = "3년이하")
     private String postingExperience;
     @Schema(description = "학력 조건", example = "고졸이상")

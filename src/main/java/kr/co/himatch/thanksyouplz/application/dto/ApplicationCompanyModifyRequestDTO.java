@@ -25,7 +25,7 @@ public class ApplicationCompanyModifyRequestDTO {
     @Schema(description = "채용 분야", example = "IT직무")
     private String postingPart;
     @Schema(description = "연봉", example = "90000")
-    private Integer postingSal;
+    private String postingSal;
     @Schema(description = "경력 조건", example = "무관")
     private String postingExperience;
     @Schema(description = "학력 조건", example = "무관")
