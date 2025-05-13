@@ -5,6 +5,7 @@ import kr.co.himatch.thanksyouplz.company.entity.Company;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "JOB_POSTING")
@@ -51,10 +52,10 @@ public class JobPosting {
     private String postingWorkType;
 
     @Column(name = "POSTING_WORK_START_TIME")
-    private LocalDateTime postingWorkStartTime;
+    private LocalTime postingWorkStartTime;
 
     @Column(name = "POSTING_WORK_END_TIME")
-    private LocalDateTime postingWorkEndTime;
+    private LocalTime postingWorkEndTime;
 
     @Column(name = "POSTING_IS_FINISH")
     private Boolean postingIsFinish;
@@ -68,7 +69,7 @@ public class JobPosting {
     @Column(name = "POSTING_UPDATE")
     private LocalDateTime postingUpdate;
 
-    public void changePostingInfo(String postingTitle, String postingContent, String postingPart, String postingSal, String postingExperience, String postingEducation, String postingLocation, String postingType, String postingWorkType, LocalDateTime postingWorkStartTime, LocalDateTime postingWorkEndTime, Boolean postingIsFinish, LocalDateTime postingDeadLine) {
+    public void changePostingInfo(String postingTitle, String postingContent, String postingPart, String postingSal, String postingExperience, String postingEducation, String postingLocation, String postingType, String postingWorkType, LocalTime postingWorkStartTime, LocalTime postingWorkEndTime, Boolean postingIsFinish, LocalDateTime postingDeadLine) {
         this.postingTitle = postingTitle;
         this.postingContent = postingContent;
         this.postingPart = postingPart;

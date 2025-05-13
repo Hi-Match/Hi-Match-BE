@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -35,9 +36,9 @@ public class ApplicationCompanyRegisterRequestDTO {
     @Schema(description = "근무 형태", example = "자율출퇴근")
     private String postingWorkType;
     @Schema(description = "근무 시작 시간", example = "08:31")
-    private LocalDateTime postingWorkStartTime;
+    private LocalTime postingWorkStartTime;
     @Schema(description = "근무 종료 시간", example = "20:20")
-    private LocalDateTime postingWorkEndTime;
+    private LocalTime postingWorkEndTime;
     @Schema(description = "마감 여부", example = "false")
     private Boolean postingIsFinish;
     @Schema(description = "마감일", example = "20240212")
@@ -49,7 +50,7 @@ public class ApplicationCompanyRegisterRequestDTO {
     public void setPostingWorkStartTime(String dateStr) {
         if (dateStr != null && !dateStr.isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            this.postingWorkStartTime = LocalDate.parse(dateStr, formatter).atStartOfDay();
+            this.postingWorkStartTime = LocalTime.parse(dateStr, formatter);
         } else {
             this.postingWorkStartTime = null;
         }
@@ -58,7 +59,7 @@ public class ApplicationCompanyRegisterRequestDTO {
     public void setPostingWorkEndTime(String dateStr) {
         if (dateStr != null && !dateStr.isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            this.postingWorkEndTime = LocalDate.parse(dateStr, formatter).atStartOfDay();
+            this.postingWorkEndTime = LocalTime.parse(dateStr, formatter);
         } else {
             this.postingWorkEndTime = null;
         }

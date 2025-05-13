@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class ApplicationCompanySelectResponseDTO {
     private String postingLocation;
     private String postingType;
     private String postingWorkType;
-    private LocalDateTime postingWorkStartTime;
-    private LocalDateTime postingWorkEndTime;
+    private LocalTime postingWorkStartTime;
+    private LocalTime postingWorkEndTime;
     private Boolean postingIsFinish;
     private LocalDateTime postingDeadLine;
     private String companyImgA;
