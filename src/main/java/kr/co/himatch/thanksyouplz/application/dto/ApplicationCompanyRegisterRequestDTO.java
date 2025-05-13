@@ -34,9 +34,9 @@ public class ApplicationCompanyRegisterRequestDTO {
     private String postingType;
     @Schema(description = "근무 형태", example = "자율출퇴근")
     private String postingWorkType;
-    @Schema(description = "근무 시작 시간", example = "20240212")
+    @Schema(description = "근무 시작 시간", example = "08:31")
     private LocalDateTime postingWorkStartTime;
-    @Schema(description = "근무 종료 시간", example = "20240212")
+    @Schema(description = "근무 종료 시간", example = "20:20")
     private LocalDateTime postingWorkEndTime;
     @Schema(description = "마감 여부", example = "false")
     private Boolean postingIsFinish;
@@ -48,7 +48,7 @@ public class ApplicationCompanyRegisterRequestDTO {
     @JsonProperty("postingWorkStartTime")
     public void setPostingWorkStartTime(String dateStr) {
         if (dateStr != null && !dateStr.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             this.postingWorkStartTime = LocalDate.parse(dateStr, formatter).atStartOfDay();
         } else {
             this.postingWorkStartTime = null;
@@ -57,7 +57,7 @@ public class ApplicationCompanyRegisterRequestDTO {
     @JsonProperty("postingWorkEndTime")
     public void setPostingWorkEndTime(String dateStr) {
         if (dateStr != null && !dateStr.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             this.postingWorkEndTime = LocalDate.parse(dateStr, formatter).atStartOfDay();
         } else {
             this.postingWorkEndTime = null;
