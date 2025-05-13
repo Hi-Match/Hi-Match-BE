@@ -27,7 +27,7 @@ public class JobPosting {
     private String postingTitle;
 
     @Lob
-    @Column(name = "POSTING_CONTENT")
+    @Column(name = "POSTING_CONTENT", columnDefinition = "LONGTEXT")
     private String postingContent;
 
     @Column(name = "POSTING_PART", length = 20)
