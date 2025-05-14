@@ -86,4 +86,8 @@ public class JobPosting {
         this.postingUpdate = LocalDateTime.now();
     }
 
+    public void changeIsFinished(Boolean postingIsFinish){
+        this.postingIsFinish = postingIsFinish;
+    }
+
 }

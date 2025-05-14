@@ -18,7 +18,7 @@ public class Constants {
             "/himatch/company/member/idfind", "/himatch/company/member/pwfind", "/himatch/company/member/idcheck",
             "/himatch/company/member/login", "/himatch/company/member/idfind", "/himatch/company/member/pwfind",
             "/himatch/company/member/license", "/himatch/resume/file", "/himatch/application/company/select",
-            "/himatch/application/member/search-page",
+            "/himatch/application/member/search-page", "/himatch/company/info/detail-select"
     };
 
     public static final String[] SECURITY_HTTP_NON_MEMBER_ALLOW_URIS = {"/himatch/application/member/job-list"};

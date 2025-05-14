@@ -500,6 +500,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public ApplicationCompanyEarlyFinishResponseDTO applicationEarlyFinish(Long postingNo) {
         JobPosting posting = jobPostingRepository.getReferenceById(postingNo);
+        posting.changeIsFinished(true);
         List<Application> applicationList = applicationRepository.findByPostingNo(posting);
         for (Application application : applicationList) {
             if (!application.getApplicationStatus().equals(ApplicationStatus.FINAL_PASS)) {
