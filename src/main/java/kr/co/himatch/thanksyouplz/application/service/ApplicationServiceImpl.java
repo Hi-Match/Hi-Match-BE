@@ -471,6 +471,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         detailResponseDTO.setApplicationAward(applicationAwardRepository.selectAward(applicationNo));
         detailResponseDTO.setApplicationMemberCode(application.getMemberNo().getMemberCode());
         detailResponseDTO.setApplicationMemberSuitability(application.getMemberNo().getMemberSuitability());
+        detailResponseDTO.setApplicationPf(application.getApplicationPf());
+        detailResponseDTO.setApplicationStatus(application.getApplicationStatus());
+        detailResponseDTO.setApplicationResult(application.getApplicationResult());
 
         return detailResponseDTO;
     }
