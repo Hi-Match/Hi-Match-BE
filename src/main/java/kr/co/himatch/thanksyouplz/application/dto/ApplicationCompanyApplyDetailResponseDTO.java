@@ -1,5 +1,6 @@
 package kr.co.himatch.thanksyouplz.application.dto;
 
+import kr.co.himatch.thanksyouplz.application.entity.ApplicationStatus;
 import kr.co.himatch.thanksyouplz.resume.entity.ArmyPart;
 import kr.co.himatch.thanksyouplz.resume.entity.ArmyType;
 import kr.co.himatch.thanksyouplz.resume.entity.Gender;
@@ -36,6 +37,9 @@ public class ApplicationCompanyApplyDetailResponseDTO {
     private String applicationRewardingPatriotism;
     private String applicationMemberCode;
     private String applicationMemberSuitability;
+    private ApplicationStatus applicationStatus;
+    private Boolean applicationPf;
+    private Boolean applicationResult;
     private List<ApplicationMemberDetailListResponseDTO> applicationCover;
     private List<ApplicationCompanyApplyDetailSchoolResponseDTO> applicationSchool;
     private List<ApplicationCompanyApplyDetailExperienceResponseDTO> applicationExperience;
