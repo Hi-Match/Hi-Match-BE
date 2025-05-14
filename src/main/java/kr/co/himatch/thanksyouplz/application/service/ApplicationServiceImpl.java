@@ -444,8 +444,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         ApplicationCompanyApplyDetailResponseDTO detailResponseDTO = new ApplicationCompanyApplyDetailResponseDTO();
         detailResponseDTO.setApplicationNo(application.getApplicationNo());
-        detailResponseDTO.setApplicationTitle(application.getMemberNo().getMemberName());
-        detailResponseDTO.setApplicationName(application.getApplicationName());
+        detailResponseDTO.setApplicationTitle(application.getApplicationTitle());
+        detailResponseDTO.setApplicationName(application.getMemberNo().getMemberName());
         detailResponseDTO.setApplicationEngName(application.getApplicationEngname());
         detailResponseDTO.setApplicationMail(application.getApplicationEngname());
         detailResponseDTO.setApplicationTel(application.getApplicationTel());
