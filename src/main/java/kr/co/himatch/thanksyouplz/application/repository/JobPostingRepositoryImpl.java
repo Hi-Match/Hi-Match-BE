@@ -59,6 +59,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
                 .where(builder)
                 .offset(12L * page)
                 .limit(12L)
+                .orderBy(jobPosting.postingNo.desc())
                 .fetch();
     }
 
