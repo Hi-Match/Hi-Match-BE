@@ -105,7 +105,11 @@ public class CodeController {
 
     // 인성검사 후 인재상 상세 설명을 AI로 불러오는 함수
     private Mono<String> callGeminiForDescription(String modelData, String codeFileContent) {
-        String descriptionPrompt = modelData + "당신은 인재상 분석 전문가입니다. 제공된 질문과 답변, 그리고 인재상 코드별 상세 특징을 바탕으로 다음을 분석해주세요. \n 1. 이 사람의 업무와 관련된 강점과 약점을 총 3줄 이내로 짧고 부드럽게 정리해주세요. \n 2. 약점은 단정적으로 표현하지 말고, 해당 경향이 가진 강점을 함께 언급하거나, 자연스럽게 보완 방법까지 함께 제시해주세요 \n 3. 코드 이름이나 코드 특성을 직접 언급하지 말고, 직무/성향 중심으로 유추 가능하게 작성해주세요. \n\n" + codeFileContent;
+        String descriptionPrompt = modelData + "당신은 인재상 분석 전문가입니다. 제공된 질문과 답변, 그리고 인재상 코드별 상세 특징을 바탕으로 다음을 분석해주세요. \n"
+                + "1. 이 사람의 업무와 관련된 강점과 약점을 총 3줄 이내로 짧고 부드럽게 정리해주세요. \n" +
+                "2. 약점은 단정적으로 표현하지 말고, 해당 경향이 가진 강점을 함께 언급하거나, 자연스럽게 보완 방법까지 함께 제시해주세요 \n" +
+                "3. 코드 이름이나 코드 특성을 직접 언급하지 말고, 직무/성향 중심으로 유추 가능하게 작성해주세요." +
+                "4. 첫 줄의 시작은 AI 하이매치 봇의 분석 결과 로 시작하게 해줘 \n\n" + codeFileContent;
         return codeService.callGemini(descriptionPrompt);
     }
 
@@ -117,18 +121,6 @@ public class CodeController {
                 + suitabilityFileContent;
         return codeService.callGemini(suitabilityPrompt);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     // 개인 인성검사 - 검사 결과 API
     @PostMapping("/member/result")
