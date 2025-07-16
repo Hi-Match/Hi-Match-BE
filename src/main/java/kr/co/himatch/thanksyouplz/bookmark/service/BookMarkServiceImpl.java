@@ -6,9 +6,12 @@ import kr.co.himatch.thanksyouplz.application.repository.JobPostingRepository;
 import kr.co.himatch.thanksyouplz.bookmark.dto.*;
 import kr.co.himatch.thanksyouplz.bookmark.entity.BookMark;
 import kr.co.himatch.thanksyouplz.bookmark.repository.BookMarkRepository;
+import kr.co.himatch.thanksyouplz.exception.bookmark.BookMarkNotFoundException;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,13 @@ public class BookMarkServiceImpl implements BookMarkService{
     public List<BookMarkListResponseDTO> listBookMark(BookMarkListRequestDTO bookMarkListRequestDTO, Long memberNo) {
         List<BookMarkListResponseDTO> selectBookMark = bookMarkRepository.selectBookMark(memberNo, bookMarkListRequestDTO.getPage());
 
+//        if (selectBookMark == null || selectBookMark.isEmpty()){
+//            throw new BadRequestException("해당 북마크를 조회할 수 없습니다.");
+//        }
+
+//        if (ObjectUtils.isEmpty(selectBookMark)){
+//            throw new BadRequestException("해당 북마크를 조회할 수 없습니다.");
+//        }
         return selectBookMark;
     }
 
@@ -47,7 +57,7 @@ public class BookMarkServiceImpl implements BookMarkService{
         Long selectSameBookMark = bookMarkRepository.selectSameBookMark(bookMarkRegisterRequestDTO.getPostingNo(), memberNo);
 
         if (selectSameBookMark > 0){
-            return null;
+            throw new BookMarkNotFoundException("VALIDATION_ERROR", "해당 북마크를 등록할 수 없습니다.");
         }else{
             Optional<JobPosting> jobPosting = jobPostingRepository.findById(bookMarkRegisterRequestDTO.getPostingNo());
 

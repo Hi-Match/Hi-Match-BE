@@ -2,6 +2,7 @@ package kr.co.himatch.thanksyouplz.member.service;
 
 import jakarta.transaction.Transactional;
 import kr.co.himatch.thanksyouplz.code.util.PersonalTypeEnum;
+import kr.co.himatch.thanksyouplz.exception.member.MemberNotFoundException;
 import kr.co.himatch.thanksyouplz.member.dto.*;
 import kr.co.himatch.thanksyouplz.member.entity.Member;
 import kr.co.himatch.thanksyouplz.member.entity.MemberLog;
@@ -104,7 +105,7 @@ public class MemberServiceImpl implements MemberService {
         Member selectId = memberRepository.selectId(memberID);
 
         if (selectId == null) {
-            return null;
+            throw new MemberNotFoundException("MemberNotFound", "해당 회원을 찾을 수 없습니다.");
         } else {
             if (BCrypt.checkpw(memberPass, selectId.getMemberPass())) {
                 return selectId.getMemberNo();
